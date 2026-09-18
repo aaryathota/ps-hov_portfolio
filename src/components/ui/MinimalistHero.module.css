@@ -1,0 +1,285 @@
+/* Ported one for one from the Tailwind classes of the 21st.dev
+   "minimalist-hero" component. Sizes, spacing and colours unchanged. */
+
+.hero {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  height: 100svh;
+  min-height: 40rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  background: #0d0d0f;                 /* bg-background */
+  color: #f4f4f5;                      /* text-foreground */
+  font-family: var(--font-body);
+  padding: 2rem;                       /* p-8 */
+}
+
+@media (min-width: 768px) { .hero { padding: 3rem; } }  /* md:p-12 */
+
+/* Header */
+.header {
+  z-index: 30;
+  display: flex;
+  width: 100%;
+  max-width: 80rem;                    /* max-w-7xl */
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: 1.25rem;                  /* text-xl */
+  font-weight: 700;
+  letter-spacing: 0.05em;              /* tracking-wider */
+}
+
+.nav { display: none; }
+
+@media (min-width: 768px) {
+  .nav { display: flex; align-items: center; gap: 2rem; }  /* space-x-8 */
+}
+
+.navLink {
+  font-size: 0.875rem;                 /* text-sm */
+  font-weight: 500;
+  letter-spacing: 0.1em;               /* tracking-widest */
+  color: rgba(244, 244, 245, 0.6);
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+
+.navLink:hover { color: #f4f4f5; }
+
+.menuButton {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;                       /* space-y-1.5 */
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.menuButton span { display: block; height: 2px; width: 1.5rem; background: #f4f4f5; }
+.menuButton span:last-child { width: 1.25rem; }
+
+@media (min-width: 768px) { .menuButton { display: none; } }
+
+/* Mobile menu (hamburger) */
+.mobileMenu {
+  position: absolute;
+  top: 4.5rem;
+  right: 2rem;
+  left: 2rem;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(244, 244, 245, 0.14);
+  border-radius: 16px;
+  background: rgba(13, 13, 15, 0.97);
+}
+
+@media (min-width: 768px) { .mobileMenu { display: none; } }
+
+/* Main */
+.main {
+  position: relative;
+  display: grid;
+  width: 100%;
+  max-width: 80rem;
+  flex-grow: 1;
+  grid-template-columns: 1fr;
+  align-items: center;
+}
+
+@media (min-width: 768px) { .main { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+.left {
+  z-index: 20;
+  order: 2;
+  text-align: center;
+}
+
+@media (min-width: 768px) { .left { order: 1; text-align: left; } }
+
+.mainText {
+  margin: 0 auto;
+  max-width: 20rem;                    /* max-w-xs */
+  font-size: 0.875rem;
+  line-height: 1.625;                  /* leading-relaxed */
+  color: rgba(244, 244, 245, 0.8);
+}
+
+@media (min-width: 768px) { .mainText { margin-left: 0; } }
+
+.readMore {
+  margin-top: 1rem;
+  display: inline-block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #f4f4f5;
+  text-decoration: underline;
+  text-decoration-thickness: from-font;
+}
+
+/* Centre image with circle */
+.center {
+  position: relative;
+  order: 1;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 768px) { .center { order: 2; } }
+
+.circle {
+  position: absolute;
+  z-index: 0;
+  height: 300px;
+  width: 300px;
+  border-radius: 9999px;
+  background: rgba(250, 204, 21, 0.9); /* bg-yellow-400/90 */
+}
+
+@media (min-width: 768px) { .circle { height: 400px; width: 400px; } }
+@media (min-width: 1024px) { .circle { height: 500px; width: 500px; } }
+
+/* Thin turning ring around the circle */
+.ring {
+  position: absolute;
+  z-index: 1;
+  width: 360px;
+  height: 360px;
+  border-radius: 9999px;
+  border: 1px dashed rgba(250, 204, 21, 0.38);
+  pointer-events: none;
+}
+
+@media (min-width: 768px) { .ring { width: 470px; height: 470px; } }
+@media (min-width: 1024px) { .ring { width: 580px; height: 580px; } }
+
+.portrait {
+  position: relative;
+  z-index: 10;   /* overlaps both the circle and the display text */
+  height: auto;
+  /* The template portrait is a tall profile shot; this is a square studio
+     cut-out, so it is sized up to fill the circle the same way. */
+  width: 19rem;
+  object-fit: contain;
+  object-position: bottom;
+  scale: 1.5;                          /* scale-150, kept out of GSAP's way */
+  transition: filter 600ms ease;
+  /* The studio shot ends at the chest; soften that edge so it does not read
+     as a hard cut across the circle. */
+  -webkit-mask-image: linear-gradient(180deg, #000 55%, rgba(0, 0, 0, 0.55) 78%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 55%, rgba(0, 0, 0, 0.55) 78%, transparent 100%);
+}
+
+@media (min-width: 768px) { /* Thin turning ring around the circle */
+.ring {
+  position: absolute;
+  z-index: 1;
+  width: 360px;
+  height: 360px;
+  border-radius: 9999px;
+  border: 1px dashed rgba(250, 204, 21, 0.38);
+  pointer-events: none;
+}
+
+@media (min-width: 768px) { .ring { width: 470px; height: 470px; } }
+@media (min-width: 1024px) { .ring { width: 580px; height: 580px; } }
+
+.portrait { width: 22rem; } }
+@media (min-width: 1024px) { /* Thin turning ring around the circle */
+.ring {
+  position: absolute;
+  z-index: 1;
+  width: 360px;
+  height: 360px;
+  border-radius: 9999px;
+  border: 1px dashed rgba(250, 204, 21, 0.38);
+  pointer-events: none;
+}
+
+@media (min-width: 768px) { .ring { width: 470px; height: 470px; } }
+@media (min-width: 1024px) { .ring { width: 580px; height: 580px; } }
+
+.portrait { width: 26rem; } }
+
+/* Right display text */
+.right {
+  z-index: 5;   /* behind the portrait where they overlap */
+  order: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Pulled in just enough that the portrait crosses the edge of the display
+   text without covering a letter. */
+@media (min-width: 768px) { .right { justify-content: flex-start; margin-left: -1.25rem; } }
+@media (min-width: 1280px) { .right { margin-left: -2rem; } }
+
+.overlayText {
+  margin: 0;
+  white-space: nowrap;
+  font-family: var(--font-body);
+  font-size: 4.5rem;                   /* text-7xl */
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: #f4f4f5;
+}
+
+@media (min-width: 768px) { .overlayText { font-size: 6rem; } }
+@media (min-width: 1024px) { .overlayText { font-size: 8rem; } }
+
+/* Footer */
+.footer {
+  z-index: 30;
+  display: flex;
+  width: 100%;
+  max-width: 80rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.socials { display: flex; align-items: center; gap: 1rem; }
+
+.socialIcon {
+  color: rgba(244, 244, 245, 0.6);
+  transition: color 160ms ease;
+  display: inline-flex;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.socialIcon:hover { color: #f4f4f5; }
+
+.location { font-size: 0.875rem; font-weight: 500; color: rgba(244, 244, 245, 0.8); }
+
+@media (prefers-reduced-motion: reduce) {
+  .portrait, .circle { transition: none; }
+}
+
+
+/* Start state for the entrance (GSAP takes over on mount) */
+[data-h-top], [data-h-copy], [data-h-display], [data-h-foot], [data-h-circle], [data-h-portrait], [data-h-ring] { opacity: 0; }
+
+/* Hover: the photo lifts a touch and the circle warms */
+.center:hover .portrait { filter: brightness(1.05) contrast(1.02); }
+.center:hover .ring { border-color: rgba(250, 204, 21, 0.6); }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-h-top], [data-h-copy], [data-h-display], [data-h-foot], [data-h-circle], [data-h-portrait], [data-h-ring] { opacity: 1; }
+}

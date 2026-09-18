@@ -1,0 +1,317 @@
+/* ============================================
+   P.Sonkar House of Ventures: Global Styles
+   Ink navy theme with a live silk background
+   ============================================ */
+
+@import url('./variables.css');
+/* Fonts are self-hosted through @fontsource (imported in main.jsx) */
+
+/* ---- Reset & Base ---- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  background: #0b1119;
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--weight-normal);
+  line-height: var(--leading-normal);
+  color: var(--color-text-primary);
+  background-color: transparent;
+  overflow-x: clip;
+  min-height: 100vh;
+}
+
+/* Anchored sections never hide under the sticky header */
+section[id],
+[id] {
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+}
+
+/* ---- Typography ---- */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  line-height: var(--leading-tight);
+  letter-spacing: -0.015em;
+  color: var(--color-text-primary);
+  text-wrap: balance;
+}
+
+h1 { font-size: var(--text-5xl); }
+h2 { font-size: var(--text-4xl); }
+h3 { font-size: var(--text-3xl); }
+h4 { font-size: var(--text-2xl); }
+h5 { font-size: var(--text-xl); }
+h6 { font-size: var(--text-lg); }
+
+p {
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+  max-width: 65ch;
+  text-wrap: pretty;
+}
+
+a {
+  color: var(--color-accent-light);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out-quart);
+}
+
+a:hover {
+  color: var(--color-text-primary);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent-light);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+strong {
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-primary);
+}
+
+/* ---- Section Label ----
+   Kept for inner pages, but toned down: sentence case, no tracking. */
+
+.section-label {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-3);
+  display: inline-block;
+}
+
+/* ---- Layout ---- */
+
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding-left: var(--section-padding-x);
+  padding-right: var(--section-padding-x);
+}
+
+.container--narrow { max-width: var(--max-width-narrow); }
+.container--wide { max-width: var(--max-width-wide); }
+
+.section {
+  padding-top: var(--section-padding-y);
+  padding-bottom: var(--section-padding-y);
+  position: relative;
+}
+
+.publicMain {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .publicMain {
+    padding-bottom: 4.75rem;
+  }
+}
+
+/* ---- Card ---- */
+
+.glass-card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: border-color var(--duration-normal) var(--ease-out-expo), background var(--duration-normal) var(--ease-out-expo);
+}
+
+.glass-card:hover {
+  border-color: var(--color-line-strong);
+  background: var(--color-bg-card-hover);
+}
+
+/* ---- Gradient Text (retired: renders as plain text now) ---- */
+
+.gradient-text,
+.gradient-text--gold {
+  color: var(--color-text-primary);
+}
+
+/* ---- Three.js Canvas ---- */
+
+.three-canvas-container {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-canvas);
+  pointer-events: none;
+}
+
+.three-canvas-container--interactive { pointer-events: auto; }
+
+/* ---- Form Styles ---- */
+
+input,
+textarea,
+select {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  background: rgba(14, 18, 38, 0.7);
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  width: 100%;
+  outline: none;
+  transition: border-color var(--duration-fast) var(--ease-out-quart),
+              box-shadow var(--duration-fast) var(--ease-out-quart);
+}
+
+select option { background: var(--color-bg-secondary); color: var(--color-text-primary); }
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-subtle);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-text-muted);
+}
+
+label {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2);
+  display: block;
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* ---- Selection ---- */
+
+::selection {
+  background: var(--color-gold);
+  color: #0d1220;
+}
+
+/* ---- Scrollbar ---- */
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--color-bg-primary); }
+::-webkit-scrollbar-thumb { background: #2a3160; border-radius: var(--radius-full); }
+::-webkit-scrollbar-thumb:hover { background: #3a4380; }
+
+/* ---- Lenis ---- */
+
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+/* ---- Utility ---- */
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---- Reduced Motion ---- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .three-canvas-container { display: none; }
+}
+
+/* ---- Responsive ---- */
+
+@media (max-width: 768px) {
+  :root { --header-height: 68px; }
+  .section {
+    padding-top: clamp(3rem, 2rem + 4vw, 4.5rem);
+    padding-bottom: clamp(3rem, 2rem + 4vw, 4.5rem);
+  }
+}
+
+/* ---- Skip link (keyboard users jump past the header) ---- */
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 1001;
+  padding: 0.7rem 1.1rem;
+  border-radius: 999px;
+  background: #f0f3ff;
+  color: #0d1220;
+  font-weight: 600;
+  transform: translateY(-160%);
+  transition: transform 180ms ease;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+  color: #0d1220;
+}
+
+#main:focus { outline: none; }
+
+/* Holds page height while a lazily loaded page downloads */
+.page-loading { min-height: 100vh; }
+
+
+/* ---- Reveal on scroll ---- */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(34px);
+  transition: opacity 1100ms var(--ease-out-expo), transform 1100ms var(--ease-out-expo);
+  will-change: opacity, transform;
+}
+
+[data-reveal].is-revealed { opacity: 1; transform: none; }
+
+[data-reveal='2'] { transition-delay: 110ms; }
+[data-reveal='3'] { transition-delay: 220ms; }
+[data-reveal='4'] { transition-delay: 330ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] { opacity: 1; transform: none; transition: none; }
+}

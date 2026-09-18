@@ -1,0 +1,392 @@
+P.SONKAR HOUSE OF VENTURES
+Complete Website Content  |  Version 4
+4 Pages  |  First-Person  |  SEO-Optimised  |  Bangalore
+
+Pages Included
+Page 1: Home
+Page 2: About Me
+Page 3: Ventures
+Page 4: Get Involved (Invest / Work / Grow)
++ Admin Portal Module Specification
+
+[ PAGE 1: HOME ]
+Home
+SEO Title: Pratap Sonkar | P.Sonkar House Of Ventures, Bangalore
+Meta Description: I am Pratap Sonkar, a founder and builder based in Bangalore. P.Sonkar House Of Ventures is the ecosystem behind the ventures I build, the collaborations I enable, and the opportunities I create.
+Primary Keywords: Pratap Sonkar founder Bangalore, P.Sonkar House Of Ventures, venture builder Bangalore, startup ecosystem Bangalore
+
+Hero Section
+Brand Tagline (above H1):
+Ideas in Motion. Ventures in Progress.
+H1 Headline:
+P.Sonkar House Of Ventures
+Sub-headline:
+A founder-led ecosystem built around the ventures I build, the people I work with, and the opportunities I create. Based in Bangalore.
+Three Primary CTAs (in this order):
+	•	Explore Ventures
+	•	Explore Services
+	•	Get Involved
+
+Three Pillars Strip
+Section Label:
+What This Is About
+Heading:
+Three Ways to Be Part of This.
+Design Note:
+DEV NOTE: Three cards side by side. Each card has a heading, two lines of body copy, and a CTA button linking to the relevant section on the Get Involved page.
+Invest
+Heading:
+Back a Venture
+Body:
+I am building a small, focused set of ventures. If something in the portfolio interests you, there is a way to have that conversation.
+CTA Button: Get Involved
+Work
+Heading:
+Join the Team
+Body:
+Internships, part-time, and full-time roles across ventures in progress. Real work. Real ownership.
+CTA Button: Get Involved
+Grow
+Heading:
+Grow Your Business
+Body:
+Looking for a growth partner who actually works with you? I have the resources and the experience to help.
+CTA Button: Get Involved
+
+Ventures Snapshot
+Section Label:
+The Portfolio
+Heading:
+Here Is What I Am Building.
+Body:
+A set of ventures at different stages. Some are being actively developed. Some are still being shaped. All of them are being worked on with full intent.
+Card Display:
+DEV NOTE: 3 to 4 featured venture cards pulled from admin panel. Each card shows: Venture Image, Company Name, One-liner, Website link if redirect is enabled by admin.
+CTA Button: View All Ventures
+
+About Me Strip
+Section Label:
+The Person Behind This
+Heading:
+I am Pratap Sonkar.
+Body:
+I build ventures, enable collaborations, and work at the intersection of people, systems, and execution. P.Sonkar House Of Ventures is the ecosystem I have built around all of it.
+CTA Button: Read My Story
+
+Homepage Closing CTA
+Headline:
+Something here catch your eye?
+Sub-text:
+Whether you want to invest, join a team, or grow your business, reach out and I will take it from there.
+CTA Buttons: Invest  |  Work With Me  |  Grow With Me
+
+[ PAGE 2: ABOUT ME ]
+About Me
+SEO Title: About Pratap Sonkar | Founder, P.Sonkar House Of Ventures, Bangalore
+Meta Description: I am Pratap Sonkar, founder of P.Sonkar House Of Ventures. Here is my story, how I work, and what drives the ventures I build in Bangalore.
+Primary Keywords: Pratap Sonkar founder, about Pratap Sonkar, P.Sonkar ventures Bangalore, venture builder India Bangalore
+
+Page Headline
+Builder. Operator. Founder.
+Sub-headline:
+Here is my story and what I am building.
+
+My Story
+P.Sonkar House Of Ventures did not come together through a single plan. It came together through years of working on things I genuinely believed needed to exist, starting from scratch, figuring things out on the ground, and building across areas I found myself drawn to.
+Over time, what started as individual projects began to take shape as a connected ecosystem. P.Sonkar House Of Ventures is the formal structure that holds all of it together. It is the parent entity behind every venture I build and every collaboration I am part of.
+
+How I Work
+Start With Clarity
+Every venture I work on begins with a clear understanding of the problem being solved, who it is being solved for, and whether there is a sustainable model behind it. Clarity before action, always.
+Stay Close to the Work
+I stay operationally close to what I build. Not from a distance. I am inside the decisions, the conversations, and the details that actually determine whether something works or not.
+Build Systems, Not Dependencies
+The goal is always to build something that does not depend entirely on me. Systems and teams are built alongside what we are building, not after it.
+
+What Drives the Portfolio
+Each venture in this ecosystem exists because there was a real gap worth addressing. The sectors vary but the reasoning is consistent: a problem that is large enough, a solution that is practical, and a model that can be made to work.
+
+In My Own Words
+(Write this section in your own voice. Suggested lines:)
+"I did not set out to build a venture studio. I set out to work on things I believed needed to exist. This is what that looks like so far.
+Along the way, I also built a network of people, businesses, and collaborations that became just as much a part of this ecosystem as the ventures I own. The Collaborated Services side of this is not separate from what I do. It is a reflection of the relationships and partnerships I have built over time for responsible and quality work getting delivered."
+
+About Me CTA
+Curious about the ventures or want to connect?
+CTA Buttons: View My Ventures  |  Get Involved
+
+[ PAGE 3: VENTURES ]
+Ventures
+SEO Title: Ventures | P.Sonkar House Of Ventures Portfolio, Bangalore
+Meta Description: Explore the ventures I am building and the services I collaborate on through P.Sonkar House Of Ventures. Everything here is a work in progress, being built with full intent.
+Primary Keywords: P.Sonkar ventures portfolio, Pratap Sonkar startups Bangalore, in-house ventures Bangalore, collaborated services ecosystem
+
+Page Intro
+Section Label:
+The Portfolio
+Heading:
+What I Am Building.
+Sub-text:
+Two categories. In-House Ventures are built and operated by me directly. Collaborated Services are engagements I am part of through active partnerships. Both are works in progress.
+Toggle Design Note:
+DEV NOTE: A toggle button appears at the top of this page with two states: 'In-House Ventures' and 'Collaborated Services'. Clicking each tab switches the card grid displayed below. Default view on page load: In-House Ventures.
+
+SECTION A: In-House Ventures
+Toggle Label:
+In-House Ventures
+Section Sub-text:
+Ventures I have conceptualised, funded, and am actively building. Each is at its own stage of progress.
+Admin Note:
+DEV NOTE: Fully managed via admin panel. Add, edit, reorder, or archive cards at any time. Website link is shown on card only when redirect is enabled by admin.
+
+In-House Venture Card Format
+Each card displays:
+	•	Image (uploaded via admin panel)
+	•	Company Name
+	•	Company Description (two to three lines max)
+	•	Website Link button (visible only when redirect URL is enabled in admin panel)
+Admin-Managed Fields per Card:
+	•	Image upload
+	•	Company Name
+	•	Company Description
+	•	Redirect URL (text field)
+	•	Redirect Toggle: On / Off
+	•	Card Visibility Toggle: Live / Hidden
+	•	Card Order: drag-and-drop reorder
+
+Pre-Loaded In-House Venture Cards
+DEV NOTE: These are the initial cards to be loaded. Admin can edit any field, reorder, or archive at any time.
+Impactshaala
+Description:
+A career growth platform where individuals can discover real-world exposures, upskill, and find work that genuinely fits who they are, all in one place.
+Website Link:
+DEV NOTE: Disable until live URL is ready.
+Guideshaala
+Description:
+An AI-powered career counselling platform that uses assessments to build a personalised career roadmap for students and working professionals.
+Website Link:
+DEV NOTE: Disable until live.
+Rise For Change
+Description:
+A youth-led NGO working on health, quality education, and youth leadership, aligned with the UN Sustainable Development Goals.
+Website Link:
+DEV NOTE: Enable when confirmed URL is available.
+Printer Cartridge Wala
+Description:
+A B2B printer consumables and maintenance business offering cartridge refilling, compatible sales, and AMC contracts to corporates and institutions at significantly lower cost.
+Website Link:
+DEV NOTE: Disable until live.
+LaptopWale.com
+Description:
+A B2B business supplying quality-checked, warranty-backed refurbished laptops and desktops to corporates, startups, and institutions at a fraction of new device cost.
+Website Link:
+DEV NOTE: Disable until live.
+Evntra
+Description:
+An event services marketplace to discover and book verified vendors across decoration, catering, entertainment, photography, venues, and equipment, or hand the entire event over to us.
+Website Link:
+DEV NOTE: Disable until live.
+W.H.O.L.E Community
+Description:
+A community for people rebuilding their sense of self after hard setbacks. A structured journey alongside others on the same road. Within. Heal. Own. Lead. Evolve.
+Website Link:
+DEV NOTE: Disable until live.
+
+SECTION B: Collaborated Services
+Toggle Label:
+Collaborated Services
+Section Sub-text:
+Services and businesses I am part of through active collaborations. These are managed independently but connected to this ecosystem through shared work and partnerships built over time.
+Admin Note:
+DEV NOTE: Fully managed via admin panel, independent of In-House Ventures section. Cards are added, edited, or archived by admin. WhatsApp CTA is pre-filled with the service name.
+
+Collaborated Services Card Format
+Each card displays:
+	•	Image (uploaded via admin panel)
+	•	Service Name
+	•	Service Description (two to three lines max)
+	•	CTA Button: Enquire on WhatsApp
+WhatsApp Pre-fill Logic:
+DEV NOTE: When the Enquire on WhatsApp button is clicked, it opens WhatsApp with a pre-filled message: "Hi, I am interested in [Service Name]. Can we connect?" The Service Name is pulled dynamically from the card's Service Name field in the admin panel.
+Admin-Managed Fields per Card:
+	•	Image upload
+	•	Service Name
+	•	Service Description
+	•	WhatsApp Number (can be set globally in site settings or overridden per card)
+	•	Card Visibility Toggle: Live / Hidden
+	•	Card Order: drag-and-drop reorder
+
+Ventures Page Closing CTA
+Headline:
+See something that interests you?
+Sub-text:
+Reach out whether you want to invest, join a team, or collaborate. I personally review every message.
+CTA Button: Get Involved
+
+[ PAGE 4: GET INVOLVED ]
+Get Involved
+SEO Title: Get Involved | Invest, Work, or Grow With P.Sonkar House Of Ventures, Bangalore
+Meta Description: Want to invest in a venture, join a team, or grow your business with my ecosystem? Tell me what you are looking for and I will take it from there.
+Primary Keywords: invest in startups Bangalore, startup internships Bangalore, business growth partner Bangalore, P.Sonkar ventures get involved
+
+Page Headline
+Tell Me What You Are Looking For.
+Sub-text:
+Three ways to be part of what I am building. Pick the one that fits and fill in the form below.
+
+Three Pillar Descriptions
+Design Note:
+DEV NOTE: Three short pillar cards appear above the form. Each is clickable and pre-selects the corresponding option in the form dropdown below.
+Invest With Me
+I am building a small, focused set of ventures. If something in the portfolio interests you and you want to be part of it, let us talk.
+Work With Me
+Internships, part-time, and full-time roles across active ventures. Real work, real ownership, no corporate layers.
+Grow With Me
+Need a growth partner with real resources and hands-on experience? I work with founders and businesses who are serious about growing.
+
+Combined Get Involved Form
+Form Headline:
+Drop Your Details and I Will Get Back to You.
+Form Note:
+DEV NOTE: This is a single smart form. The first field is a dropdown: 'I want to: Invest / Work / Grow'. Based on the selection, additional relevant fields appear below. Fields common to all three options appear regardless of selection.
+
+Fields Common to All Three Options
+	•	Full Name (required)
+	•	Email Address (required)
+	•	Phone Number (required)
+	•	I want to: [Dropdown: Invest / Work / Grow] (required)
+
+Additional Fields: When 'Invest' is Selected
+	•	Which venture caught your attention? (optional, text field)
+	•	I am interested in: [Dropdown: An In-House Venture / A Collaborated Service / Both / I want to learn more first]
+	•	A little about yourself and why this interests you (text area, optional)
+Note below Invest fields:
+I personally read every investment enquiry. I only move forward when there is a genuine mutual fit.
+
+Additional Fields: When 'Work' is Selected
+	•	I am looking for: [Dropdown: Internship / Part-Time Role / Full-Time Role / Open to whatever fits]
+	•	Ventures I am most interested in: [Multi-select, admin-managed list of active ventures]
+	•	Skills or areas of experience (text area, required)
+	•	LinkedIn profile or portfolio link (optional)
+
+Additional Fields: When 'Grow' is Selected
+	•	Business Name (required)
+	•	Stage of Business: [Dropdown: Just Starting Out / Early Stage / Growing / Looking to Scale]
+	•	What you need help with: [Multi-select: Digital Presence / Marketing / Operations / Strategy / Business Development / Not Sure Yet]
+	•	Brief description of your business and what you are trying to solve (text area, required)
+
+Submit Button
+Send
+Below form note:
+I read every message personally. If there is a fit, I will reach out directly.
+
+[ SITE-WIDE ELEMENTS ]
+Navigation, Footer, and Site-Wide Copy
+
+Navigation Labels
+	•	Home
+	•	About Me
+	•	Ventures
+	•	Get Involved
+Sticky Nav CTA (appears on all pages):
+Get Involved (button, links to Page 4)
+
+Footer Copy
+Tagline:
+Ideas in Motion. Ventures in Progress.
+Short Description:
+P.Sonkar House Of Ventures is the ecosystem behind the ventures I build, the collaborations I enable, and the opportunities I create. Based in Bangalore.
+Footer Links:
+Home  |  About Me  |  Ventures  |  Get Involved
+Social Links (placeholders):
+	•	LinkedIn: linkedin.com/in/pratapsonkar  [placeholder]
+	•	Instagram: @psonkarventures  [placeholder]
+	•	Twitter / X: @pratapsonkar  [placeholder]
+Contact Placeholders:
+	•	Email: hello@psonkarventures.com  [placeholder]
+	•	WhatsApp: +91 XXXXX XXXXX  [placeholder]
+Legal Line:
+P.Sonkar House Of Ventures. Bangalore, Karnataka, India. All rights reserved. [Year]
+
+SEO Primary Keywords
+	•	Pratap Sonkar founder Bangalore
+	•	P.Sonkar House Of Ventures
+	•	venture builder Bangalore
+	•	startup ecosystem Bangalore India
+	•	invest in startups Bangalore
+	•	startup internships Bangalore
+	•	business growth partner Bangalore
+	•	founder-led ventures India
+
+[ ADMIN PORTAL MODULE SPECIFICATION ]
+Admin Portal: Full Module Specification
+Access:
+Single login for Pratap only. Email and password authentication. All actions logged with timestamp. No public registration.
+
+Module 1: In-House Ventures Manager
+Purpose:
+Manage all venture cards displayed under the In-House Ventures toggle on the Ventures page.
+Actions Available:
+	•	Add new venture card
+	•	Edit any field on an existing card
+	•	Archive or permanently delete a card
+	•	Toggle card visibility: Live or Hidden (hidden cards are not shown on the site but are not deleted)
+	•	Drag-and-drop reorder of cards
+	•	Preview how a card will appear on the site before publishing
+Fields per Card:
+	•	Image upload (recommended size and format guidance shown in admin)
+	•	Company Name (text field, required)
+	•	Company Description (text area, 2 to 3 lines recommended, required)
+	•	Website URL (text field, optional)
+	•	Website Link Toggle: On or Off (when Off, the Visit Website button does not appear on the card)
+
+Module 2: Collaborated Services Manager
+Purpose:
+Manage all service cards displayed under the Collaborated Services toggle on the Ventures page.
+Actions Available:
+	•	Add new service card
+	•	Edit any field on an existing card
+	•	Archive or permanently delete a card
+	•	Toggle card visibility: Live or Hidden
+	•	Drag-and-drop reorder of cards
+	•	Preview before publishing
+Fields per Card:
+	•	Image upload (required)
+	•	Service Name (text field, required)
+	•	Service Description (text area, 2 to 3 lines recommended, required)
+	•	WhatsApp Number (text field: uses global number from Site Settings by default, can be overridden per card)
+	•	WhatsApp Pre-fill Message: auto-generated as 'Hi, I am interested in [Service Name]. Can we connect?' using the Service Name field. Admin can optionally customise this message per card.
+
+Module 3: Get Involved Form Responses
+Purpose:
+View and manage all form submissions from the Get Involved page.
+Actions Available:
+	•	View all submissions in a table with columns: Name, Email, Phone, Intent (Invest / Work / Grow), Date Submitted
+	•	Click any row to expand and see all fields submitted for that entry
+	•	Mark submission as: New, Reviewed, Follow-Up Pending, Closed
+	•	Export all submissions as CSV
+	•	Filter submissions by Intent type (Invest / Work / Grow) and by status
+Notification Setting:
+	•	Option to receive an email notification to admin email each time a new form is submitted
+
+Module 4: Ventures Multi-Select List (for Work form)
+Purpose:
+Manage the list of ventures that appears in the multi-select field on the Work section of the Get Involved form.
+Actions Available:
+	•	Add venture name to the list
+	•	Remove venture name from the list
+	•	Reorder the list
+Note:
+DEV NOTE: This list should reflect currently active In-House Ventures. Admin updates this manually when ventures are added or changed. It does not auto-sync from Module 1.
+
+Module 5: Site-Wide Settings
+Purpose:
+Manage global settings that apply across the entire website.
+Fields:
+	•	Primary WhatsApp Number (used as default for Collaborated Services cards and the WhatsApp button in footer)
+	•	Primary Email Address
+	•	LinkedIn URL
+	•	Instagram Handle
+	•	Twitter / X Handle
+	•	Footer Legal Year (auto-updates or manual)
+	•	Homepage Venture Snapshot: select which 3 to 4 venture cards from Module 1 appear in the Ventures Snapshot section on the homepage
