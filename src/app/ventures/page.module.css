@@ -37,7 +37,11 @@
   height: 112%;
   object-fit: cover;
   will-change: transform;
+<<<<<<< HEAD
   filter: brightness(1.2) saturate(1.08);
+=======
+  filter: brightness(1.1) saturate(1.04);
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
 }
 
 .chapterScrim {
@@ -48,7 +52,11 @@
     linear-gradient(90deg, rgba(6, 8, 14, 0.6) 0%, rgba(6, 8, 14, 0.04) 60%);
 }
 
+<<<<<<< HEAD
 .chapterTint { position: absolute; inset: 0; mix-blend-mode: multiply; opacity: 0.3; }
+=======
+.chapterTint { position: absolute; inset: 0; mix-blend-mode: multiply; opacity: 0.38; }
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
 
 .chapterInner {
   position: relative;

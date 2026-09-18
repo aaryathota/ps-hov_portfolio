@@ -6,7 +6,10 @@ import MobileTabBar from '@/components/layout/MobileTabBar';
 import PageTransition from '@/components/layout/PageTransition';
 import SmoothScroll from '@/components/layout/SmoothScroll';
 import Ambience from '@/components/motion/Ambience';
+<<<<<<< HEAD
 import ScrollProgress from '@/components/motion/ScrollProgress';
+=======
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
 import HomePage from '@/app/page.jsx';
 
 // Only the homepage ships in the first download. Other pages (and the admin
@@ -108,7 +111,10 @@ export default function App() {
   return (
     <SmoothScroll>
       <a href="#main" className="skip-link">Skip to content</a>
+<<<<<<< HEAD
       <ScrollProgress />
+=======
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
       <Ambience />
       <PageMeta />
       {location.pathname !== '/' && <Header />}

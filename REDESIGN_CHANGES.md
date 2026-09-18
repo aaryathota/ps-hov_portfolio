@@ -257,6 +257,7 @@ Reveal transitions lengthened to 1.1s on the expo curve with a wider stagger (11
 
 ## Reference pass
 This build continues from the review of landonorris.com and charlesleclerc.com earlier in the project: the chapter rail, numbered chapters and "scroll to explore" cue on Ventures, and now the full-bleed statement band with a vertical label and caption row, which is how both of those sites break up long pages.
+<<<<<<< HEAD
 
 # Version 10: entry loader and living hero (18 September 2026)
 
@@ -296,3 +297,5 @@ A hairline **scroll progress bar** across the top of the window, gold fading to 
 
 ## Checked in a browser
 Build and lint clean. No JavaScript errors on any route. Loader gone, progress bar reaches full width at the bottom of the page, all five pages render, mobile has no sideways overflow.
+=======
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49

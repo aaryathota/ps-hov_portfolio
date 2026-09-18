@@ -377,7 +377,10 @@ export default function AdminPanel() {
                   className={styles.preview}
                   src={getImageUrl(form.image_url)}
                   alt="Preview"
+<<<<<<< HEAD
           decoding="async"
+=======
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
                 />
               )}
               {type === "ventures" && (
@@ -460,8 +463,12 @@ export default function AdminPanel() {
                 <article className={styles.item} key={item.id}>
                   <div className={styles.itemImage}>
                     {item.image_url ? (
+<<<<<<< HEAD
                       <img src={getImageUrl(item.image_url)} alt=""
           decoding="async" />
+=======
+                      <img src={getImageUrl(item.image_url)} alt="" />
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
                     ) : (
                       <ImagePlus size={18} />
                     )}

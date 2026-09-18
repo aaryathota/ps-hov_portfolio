@@ -54,9 +54,15 @@ export const ventureMedia = {
   evntra: {
     accent: '#e883a6',
     tint: 'rgba(52, 18, 34, 0.52)',
+<<<<<<< HEAD
     src: PEXELS('3215526/pexels-photo-3215526.jpeg'),
     fallback: '/images/plates/evntra.jpg',
     alt: 'People gathered around a table at an outdoor venue in the evening',
+=======
+    src: UNSPLASH('1465101162946-4377e57745c3'),
+    fallback: '/images/plates/evntra.jpg',
+    alt: 'Long exposure of lights across a dark evening scene',
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
   },
   'whole-community': {
     accent: '#d8c07f',
@@ -80,11 +86,14 @@ export const pageMedia = {
     fallback: '/images/plates/guideshaala.jpg',
     alt: 'People working in a city cafe',
   },
+<<<<<<< HEAD
   services: {
     src: PEXELS('3182779/pexels-photo-3182779.jpeg', 1900),
     fallback: '/images/plates/service-brand.jpg',
     alt: 'A team working together on a project in a bright office',
   },
+=======
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
 };
 
 export const serviceMedia = {

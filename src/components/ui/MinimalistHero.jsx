@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { gsap, ScrollTrigger, SplitText } from '@/lib/gsap';
+=======
+import { useLayoutEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { gsap } from '@/lib/gsap';
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
 import styles from './MinimalistHero.module.css';
 
 /*
@@ -40,6 +46,7 @@ export default function MinimalistHero({
   locationText = 'Bangalore, India',
 }) {
   const root = useRef(null);
+<<<<<<< HEAD
   const timeline = useRef(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -135,6 +142,35 @@ export default function MinimalistHero({
       window.removeEventListener('pointermove', onMove);
       document.documentElement.removeEventListener('pointerleave', onLeave);
     };
+=======
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useLayoutEffect(() => {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const ctx = gsap.context((self) => {
+      const q = self.selector;
+      if (reduce) {
+        gsap.set([q('[data-h-top]'), q('[data-h-circle]'), q('[data-h-portrait]'), q('[data-h-copy]'), q('[data-h-display]'), q('[data-h-foot]')], { opacity: 1, clearProps: 'transform,clipPath' });
+        return;
+      }
+
+      const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+
+      tl.fromTo(q('[data-h-top]'), { opacity: 0, y: -14 }, { opacity: 1, y: 0, duration: 0.7, stagger: 0.06 }, 0.1)
+        // the circle opens first
+        .fromTo(q('[data-h-circle]'), { opacity: 0, scale: 0.86 }, { opacity: 1, scale: 1, duration: 1.1, ease: 'power3.out' }, 0.25)
+        // then the portrait rolls up out of it
+        .fromTo(q('[data-h-portrait]'),
+          { opacity: 0, yPercent: 26, clipPath: 'inset(100% 0% 0% 0%)' },
+          { opacity: 1, yPercent: 0, clipPath: 'inset(0% 0% 0% 0%)', duration: 1.35, ease: 'power3.out' }, 0.8)
+        // then the copy and the display text sitting behind the portrait
+        .fromTo(q('[data-h-copy]'), { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.8 }, 1.55)
+        .fromTo(q('[data-h-display]'), { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.9 }, 1.75)
+        .fromTo(q('[data-h-foot]'), { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.7, stagger: 0.08 }, 1.95);
+    }, root);
+
+    return () => ctx.revert();
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
   }, []);
 
   return (
@@ -179,7 +215,10 @@ export default function MinimalistHero({
 
         <div className={styles.center}>
           <div className={styles.circle} data-h-circle />
+<<<<<<< HEAD
           <div className={styles.ring} data-h-ring />
+=======
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
           <img
             className={styles.portrait}
             data-h-portrait
@@ -188,7 +227,10 @@ export default function MinimalistHero({
             width="923"
             height="924"
             fetchPriority="high"
+<<<<<<< HEAD
           decoding="async"
+=======
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
           />
         </div>
 

@@ -138,8 +138,12 @@ export default function AboutPage() {
   return <>
     <PageBackdrop fixed src={pageMedia.about.src} fallback={pageMedia.about.fallback} />
     <section ref={heroRef} className={styles.hero} data-about-hero>
+<<<<<<< HEAD
       <img className={styles.heroPortrait} data-about-portrait src="/images/founder_polo.webp" alt="Pratap Sonkar" width="661" height="585"
           decoding="async" />
+=======
+      <img className={styles.heroPortrait} data-about-portrait src="/images/founder_polo.webp" alt="Pratap Sonkar" width="661" height="585" />
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
       <div className="container"><div className={styles.heroContent} data-about-hero-content>
         <motion.div {...fadeUp(0.08)} animate={{ opacity: 1, y: 0 }}><SectionLabel>About Pratap Sonkar</SectionLabel></motion.div>
         <motion.h1 className={styles.heroTitle} {...fadeUp(0.18)} animate={{ opacity: 1, y: 0 }}>

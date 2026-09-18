@@ -3,7 +3,11 @@ import { Link } from 'react-router-dom';
 import { getImageUrl, getServices } from '@/api';
 import CoverflowCarousel from '@/components/ui/CoverflowCarousel';
 import PageBackdrop from '@/components/ui/PageBackdrop';
+<<<<<<< HEAD
 import { mediaFor, pageMedia, serviceMedia } from '@/data/media';
+=======
+import { mediaFor, serviceMedia, ventureMedia } from '@/data/media';
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
 import styles from './page.module.css';
 
 /* Partner services, shown in the 3D coverflow carousel. */
@@ -55,7 +59,11 @@ export default function ServicesPage() {
 
   return (
     <div className={styles.page}>
+<<<<<<< HEAD
       <PageBackdrop fixed src={pageMedia.services.src} fallback={pageMedia.services.fallback} />
+=======
+      <PageBackdrop fixed src={(ventureMedia.evntra || {}).src} fallback="/images/plates/evntra.jpg" />
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
       <header className={styles.head} data-reveal>
         <p className={styles.eyebrow}>Partner Services</p>
         <h1 className={styles.title}>The work around the ventures.</h1>

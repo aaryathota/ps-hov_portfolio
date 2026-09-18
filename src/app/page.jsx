@@ -165,8 +165,12 @@ export default function HomePage() {
                 {tickerNames.map((name) => (
                   <span className={styles.tickerItem} key={`${copy}-${name}`}>
                     {name}
+<<<<<<< HEAD
                     <img src="/images/logomark-white.webp" alt="" className={styles.tickerMark}
           decoding="async" />
+=======
+                    <img src="/images/logomark-white.webp" alt="" className={styles.tickerMark} />
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
                   </span>
                 ))}
               </div>

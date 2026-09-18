@@ -47,10 +47,15 @@ export default function Header() {
       <div className={styles.inner}>
         {/* Logo */}
         <Link to="/" className={styles.logo}>
+<<<<<<< HEAD
           <img className={styles.logoImage} src="/images/logo-white.webp" alt="P.Sonkar House of Ventures" width="270" height="57"
           decoding="async" />
           <img className={styles.logoMarkImage} src="/images/logomark-white.webp" alt="" aria-hidden="true"
           decoding="async" />
+=======
+          <img className={styles.logoImage} src="/images/logo-white.webp" alt="P.Sonkar House of Ventures" width="270" height="57" />
+          <img className={styles.logoMarkImage} src="/images/logomark-white.webp" alt="" aria-hidden="true" />
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
         </Link>
 
         {/* Desktop Nav */}

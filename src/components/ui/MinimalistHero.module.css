@@ -151,6 +151,7 @@
 @media (min-width: 768px) { .circle { height: 400px; width: 400px; } }
 @media (min-width: 1024px) { .circle { height: 500px; width: 500px; } }
 
+<<<<<<< HEAD
 /* Thin turning ring around the circle */
 .ring {
   position: absolute;
@@ -165,6 +166,8 @@
 @media (min-width: 768px) { .ring { width: 470px; height: 470px; } }
 @media (min-width: 1024px) { .ring { width: 580px; height: 580px; } }
 
+=======
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
 .portrait {
   position: relative;
   z-index: 10;   /* overlaps both the circle and the display text */
@@ -175,13 +178,17 @@
   object-fit: contain;
   object-position: bottom;
   scale: 1.5;                          /* scale-150, kept out of GSAP's way */
+<<<<<<< HEAD
   transition: filter 600ms ease;
+=======
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
   /* The studio shot ends at the chest; soften that edge so it does not read
      as a hard cut across the circle. */
   -webkit-mask-image: linear-gradient(180deg, #000 55%, rgba(0, 0, 0, 0.55) 78%, transparent 100%);
   mask-image: linear-gradient(180deg, #000 55%, rgba(0, 0, 0, 0.55) 78%, transparent 100%);
 }
 
+<<<<<<< HEAD
 @media (min-width: 768px) { /* Thin turning ring around the circle */
 .ring {
   position: absolute;
@@ -212,6 +219,10 @@
 @media (min-width: 1024px) { .ring { width: 580px; height: 580px; } }
 
 .portrait { width: 26rem; } }
+=======
+@media (min-width: 768px) { .portrait { width: 22rem; } }
+@media (min-width: 1024px) { .portrait { width: 26rem; } }
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
 
 /* Right display text */
 .right {
@@ -230,7 +241,10 @@
 
 .overlayText {
   margin: 0;
+<<<<<<< HEAD
   white-space: nowrap;
+=======
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
   font-family: var(--font-body);
   font-size: 4.5rem;                   /* text-7xl */
   font-weight: 800;
@@ -274,6 +288,7 @@
 
 
 /* Start state for the entrance (GSAP takes over on mount) */
+<<<<<<< HEAD
 [data-h-top], [data-h-copy], [data-h-display], [data-h-foot], [data-h-circle], [data-h-portrait], [data-h-ring] { opacity: 0; }
 
 /* Hover: the photo lifts a touch and the circle warms */
@@ -282,4 +297,10 @@
 
 @media (prefers-reduced-motion: reduce) {
   [data-h-top], [data-h-copy], [data-h-display], [data-h-foot], [data-h-circle], [data-h-portrait], [data-h-ring] { opacity: 1; }
+=======
+[data-h-top], [data-h-copy], [data-h-display], [data-h-foot], [data-h-circle], [data-h-portrait] { opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-h-top], [data-h-copy], [data-h-display], [data-h-foot], [data-h-circle], [data-h-portrait] { opacity: 1; }
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
 }

@@ -776,7 +776,11 @@
 }
 
 .doorImage {
+<<<<<<< HEAD
   filter: brightness(1.18) saturate(1.06);
+=======
+  filter: brightness(1.1) saturate(1.04);
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
   position: absolute;
   inset: 0;
   width: 100%;
@@ -946,7 +950,11 @@
 }
 
 .doorImage {
+<<<<<<< HEAD
   filter: brightness(1.18) saturate(1.06);
+=======
+  filter: brightness(1.1) saturate(1.04);
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
   position: absolute;
   inset: 0;
   width: 100%;
@@ -1012,7 +1020,11 @@
 }
 
 .imageBreakPhoto {
+<<<<<<< HEAD
   filter: brightness(1.2) saturate(1.08);
+=======
+  filter: brightness(1.12) saturate(1.05);
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
   position: absolute;
   inset: -12% 0;
   width: 100%;

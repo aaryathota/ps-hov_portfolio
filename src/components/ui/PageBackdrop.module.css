@@ -16,18 +16,30 @@
   object-fit: cover;
   will-change: transform;
   /* Brighter than before: the photograph should be visible, not hinted at */
+<<<<<<< HEAD
   filter: brightness(1.22) saturate(1.08) contrast(1.02);
 }
 
 .tint { position: absolute; inset: 0; mix-blend-mode: multiply; opacity: 0.28; }
+=======
+  filter: brightness(1.12) saturate(1.05) contrast(1.02);
+}
+
+.tint { position: absolute; inset: 0; mix-blend-mode: multiply; opacity: 0.35; }
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
 
 /* Page-level: heavy enough for long-form text over a photograph */
 .scrim {
   position: absolute;
   inset: 0;
   background:
+<<<<<<< HEAD
     linear-gradient(180deg, rgba(6, 8, 14, 0.6) 0%, rgba(6, 8, 14, 0.34) 45%, rgba(6, 8, 14, 0.74) 100%),
     linear-gradient(90deg, rgba(6, 8, 14, 0.4) 0%, rgba(6, 8, 14, 0.06) 72%);
+=======
+    linear-gradient(180deg, rgba(6, 8, 14, 0.68) 0%, rgba(6, 8, 14, 0.46) 45%, rgba(6, 8, 14, 0.8) 100%),
+    linear-gradient(90deg, rgba(6, 8, 14, 0.46) 0%, rgba(6, 8, 14, 0.12) 72%);
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
 }
 
 /* Section-level: lighter, the photograph is meant to be seen */

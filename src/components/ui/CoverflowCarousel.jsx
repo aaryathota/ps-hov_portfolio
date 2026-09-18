@@ -174,8 +174,12 @@ export default function CoverflowCarousel({
                 className={styles.card}
                 onClick={() => goTo(index)}
               >
+<<<<<<< HEAD
                 <img src={slide.src} alt={slide.alt} draggable={false} className={styles.image} loading="lazy"
           decoding="async" />
+=======
+                <img src={slide.src} alt={slide.alt} draggable={false} className={styles.image} loading="lazy" />
+>>>>>>> 8a231404a09dbddc638ea8f8089e0f1ab1eb8f49
                 <div className={styles.cardLabel}>
                   {slide.kind && <span className={styles.cardKind}>{slide.kind}</span>}
                   {slide.title && <span className={styles.cardTitle}>{slide.title}</span>}
