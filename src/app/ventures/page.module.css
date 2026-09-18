@@ -1,0 +1,218 @@
+/* Full-screen venture chapters. Each venture owns the whole background. */
+
+.page {
+  position: relative;
+  background: #07090f;
+}
+
+.pin {
+  position: relative;
+  height: 100svh;
+  overflow: hidden;
+}
+
+.track {
+  display: flex;
+  height: 100%;
+  width: max-content;
+  will-change: transform;
+}
+
+.chapter {
+  position: relative;
+  flex-shrink: 0;
+  width: 100vw;
+  height: 100svh;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.chapterMedia { position: absolute; inset: 0; overflow: hidden; }
+
+.chapterImage {
+  position: absolute;
+  inset: -6%;
+  width: 112%;
+  height: 112%;
+  object-fit: cover;
+  will-change: transform;
+  filter: brightness(1.1) saturate(1.04);
+}
+
+.chapterScrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(6, 8, 14, 0.5) 0%, rgba(6, 8, 14, 0.04) 36%, rgba(6, 8, 14, 0.82) 100%),
+    linear-gradient(90deg, rgba(6, 8, 14, 0.6) 0%, rgba(6, 8, 14, 0.04) 60%);
+}
+
+.chapterTint { position: absolute; inset: 0; mix-blend-mode: multiply; opacity: 0.38; }
+
+.chapterInner {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 64rem);
+  padding: 0 var(--section-padding-x) clamp(8rem, 16vh, 11rem);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  color: #f5f6fb;
+}
+
+.chapterIndex {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 1rem + 2.4vw, 3.4rem);
+  line-height: 1;
+}
+
+.chapterCount { font-size: 0.9rem; letter-spacing: 0.1em; color: rgba(245, 246, 251, 0.55); font-family: var(--font-body); }
+
+.chapterSector {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.chapterTitle {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.8rem, 1.4rem + 5vw, 6.4rem);
+  line-height: 0.96;
+  letter-spacing: -0.03em;
+  color: #fbfbfe;
+  max-width: 16ch;
+}
+
+.chapterText {
+  max-width: 54ch;
+  font-size: var(--text-lg);
+  color: rgba(245, 246, 251, 0.88);
+}
+
+.chapterLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4) var(--space-7);
+  margin-top: var(--space-4);
+}
+
+.chapterLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  color: #fbfbfe;
+  padding-bottom: 3px;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat;
+  transition: background-size 500ms var(--ease-out-expo), color 250ms;
+}
+
+.chapterLink:hover { color: #ffe6b8; background-size: 0% 1px; background-position: 100% 100%; }
+
+.chapterSoon { font-size: var(--text-sm); color: rgba(245, 246, 251, 0.6); align-self: center; }
+
+/* Chapter rail */
+.rail {
+  position: absolute;
+  left: var(--section-padding-x);
+  right: var(--section-padding-x);
+  bottom: clamp(1.5rem, 4vh, 3rem);
+  z-index: 3;
+}
+
+.railTrack { display: block; height: 1px; background: rgba(245, 246, 251, 0.2); margin-bottom: var(--space-4); }
+
+.railFill {
+  display: block;
+  height: 100%;
+  background: #f5f6fb;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.rail ul { list-style: none; display: flex; justify-content: space-between; gap: var(--space-4); margin: 0; padding: 0; }
+
+.railButton, .railActive {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  background: none;
+  border: 0;
+  padding: 0.25rem 0;
+  cursor: pointer;
+  font: inherit;
+  color: rgba(245, 246, 251, 0.45);
+  white-space: nowrap;
+  transition: color 300ms ease;
+}
+
+.railButton:hover { color: rgba(245, 246, 251, 0.8); }
+.railActive { color: #ffffff; }
+
+.railNum { font-family: var(--font-display); font-size: 0.95rem; }
+.railName { font-size: var(--text-xs); letter-spacing: 0.06em; }
+
+.scrollCue {
+  margin-top: var(--space-3);
+  font-size: var(--text-xs);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(245, 246, 251, 0.5);
+}
+
+/* Closing block after the chapters */
+.tail {
+  position: relative;
+  z-index: 2;
+  max-width: var(--max-width-wide);
+  margin: 0 auto;
+  padding: clamp(5rem, 12vw, 9rem) var(--section-padding-x);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-6);
+}
+
+.tailEyebrow { font-size: var(--text-sm); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-gold-light); }
+
+.tailTitle {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(2.2rem, 1.2rem + 3.4vw, 4.4rem);
+  line-height: 1;
+  max-width: 18ch;
+}
+
+.tailButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.9rem;
+  border-radius: 999px;
+  background: var(--color-text-primary);
+  color: #0d1220;
+  font-weight: 600;
+}
+
+.tailButton:hover { background: var(--color-gold-light); }
+
+@media (max-width: 899px) {
+  .pin { height: auto; overflow: visible; }
+  .track { flex-direction: column; width: 100%; height: auto; }
+  .chapter { width: 100%; height: 100svh; }
+  .chapterInner { padding-bottom: clamp(4rem, 12vh, 7rem); }
+  .rail { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pin { height: auto; overflow: visible; }
+  .track { flex-direction: column; width: 100%; height: auto; }
+  .chapter { width: 100%; height: auto; min-height: 80svh; padding-top: 6rem; }
+  .rail { display: none; }
+}
