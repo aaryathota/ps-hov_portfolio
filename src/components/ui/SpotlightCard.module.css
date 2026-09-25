@@ -1,0 +1,44 @@
+.card {
+  --spot-x: 50%;
+  --spot-y: 0%;
+  --spot-color: var(--tone-glow, rgba(45, 90, 142, 0.14));
+  position: relative;
+  isolation: isolate;
+}
+
+/* The soft light inside the card */
+.light {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(22rem circle at var(--spot-x) var(--spot-y), var(--spot-color), transparent 70%);
+  transition: opacity 500ms var(--ease-out-quart);
+}
+
+/* A 1px border that only shows near the pointer */
+.edge {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  padding: 1px;
+  opacity: 0;
+  background: radial-gradient(16rem circle at var(--spot-x) var(--spot-y), var(--tone, var(--color-accent)), transparent 70%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  transition: opacity 500ms var(--ease-out-quart);
+}
+
+.card:hover .light,
+.card:hover .edge { opacity: 1; }
+
+.card:focus-within .light { opacity: 1; background: radial-gradient(30rem circle at 50% 0%, var(--spot-color), transparent 75%); }
+.card:focus-within .edge { opacity: 0.6; background: var(--tone, var(--color-accent)); }
+
+@media (hover: none) {
+  .light, .edge { display: none; }
+}

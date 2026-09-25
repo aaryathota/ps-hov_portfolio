@@ -1,0 +1,479 @@
+/* Home. Light and formal: white, navy, a little gold. */
+
+.page { position: relative; overflow-x: clip; }
+
+.h2 {
+  font-size: clamp(2.2rem, 1.4rem + 3.2vw, 4.2rem);
+  font-weight: var(--weight-semibold);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  color: var(--color-ink);
+  max-width: 16ch;
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: stretch;
+  padding: var(--header-height) 4vw 0;
+  background:
+    radial-gradient(70rem 40rem at 60% 45%, rgba(45, 90, 142, 0.07), transparent 70%),
+    linear-gradient(180deg, #fff 0%, var(--color-bg-hero) 100%);
+  overflow: hidden;
+}
+
+.heroGrid {
+  position: relative;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 0.72fr);
+  align-items: end;
+  gap: 1rem;
+}
+
+.heroText {
+  align-self: center;
+  position: relative;
+  z-index: 3;
+  padding-bottom: clamp(2rem, 6vh, 5rem);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.tagline {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-accent-light);
+  max-width: none;
+}
+
+.title {
+  font-size: clamp(2.8rem, 0.8rem + 5vw, 6.2rem);
+  font-weight: var(--weight-semibold);
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+  color: var(--color-ink);
+}
+
+.titleSub { color: var(--color-accent-light); }
+
+/* "Ventures." in the serif italic, a touch larger so its x-height matches Outfit */
+.titleSerif {
+  font-size: 1.08em;
+  font-weight: 380;
+  letter-spacing: -0.03em;
+  line-height: 0.9;
+  padding-right: 0.06em;
+}
+
+.heroCtas { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-4); }
+
+/* Portrait stage */
+.stage {
+  position: relative;
+  align-self: end;
+  justify-self: center;
+  width: min(68svh, 42vw);
+  margin: 0 -4vw;
+  aspect-ratio: 1015 / 1194;
+  z-index: 2;
+}
+
+.back {
+  position: absolute;
+  left: 50%;
+  top: 14%;
+  width: 96%;
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+}
+
+.circle {
+  position: absolute;
+  inset: 6%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 26%, #eef3fa 0%, #d3e0f1 60%, #c2d3ea 100%);
+}
+
+.ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px dashed rgba(184, 134, 11, 0.55);
+}
+
+.portraitWrap { position: absolute; inset: 0; }
+.portraitWrap > div { position: absolute; inset: 0; }
+
+.portrait {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: bottom;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.heroSide {
+  align-self: center;
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding-bottom: clamp(2rem, 6vh, 5rem);
+  max-width: 21rem;
+  justify-self: end;
+}
+
+.sideTitle {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-medium);
+  line-height: 1.15;
+  color: var(--color-ink);
+}
+
+.sideText { font-size: var(--text-base); }
+
+.textLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-sm);
+  color: var(--color-accent);
+  padding-bottom: 3px;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat;
+  transition: background-size 500ms var(--ease-out-expo), color 250ms;
+}
+
+.textLink:hover { color: var(--color-accent-dark); background-size: 0% 1px; background-position: 100% 100%; }
+
+.heroNote {
+  position: absolute;
+  right: 4vw;
+  top: calc(var(--header-height) + 1rem);
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+  max-width: none;
+  display: none;
+}
+
+/* ---------- Ticker ---------- */
+
+.ticker {
+  position: relative;
+  z-index: 3;
+  background: var(--color-accent-dark);
+  color: #fff;
+  overflow: hidden;
+  padding: clamp(1.1rem, 2.2vw, 1.7rem) 0;
+}
+
+.tickerRow { display: flex; width: max-content; will-change: transform; }
+.tickerSet { display: flex; flex-shrink: 0; }
+
+.tickerItem {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  padding-right: clamp(1.5rem, 3vw, 3rem);
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(1.5rem, 0.95rem + 1.9vw, 2.75rem);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.tickerMark { height: 0.95em; width: auto; opacity: 0.45; }
+
+/* Thin gold rules above and below the band */
+.ticker::before,
+.ticker::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 160, 23, 0.55) 20%, rgba(212, 160, 23, 0.55) 80%, transparent);
+}
+.ticker::before { top: 6px; }
+.ticker::after { bottom: 6px; }
+
+/* ---------- Ways ---------- */
+
+.ways { background: #fff; }
+
+.wayGrid {
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.75rem);
+}
+
+.way {
+  --tone: var(--color-accent);
+  --tone-bg: var(--color-accent-bg);
+  --tone-glow: rgba(45, 90, 142, 0.12);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: clamp(1.75rem, 3vw, 2.5rem);
+  padding-top: clamp(2.25rem, 3.4vw, 3rem);
+  background: var(--color-bg-secondary);
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  transition: background 400ms var(--ease-out-quart), translate 500ms var(--ease-out-expo), box-shadow 500ms var(--ease-out-expo);
+}
+
+.gold { --tone: var(--color-gold); --tone-bg: var(--color-gold-bg); --tone-glow: rgba(184, 134, 11, 0.13); }
+.teal { --tone: var(--color-teal); --tone-bg: var(--color-teal-bg); --tone-glow: rgba(13, 115, 119, 0.12); }
+
+.way:hover {
+  background: #fff;
+  translate: 0 -6px;
+  box-shadow: 0 1px 0 var(--color-line), 0 30px 50px -30px rgba(15, 36, 64, 0.28);
+}
+
+.wayRule {
+  position: absolute;
+  top: 0;
+  left: clamp(1.75rem, 3vw, 2.5rem);
+  right: clamp(1.75rem, 3vw, 2.5rem);
+  height: 2px;
+  background: var(--tone);
+}
+
+.wayIcon {
+  transition: transform 600ms var(--ease-out-expo), background 400ms;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: var(--tone-bg);
+  color: var(--tone);
+  margin-bottom: var(--space-2);
+}
+
+.way:hover .wayIcon { transform: rotate(-8deg) scale(1.06); }
+
+.wayKicker { font-size: var(--text-sm); font-weight: var(--weight-semibold); color: var(--tone); }
+.wayHeading { font-size: var(--text-2xl); font-weight: var(--weight-semibold); color: var(--color-ink); }
+.wayBody { flex: 1; font-size: var(--text-base); }
+
+.wayLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: var(--space-3);
+  font-weight: var(--weight-semibold);
+  color: var(--color-ink);
+  transition: color 250ms, gap 350ms var(--ease-out-expo);
+}
+
+.wayLink:hover { color: var(--tone); gap: 0.7rem; }
+
+/* ---------- How it works ---------- */
+
+.steps { background: var(--color-bg-secondary); }
+
+.stepsHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-6) var(--space-12);
+  margin-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+.stepsSub { max-width: 36ch; font-size: var(--text-lg); }
+
+.stepsWrap { position: relative; }
+
+/* The gold line that runs through the three numerals */
+.stepsTrack {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  right: 2rem;
+  height: 1px;
+  background: var(--color-line-strong);
+}
+
+.stepsLine {
+  display: block;
+  height: 1px;
+  background: linear-gradient(90deg, var(--color-gold), var(--color-gold-light));
+  transform-origin: left center;
+}
+
+.stepList {
+  position: relative;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.5rem, 4vw, 4rem);
+}
+
+.step { display: flex; flex-direction: column; gap: var(--space-6); }
+
+/* Roman numeral in a gold ring, set in the serif */
+.stepNode {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-gold);
+  box-shadow: 0 0 0 6px var(--color-bg-secondary), inset 0 0 0 4px #fff, inset 0 0 0 5px rgba(184, 134, 11, 0.35);
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.35rem;
+  color: var(--color-gold-dark);
+  transition: background 400ms, color 400ms, translate 600ms var(--ease-out-expo);
+}
+
+/* translate, not transform, so the hover never fights the entrance animation */
+.step:hover .stepNode { background: var(--color-accent-dark); color: var(--color-gold-light); translate: 0 -3px; }
+
+.stepTitle {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-semibold);
+  color: var(--color-ink);
+  margin-bottom: var(--space-3);
+}
+
+.stepBody { font-size: var(--text-base); max-width: 34ch; }
+
+.stepsActions {
+  margin-top: clamp(3rem, 5vw, 4.5rem);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4) var(--space-8);
+}
+
+/* ---------- Founder ---------- */
+
+.founder { background: #fff; }
+
+.founderInner {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(2.5rem, 7vw, 7rem);
+  align-items: start;
+}
+
+.founderSide { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-5); position: sticky; top: calc(var(--header-height) + 2rem); }
+
+.founderTitle {
+  font-size: clamp(2rem, 1.2rem + 2.6vw, 3.6rem);
+  font-weight: var(--weight-semibold);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--color-ink);
+}
+
+.founderBody { font-size: var(--text-base); max-width: 44ch; }
+
+.quote { margin: 0; position: relative; }
+
+.quoteMark {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: clamp(5rem, 3rem + 5vw, 8.5rem);
+  line-height: 0.6;
+  height: 0.42em;
+  color: var(--color-gold);
+  opacity: 0.8;
+  margin-left: -0.04em;
+}
+
+.quoteText {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.7rem, 1rem + 2.1vw, 3rem);
+  font-weight: 330;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: var(--color-ink);
+  max-width: 24ch;
+}
+
+.quoteFooter {
+  margin-top: var(--space-8);
+  padding-left: 3rem;
+  position: relative;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-tertiary);
+}
+
+.quoteFooter::before { content: ''; position: absolute; left: 0; top: 50%; width: 2rem; height: 1px; background: var(--color-gold); }
+
+/* ---------- Closing ---------- */
+
+.closing { padding: 0 clamp(0.75rem, 2vw, 1.75rem) clamp(2rem, 4vw, 3.5rem); background: #fff; }
+
+.closingBox {
+  background: var(--color-accent-dark);
+  color: #fff;
+  padding: clamp(3.5rem, 9vw, 8rem) var(--section-padding-x);
+  text-align: center;
+  clip-path: inset(0% 0% 0% 0% round 28px);
+}
+
+.closingCopy { display: flex; flex-direction: column; align-items: center; gap: var(--space-6); }
+
+.closingTitle {
+  font-size: clamp(2.2rem, 1.2rem + 4vw, 5rem);
+  font-weight: var(--weight-medium);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: #fff;
+  max-width: 16ch;
+}
+
+.closingSerif { color: var(--color-gold-light); font-weight: 350; }
+
+.closingText { color: rgba(255, 255, 255, 0.78); max-width: 46ch; font-size: var(--text-lg); }
+
+.closingButtons { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-3); margin-top: var(--space-4); }
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 900px) {
+  .hero { padding-top: calc(var(--header-height) + 0.5rem); }
+  .heroGrid { grid-template-columns: 1fr; gap: 0; align-items: start; }
+  .heroText { padding-bottom: 0; order: 1; }
+  .heroSide { order: 3; max-width: none; justify-self: start; padding: var(--space-6) 0 var(--space-8); }
+  .stage { order: 2; width: min(100%, 26rem); margin: var(--space-6) 0 0; justify-self: center; }
+  .wayGrid { grid-template-columns: 1fr; }
+  .founderInner { grid-template-columns: 1fr; }
+  .founderSide { position: static; }
+  .stepList { grid-template-columns: 1fr; gap: var(--space-10); }
+  .stepsTrack { top: 2rem; bottom: 2rem; left: 2rem; right: auto; width: 1px; height: auto; }
+  .stepsLine { width: 1px; height: 100%; transform-origin: center top; }
+  .step { flex-direction: row; align-items: flex-start; gap: var(--space-5); }
+  .stepNode { flex-shrink: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ring { animation: none; }
+}

@@ -1,0 +1,362 @@
+/* ============================================
+   P.Sonkar House of Ventures — Global Styles
+   Light, formal. Fonts are self-hosted (see main.jsx).
+   ============================================ */
+
+@import url('./variables.css');
+
+/* ---- Reset & Base ---- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Lenis needs these so native and smooth scrolling do not fight */
+html.lenis,
+html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+img,
+svg {
+  max-width: 100%;
+}
+
+[id] {
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--weight-normal);
+  line-height: var(--leading-normal);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-primary);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ---- Typography ---- */
+
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-text-primary);
+}
+
+h1 { font-size: var(--text-5xl); font-weight: var(--weight-extrabold); }
+h2 { font-size: var(--text-4xl); font-weight: var(--weight-bold); }
+h3 { font-size: var(--text-3xl); font-weight: var(--weight-semibold); }
+h4 { font-size: var(--text-2xl); font-weight: var(--weight-semibold); }
+h5 { font-size: var(--text-xl); font-weight: var(--weight-medium); }
+h6 { font-size: var(--text-lg); font-weight: var(--weight-medium); }
+
+p {
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+  max-width: 65ch;
+}
+
+a {
+  color: var(--color-accent-light);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out-quart);
+}
+
+a:hover { color: var(--color-accent-dark); }
+
+strong {
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-primary);
+}
+
+/* ---- Section label ----
+   A short rule and a plain-sentence label. Kept for places where the label
+   tells the reader which part of the story they are in. */
+
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.01em;
+  color: var(--color-accent);
+  margin-bottom: var(--space-4);
+}
+
+.section-label::before {
+  content: '';
+  width: 1.75rem;
+  height: 1px;
+  background: var(--color-gold);
+}
+
+/* ---- Serif accent ----
+   Fraunces italic, the same family of letterform as the P.Sonkar wordmark.
+   Used for one or two words in a heading, quotes and numerals, never for
+   body copy, so the site stays modern with a traditional voice. */
+
+/* :where() keeps specificity at zero so a page can recolour or resize it */
+:where(.serif-accent) {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.012em;
+  font-optical-sizing: auto;
+  color: var(--color-accent-light);
+}
+
+/* ---- Ornament: hairline, a small gold diamond, hairline ---- */
+
+.ornament {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  width: 100%;
+  max-width: 14rem;
+  color: var(--color-gold);
+}
+
+.ornament::before,
+.ornament::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, currentColor);
+}
+
+.ornament::after { transform: scaleX(-1); }
+
+.ornament > span {
+  width: 7px;
+  height: 7px;
+  border: 1px solid currentColor;
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+.ornament--center { margin-inline: auto; }
+.ornament--light { color: var(--color-gold-light); }
+
+/* ---- Gold sheen: a slow highlight that passes across a line of text ----
+   Adapted from 21st.dev "Animated Shiny Text". Pauses between passes so it
+   reads as a glint, not a loading state. */
+
+.sheen {
+  --sheen-base: var(--color-accent-light);
+  --sheen-light: var(--color-gold-light);
+  background: linear-gradient(100deg,
+    var(--sheen-base) 0%, var(--sheen-base) 42%,
+    var(--sheen-light) 50%,
+    var(--sheen-base) 58%, var(--sheen-base) 100%);
+  background-size: 260% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: sheen 6.5s var(--ease-in-out-quart) 2.2s infinite;
+}
+
+@keyframes sheen {
+  0% { background-position: 100% 0; }
+  38%, 100% { background-position: -60% 0; }
+}
+
+/* ---- Paper grain: a very faint texture on large light panels ---- */
+
+.grain { position: relative; isolation: isolate; }
+
+.grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.06 0 0 0 0 0.14 0 0 0 0 0.25 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---- Layout ---- */
+
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding-left: var(--section-padding-x);
+  padding-right: var(--section-padding-x);
+}
+
+.container--narrow { max-width: var(--max-width-narrow); }
+.container--wide { max-width: var(--max-width-wide); }
+
+.section {
+  padding-top: var(--section-padding-y);
+  padding-bottom: var(--section-padding-y);
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .publicMain { padding-bottom: 4.75rem; }
+}
+
+/* ---- Card (kept for admin + legacy pages) ---- */
+
+.glass-card {
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  transition: border-color var(--duration-normal) var(--ease-out-expo),
+              box-shadow var(--duration-normal) var(--ease-out-expo);
+}
+
+.glass-card:hover {
+  border-color: var(--color-line-strong);
+  box-shadow: 0 20px 40px -20px rgba(15, 36, 64, 0.14);
+}
+
+/* ---- Form Styles ---- */
+
+input,
+textarea,
+select {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  background: var(--color-bg-primary);
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  width: 100%;
+  outline: none;
+  transition: border-color var(--duration-fast) var(--ease-out-quart),
+              box-shadow var(--duration-fast) var(--ease-out-quart);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-subtle);
+}
+
+input::placeholder,
+textarea::placeholder { color: var(--color-text-muted); }
+
+label {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2);
+  display: block;
+}
+
+textarea { min-height: 120px; resize: vertical; }
+
+/* ---- Focus (keyboard only) ---- */
+
+:focus-visible {
+  outline: 2px solid var(--color-accent-light);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---- Selection ---- */
+
+::selection { background: var(--color-accent); color: #fff; }
+
+/* ---- Scrollbar ---- */
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-bg-secondary); }
+::-webkit-scrollbar-thumb { background: #cbd2dd; border-radius: var(--radius-full); }
+::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+/* ---- Utilities ---- */
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 1100;
+  padding: 0.7rem 1.1rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-accent-dark);
+  color: #fff;
+  font-weight: var(--weight-semibold);
+  transform: translateY(-200%);
+  transition: transform 200ms var(--ease-out-quart);
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+  color: #fff;
+}
+
+.page-loading { min-height: 100vh; }
+
+/* Reveal on scroll: anything with data-reveal rises in once (see App.jsx) */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 1000ms var(--ease-out-expo), transform 1000ms var(--ease-out-expo);
+}
+
+[data-reveal].is-revealed { opacity: 1; transform: none; }
+[data-reveal='2'] { transition-delay: 110ms; }
+[data-reveal='3'] { transition-delay: 220ms; }
+[data-reveal='4'] { transition-delay: 330ms; }
+
+/* ---- Reduced Motion ---- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  [data-reveal] { opacity: 1; transform: none; transition: none; }
+}
+
+/* ---- Responsive ---- */
+
+@media (max-width: 768px) {
+  .section {
+    padding-top: clamp(2.5rem, 2rem + 3vw, 4rem);
+    padding-bottom: clamp(2.5rem, 2rem + 3vw, 4rem);
+  }
+}

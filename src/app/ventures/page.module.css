@@ -1,0 +1,448 @@
+/* Ventures: one full screen per venture, travelling sideways.
+   The intro is light. Each chapter is its picture, edge to edge, with the
+   story set over it on a navy gradient in the site's own colours. */
+
+.page {
+  position: relative;
+  background: var(--color-bg-hero);
+}
+
+.pin {
+  position: relative;
+  height: 100svh;
+  overflow: hidden;
+}
+
+.track {
+  display: flex;
+  height: 100%;
+  width: max-content;
+  will-change: transform;
+}
+
+/* ---------- Intro panel ---------- */
+
+.intro {
+  position: relative;
+  flex-shrink: 0;
+  width: 100vw;
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  padding: var(--header-height) var(--section-padding-x) 9rem;
+  background:
+    radial-gradient(60rem 40rem at 85% 20%, rgba(45, 90, 142, 0.1), transparent 70%),
+    var(--color-bg-hero);
+}
+
+.introInner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: 56rem;
+}
+
+.introKicker {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.introKicker::before { content: ''; width: 1.75rem; height: 1px; background: var(--color-gold); }
+
+.introTitle {
+  font-size: clamp(3rem, 1.4rem + 6.5vw, 8rem);
+  font-weight: var(--weight-semibold);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  color: var(--color-ink);
+}
+
+.introText { font-size: var(--text-lg); max-width: 46ch; }
+
+.introSide { font-size: var(--text-sm); color: var(--color-text-tertiary); }
+.introSide a { color: var(--color-accent); font-weight: var(--weight-semibold); border-bottom: 1px solid currentColor; }
+
+.introCue {
+  position: absolute;
+  right: var(--section-padding-x);
+  bottom: 9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+}
+
+.introCue span {
+  width: 3.5rem;
+  height: 1px;
+  background: var(--color-line-strong);
+  position: relative;
+  overflow: hidden;
+}
+
+.introCue span::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-accent);
+  transform: translateX(-100%);
+  animation: cue 2.4s var(--ease-in-out-quart) infinite;
+}
+
+@keyframes cue { 60%, 100% { transform: translateX(100%); } }
+
+/* ---------- Chapters ---------- */
+
+.chapter {
+  --ink-deep: 10, 24, 44; /* navy, as r, g, b for the gradients */
+  position: relative;
+  flex-shrink: 0;
+  width: 100vw;
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: var(--color-accent-dark);
+  color: #fff;
+}
+
+/* The picture: a little wider than the screen so it can drift */
+.media { position: absolute; inset: 0; overflow: hidden; }
+
+.mediaImage {
+  position: absolute;
+  top: 0;
+  left: -8%;
+  width: 116%;
+  max-width: none; /* the global img rule would cap it at 100% and leave no room to drift */
+  height: 100%;
+  object-fit: cover;
+  will-change: transform;
+  user-select: none;
+}
+
+/* Navy from the left for the text, and from the bottom for the rail */
+.scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg,
+      rgba(var(--ink-deep), 0.94) 0%,
+      rgba(var(--ink-deep), 0.82) 28%,
+      rgba(var(--ink-deep), 0.42) 52%,
+      rgba(var(--ink-deep), 0.06) 74%,
+      rgba(var(--ink-deep), 0) 100%),
+    linear-gradient(0deg, rgba(var(--ink-deep), 0.78) 0%, rgba(var(--ink-deep), 0) 30%),
+    linear-gradient(180deg, rgba(var(--ink-deep), 0.35) 0%, rgba(var(--ink-deep), 0) 22%);
+}
+
+/* ---------- Screenshot chapters ----------
+   Navy, with a soft light behind a large browser window that runs off the
+   right edge. Text sits on the navy; the window's left edge passes under it. */
+
+.chapter[data-kind='screenshot'] {
+  background:
+    radial-gradient(52rem 36rem at 78% 42%, rgba(45, 90, 142, 0.55), transparent 70%),
+    radial-gradient(30rem 22rem at 62% 88%, rgba(184, 134, 11, 0.14), transparent 70%),
+    var(--color-accent-dark);
+}
+
+.deviceWrap {
+  position: absolute;
+  top: calc(var(--header-height) + 3.25rem);
+  left: 44vw;
+  width: 66vw;
+  will-change: transform;
+}
+
+.device {
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+  transform: perspective(2200px) rotateY(-11deg) rotateX(3deg);
+  transform-origin: left center;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 50px 120px -30px rgba(0, 0, 0, 0.65);
+}
+
+.device img { display: block; width: 100%; height: auto; }
+
+.deviceBar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 2.2rem;
+  padding: 0 1rem;
+  background: #eef1f6;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.deviceBar span { width: 10px; height: 10px; border-radius: 50%; background: #cfd6e2; }
+
+.chapter[data-kind='screenshot'] .scrim {
+  background:
+    linear-gradient(90deg,
+      rgba(var(--ink-deep), 0.96) 0%,
+      rgba(var(--ink-deep), 0.88) 34%,
+      rgba(var(--ink-deep), 0.25) 52%,
+      rgba(var(--ink-deep), 0) 62%),
+    linear-gradient(0deg, rgba(var(--ink-deep), 0.85) 0%, rgba(var(--ink-deep), 0) 26%);
+}
+
+/* A thin gold frame just inside the edges: the traditional touch */
+.chapter::after {
+  content: '';
+  position: absolute;
+  inset: calc(var(--header-height) + 0.9rem) clamp(0.9rem, 1.6vw, 1.5rem) clamp(0.9rem, 1.6vw, 1.5rem);
+  border: 1px solid rgba(212, 160, 23, 0.32);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.credit {
+  position: absolute;
+  z-index: 3;
+  top: calc(var(--header-height) + 1.9rem);
+  right: calc(clamp(0.9rem, 1.6vw, 1.5rem) + 1.1rem);
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.72);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  padding-bottom: 1px;
+}
+
+.credit:hover { color: #fff; border-color: #fff; }
+
+.chapterInner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: calc(var(--header-height) + 2rem) var(--section-padding-x) 9.5rem calc(var(--section-padding-x) + 1.5rem);
+}
+
+.copy { display: flex; flex-direction: column; gap: var(--space-5); max-width: 40rem; }
+
+.index {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  line-height: 1;
+}
+
+.indexNum {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.8rem, 1.1rem + 1.8vw, 2.8rem);
+  color: var(--color-gold-light);
+}
+
+.count { font-size: var(--text-sm); color: rgba(255, 255, 255, 0.6); }
+
+.sector {
+  position: relative;
+  margin-left: 0.9rem;
+  padding-left: 1.4rem;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.sector::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 0.9rem;
+  height: 1px;
+  background: var(--color-gold-light);
+}
+
+.title {
+  font-size: clamp(2.8rem, 1.2rem + 5vw, 6.6rem);
+  font-weight: var(--weight-semibold);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  color: #fff;
+  padding-bottom: 0.08em;
+  text-shadow: 0 2px 30px rgba(10, 24, 44, 0.35);
+}
+
+.text {
+  font-size: var(--text-lg);
+  line-height: 1.65;
+  max-width: 44ch;
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.links { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4) var(--space-8); margin-top: var(--space-3); }
+
+.primaryLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.5rem;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--color-accent-dark);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-sm);
+  transition: background 300ms, transform 500ms var(--ease-out-expo), gap 400ms var(--ease-out-expo);
+}
+
+.primaryLink:hover { background: var(--color-gold-bg); color: var(--color-accent-dark); gap: 0.75rem; transform: translateY(-2px); }
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-sm);
+  color: #fff;
+  padding-bottom: 3px;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat;
+  transition: background-size 500ms var(--ease-out-expo), color 250ms;
+}
+
+.link:hover { color: var(--color-gold-light); background-size: 0% 1px; background-position: 100% 100%; }
+
+.soon { font-size: var(--text-sm); color: rgba(255, 255, 255, 0.6); }
+
+/* ---------- Rail ---------- */
+
+.rail {
+  position: absolute;
+  left: calc(var(--section-padding-x) + 1.5rem);
+  right: calc(var(--section-padding-x) + 1.5rem);
+  bottom: clamp(1.9rem, 4.4vh, 3.1rem);
+  z-index: 3;
+}
+
+.railTrack { display: block; height: 1px; background: var(--color-line-strong); margin-bottom: var(--space-4); transition: background 400ms; }
+
+.railFill { display: block; height: 100%; background: var(--color-accent); transform: scaleX(0); transform-origin: left; transition: background 400ms; }
+
+.rail ul { list-style: none; display: flex; justify-content: space-between; gap: var(--space-4); }
+
+.railButton,
+.railActive {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  background: none;
+  border: 0;
+  padding: 0.25rem 0;
+  cursor: pointer;
+  font: inherit;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  transition: color 300ms ease;
+}
+
+.railButton:hover { color: var(--color-text-secondary); }
+.railActive { color: var(--color-ink); }
+
+.railNum { font-family: var(--font-serif); font-style: italic; font-size: 0.95rem; }
+.railName { font-size: var(--text-xs); }
+
+/* Over a picture the rail turns light */
+.railOnImage .railTrack { background: rgba(255, 255, 255, 0.28); }
+.railOnImage .railFill { background: var(--color-gold-light); }
+.railOnImage .railButton { color: rgba(255, 255, 255, 0.55); }
+.railOnImage .railButton:hover { color: rgba(255, 255, 255, 0.85); }
+.railOnImage .railActive { color: #fff; }
+
+/* ---------- Closing block ---------- */
+
+.tail {
+  position: relative;
+  z-index: 2;
+  background: var(--color-accent-dark);
+  color: #fff;
+}
+
+.tailInner {
+  max-width: var(--max-width-wide);
+  margin: 0 auto;
+  padding: clamp(4.5rem, 10vw, 8rem) var(--section-padding-x);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-8);
+}
+
+.tailTitle {
+  font-size: clamp(2.2rem, 1.2rem + 3.4vw, 4.4rem);
+  font-weight: var(--weight-medium);
+  line-height: 1.02;
+  color: #fff;
+  max-width: 18ch;
+}
+
+.tailSerif { color: var(--color-gold-light); font-weight: 350; }
+
+.tailActions { display: flex; align-items: center; gap: var(--space-8); flex-wrap: wrap; }
+
+.tailButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.9rem;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--color-accent-dark);
+  font-weight: var(--weight-semibold);
+  transition: background 300ms;
+}
+
+.tailButton:hover { background: #dfe6f2; color: var(--color-accent-dark); }
+
+.tailLink { color: rgba(255, 255, 255, 0.82); border-bottom: 1px solid rgba(255, 255, 255, 0.4); padding-bottom: 2px; }
+.tailLink:hover { color: #fff; border-color: #fff; }
+
+/* ---------- Phones and reduced motion: chapters stack ---------- */
+
+@media (max-width: 899px) {
+  .pin { height: auto; overflow: visible; }
+  .track { flex-direction: column; width: 100%; height: auto; }
+  .intro { width: 100%; height: auto; min-height: 88svh; padding: calc(var(--header-height) + 2rem) var(--section-padding-x) 4rem; }
+  .introCue { display: none; }
+  .chapter { width: 100%; height: auto; min-height: 100svh; align-items: flex-end; }
+  .mediaImage { left: 0; width: 100%; }
+  .scrim,
+  .chapter[data-kind='screenshot'] .scrim {
+    background: linear-gradient(180deg,
+      rgba(var(--ink-deep), 0.3) 0%,
+      rgba(var(--ink-deep), 0.25) 30%,
+      rgba(var(--ink-deep), 0.78) 58%,
+      rgba(var(--ink-deep), 0.95) 100%);
+  }
+  .chapter::after { inset: 0.75rem; }
+  .deviceWrap { top: 5.5rem; left: 1.5rem; width: 150vw; }
+  .device { transform: perspective(1400px) rotateY(-8deg); }
+  .credit { top: auto; bottom: 1.4rem; right: 1.5rem; }
+  .chapterInner { padding: 8rem 1.5rem 4.25rem; }
+  .title { font-size: clamp(2.4rem, 1.4rem + 5vw, 3.6rem); }
+  .text { font-size: var(--text-base); }
+  .rail { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pin { height: auto; overflow: visible; }
+  .track { flex-direction: column; width: 100%; height: auto; }
+  .intro { width: 100%; height: auto; min-height: 70svh; }
+  .introCue { display: none; }
+  .chapter { width: 100%; min-height: 100svh; }
+  .mediaImage { left: 0; width: 100%; }
+  .rail { display: none; }
+}

@@ -1,0 +1,70 @@
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-body);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 320ms var(--ease-out-quart), border-color 320ms var(--ease-out-quart);
+}
+
+/* Colour rises from the bottom edge on hover */
+.fill {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  transform: translateY(101%);
+  transition: transform 420ms var(--ease-out-expo);
+}
+
+.button:hover .fill,
+.button:focus-visible .fill { transform: translateY(0); }
+
+.sm { font-size: var(--text-xs); padding: 0.55rem 1.1rem; }
+.md { font-size: var(--text-sm); padding: 0.8rem 1.5rem; }
+.lg { font-size: var(--text-base); padding: 1rem 1.9rem; }
+
+.primary { background: var(--color-accent); color: #fff; }
+.primary .fill { background: var(--color-accent-dark); }
+.primary:hover { color: #fff; }
+
+.secondary { background: var(--color-bg-tertiary); color: var(--color-text-primary); }
+.secondary .fill { background: #e2e7f0; }
+.secondary:hover { color: var(--color-text-primary); }
+
+.outline { background: transparent; color: var(--color-accent); border-color: var(--color-accent); }
+.outline .fill { background: var(--color-accent); }
+.outline:hover,
+.outline:focus-visible { color: #fff; }
+
+.ghost { background: transparent; color: var(--color-text-secondary); }
+.ghost .fill { background: var(--color-bg-tertiary); }
+.ghost:hover { color: var(--color-text-primary); }
+
+/* For navy sections */
+.onDark { background: #fff; color: var(--color-accent-dark); }
+.onDark .fill { background: #dfe6f2; }
+.onDark:hover { color: var(--color-accent-dark); }
+
+.onDarkOutline { background: transparent; color: #fff; border-color: rgba(255, 255, 255, 0.45); }
+.onDarkOutline .fill { background: #fff; }
+.onDarkOutline:hover,
+.onDarkOutline:focus-visible { color: var(--color-accent-dark); border-color: #fff; }
+
+.fullWidth { width: 100%; }
+
+.icon { display: flex; align-items: center; }
+.iconAfter { transition: transform 320ms var(--ease-out-expo); }
+.button:hover .iconAfter { transform: translate(2px, -2px); }
+
+.button:disabled { opacity: 0.5; cursor: not-allowed; }

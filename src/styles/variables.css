@@ -1,0 +1,170 @@
+/* ============================================
+   P.Sonkar House of Ventures — Design Tokens
+   LIGHT MODE — Premium Professional
+   ============================================ */
+
+:root {
+  /* Shared brand mark sizing */
+  --logo-width: clamp(220px, 24vw, 340px);
+  --logo-footer-width: min(320px, 100%);
+  --logo-mark-size: 42px;
+
+  /* ---- Color Palette — Light Mode ---- */
+
+  /* Base / Background */
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f8f9fc;
+  --color-bg-tertiary: #f0f2f7;
+  --color-bg-card: rgba(255, 255, 255, 0.85);
+  --color-bg-card-hover: rgba(255, 255, 255, 1);
+  --color-bg-glass: rgba(255, 255, 255, 0.6);
+  --color-bg-glass-border: rgba(0, 0, 0, 0.06);
+  --color-bg-hero: #f4f6fb;
+
+  /* Text */
+  --color-text-primary: #111827;
+  --color-text-secondary: #4b5563;
+  --color-text-tertiary: #6b7280;
+  --color-text-muted: #9ca3af;
+
+  /* Accent — Deep Indigo/Blue */
+  --color-accent: #1e3a5f;
+  --color-accent-light: #2d5a8e;
+  --color-accent-dark: #0f2440;
+  --color-accent-glow: rgba(30, 58, 95, 0.15);
+  --color-accent-subtle: rgba(30, 58, 95, 0.06);
+  --color-accent-bg: #eef2f9;
+
+  /* Secondary — Warm Gold */
+  --color-gold: #b8860b;
+  --color-gold-light: #d4a017;
+  --color-gold-dark: #8b6508;
+  --color-gold-glow: rgba(184, 134, 11, 0.15);
+  --color-gold-bg: #fdf8ee;
+
+  /* Tertiary — Teal */
+  --color-teal: #0d7377;
+  --color-teal-light: #14b8a6;
+  --color-teal-dark: #0a5c5f;
+  --color-teal-glow: rgba(13, 115, 119, 0.15);
+  --color-teal-bg: #eef9f8;
+
+  /* Status */
+  --color-success: #16a34a;
+  --color-warning: #d97706;
+  --color-error: #dc2626;
+  --color-info: var(--color-accent);
+
+  /* Venture Stage Colors */
+  --color-stage-active: var(--color-success);
+  --color-stage-in-progress: var(--color-gold);
+  --color-stage-early: var(--color-accent-light);
+  --color-stage-being-shaped: var(--color-teal);
+
+  /* ---- Typography ---- */
+  --font-heading: 'Outfit Variable', 'Outfit', system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-heading);
+  /* Classic serif, echoing the P.Sonkar wordmark. Used sparingly for accents. */
+  --font-serif: 'Fraunces Variable', 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter Variable', 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Fluid Typography */
+  --text-xs: clamp(0.7rem, 0.65rem + 0.25vw, 0.8rem);
+  --text-sm: clamp(0.8rem, 0.75rem + 0.3vw, 0.9rem);
+  --text-base: clamp(0.9rem, 0.85rem + 0.35vw, 1.05rem);
+  --text-lg: clamp(1.05rem, 0.95rem + 0.5vw, 1.25rem);
+  --text-xl: clamp(1.2rem, 1.05rem + 0.75vw, 1.5rem);
+  --text-2xl: clamp(1.5rem, 1.2rem + 1.5vw, 2rem);
+  --text-3xl: clamp(1.8rem, 1.4rem + 2vw, 2.8rem);
+  --text-4xl: clamp(2.2rem, 1.6rem + 3vw, 3.8rem);
+  --text-5xl: clamp(2.8rem, 1.8rem + 4vw, 5rem);
+
+  /* Weights */
+  --weight-light: 300;
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-extrabold: 800;
+
+  /* Line Heights */
+  --leading-tight: 1.1;
+  --leading-snug: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.7;
+
+  /* Letter Spacing */
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.05em;
+  --tracking-wider: 0.1em;
+  --tracking-widest: 0.15em;
+
+  /* ---- Spacing ---- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+  --space-40: 10rem;
+
+  /* Section Spacing */
+  --section-padding-y: clamp(4rem, 3rem + 5vw, 8rem);
+  --section-padding-x: clamp(1.25rem, 0.5rem + 3vw, 4rem);
+
+  /* ---- Layout ---- */
+  --max-width: 1200px;
+  --max-width-narrow: 760px;
+  --max-width-wide: 1400px;
+
+  /* ---- Borders ---- */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+  --border-subtle: 1px solid rgba(0, 0, 0, 0.06);
+  --border-accent: 1px solid var(--color-accent);
+
+  /* ---- Shadows ---- */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.12);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.04);
+  --shadow-card-hover: 0 4px 16px rgba(0, 0, 0, 0.08), 0 8px 32px rgba(0, 0, 0, 0.06);
+
+  /* ---- Transitions ---- */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  --duration-slower: 800ms;
+
+  /* ---- Structure ---- */
+  --header-height: 76px;
+  --color-line: rgba(15, 36, 64, 0.12);
+  --color-line-strong: rgba(15, 36, 64, 0.22);
+  --color-ink: #0f2440;
+
+  /* ---- Z-Index ---- */
+  --z-base: 0;
+  --z-above: 10;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+  --z-canvas: -1;
+}

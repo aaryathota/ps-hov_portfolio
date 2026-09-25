@@ -1,0 +1,50 @@
+.page {
+  overflow: hidden;
+  padding: calc(var(--header-height) + clamp(3rem, 6vw, 5rem)) var(--section-padding-x) clamp(4rem, 8vw, 7rem);
+  background:
+    radial-gradient(60rem 30rem at 50% 0%, rgba(45, 90, 142, 0.08), transparent 70%),
+    var(--color-bg-secondary);
+}
+
+.head {
+  max-width: var(--max-width-wide);
+  margin: 0 auto clamp(1.5rem, 3vw, 2.5rem);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  font-size: clamp(2.4rem, 1.4rem + 4vw, 5rem);
+  font-weight: var(--weight-semibold);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  color: var(--color-ink);
+  max-width: 16ch;
+}
+
+.lede { margin: var(--space-6) auto 0; max-width: 56ch; font-size: var(--text-lg); }
+
+.loading { text-align: center; color: var(--color-text-tertiary); padding: 4rem 0; }
+
+.tail {
+  max-width: var(--max-width-wide);
+  margin: clamp(3rem, 7vw, 6rem) auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  padding-top: clamp(2rem, 4vw, 3rem);
+  border-top: 1px solid var(--color-line-strong);
+}
+
+.tailTitle {
+  font-size: clamp(1.8rem, 1rem + 2.4vw, 3rem);
+  font-weight: var(--weight-medium);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--color-ink);
+  max-width: 20ch;
+}
