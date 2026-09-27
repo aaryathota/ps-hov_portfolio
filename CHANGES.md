@@ -7,7 +7,8 @@
 - Footer link "About the founder" renamed "About Me", as in the site content.
 
 ## Home
-- Tagline oval: the turning gold outline, the moving highlight and the glint over the words are gone. The oval itself is unchanged.
+- Tagline oval: only the turning gold outline is removed. The soft highlight drifting across it and the gold glint over the words stay.
+- **Fixed: the circle behind the photo drifted off to the right** as soon as the mouse moved over the hero (the pointer effect overwrote the CSS that centred it). It is now centred without a transform and stays behind the photo.
 - Ring behind the photo: the coin icon is now a hand with coins (fundraising), and the growth arrow is now a rising bar chart.
 - Space added between the venture name banner and the KPI cards.
 - Venture cards: photo, name and "Explore" only. Each card opens that venture on the Ventures page (links like `/ventures#rise-for-change`).

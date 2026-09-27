@@ -229,7 +229,8 @@ export default function HomePage() {
         <div className={styles.heroGrid}>
           <div className={styles.heroText} data-hero-scroll="text">
             <p className={styles.taglinePill} data-hero-tagline>
-              <span className={styles.pillText}>{TAGLINE}</span>
+              <span className={styles.pillGlow} aria-hidden="true" />
+              <span className={`sheen ${styles.pillText}`}>{TAGLINE}</span>
             </p>
             <h1 className={styles.title} data-hero-title>
               P.Sonkar<br />

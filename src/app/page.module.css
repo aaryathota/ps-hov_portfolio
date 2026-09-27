@@ -49,7 +49,8 @@
 }
 
 /* ---- Tagline: one line in a liquid-glass oval with a gold outline ----
-   Static: no turning outline, no moving highlight. */
+   The outline stays still (it no longer turns). A soft highlight drifts
+   across the glass and the gold glint passes over the words. */
 
 .taglinePill {
   position: relative;
@@ -69,12 +70,31 @@
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.95),
     0 10px 30px -14px rgba(15, 36, 64, 0.3);
+  overflow: hidden;
+  isolation: isolate;
   white-space: nowrap;
 }
 
+/* The liquid highlight that drifts across the glass */
+.pillGlow {
+  position: absolute;
+  inset: -40% auto -40% -30%;
+  width: 45%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.95), rgba(190, 212, 243, 0.35) 60%, transparent);
+  filter: blur(6px);
+  animation: pillGlow 6s ease-in-out infinite alternate;
+}
+
+@keyframes pillGlow {
+  from { transform: translateX(0) scale(0.9); }
+  to { transform: translateX(260%) scale(1.15); }
+}
+
 .pillText {
+  --sheen-base: var(--color-accent);
   display: block;
-  color: var(--color-accent);
   font-size: var(--text-sm);
   font-weight: var(--weight-semibold);
   letter-spacing: 0.005em;
@@ -117,11 +137,12 @@
 
 .back {
   position: absolute;
-  left: 50%;
+  left: 2%;
   top: 14%;
   width: 96%;
   aspect-ratio: 1;
-  transform: translateX(-50%);
+  /* Centred with left/width, not a transform: the pointer nudge animates x,
+     and a transform here would be overwritten and throw the circle off centre */
 }
 
 .circle {
@@ -598,4 +619,5 @@
 
 @media (prefers-reduced-motion: reduce) {
   .ring { animation: none; }
+  .pillGlow { animation: none; }
 }
