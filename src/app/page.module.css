@@ -124,7 +124,9 @@
 .heroCtas { display: flex; flex-wrap: nowrap; gap: var(--space-3); margin-top: var(--space-4); }
 .heroCtas > * { flex: 0 1 auto; white-space: nowrap; }
 
-/* Portrait stage */
+/* Portrait stage. The slot is invisible to the layout on laptops. */
+.stageSlot { display: contents; }
+
 .stage {
   position: relative;
   align-self: end;
@@ -615,6 +617,51 @@
   .ventureCard { flex-basis: 78vw; }
   .closingButtons > * { width: 100%; max-width: 20rem; }
   .closingButtons a { width: 100%; }
+}
+
+/* Phones: the whole opening screen fits above the tab bar on every phone.
+   Tagline, name, buttons and the "founder-led" block keep their size; the
+   photo (head to knees, in its circle) takes the height that is left and is
+   never cropped. Very short screens (landscape) fall back to normal flow. */
+@media (max-width: 600px) and (min-height: 520px) {
+  .hero {
+    height: 100svh;
+    min-height: 0;
+    padding-top: calc(var(--header-height) + 0.35rem);
+    padding-bottom: calc(4.15rem + env(safe-area-inset-bottom) + 0.9rem);
+  }
+  .heroGrid { display: flex; flex-direction: column; align-items: stretch; height: 100%; gap: 0; }
+  .heroText { flex: none; gap: 0.9rem; }
+  .title { font-size: 2.7rem; }
+  .heroCtas { margin-top: 0.15rem; }
+  .heroCtas a { padding: 0.8rem 0.8rem; }
+  .stageSlot {
+    display: flex;
+    flex: 1 1 0;
+    min-height: 0;
+    order: 2;
+    align-items: flex-end;
+    justify-content: center;
+    align-self: stretch;
+    container-type: size;
+    margin-top: 0.6rem;
+  }
+  .stage {
+    order: 0;
+    margin: 0;
+    width: min(100cqw, calc(100cqh * 1015 / 1194));
+    max-width: 100%;
+  }
+  .ringBadge { width: min(2.05rem, 9cqh); }
+  .heroSide {
+    flex: none;
+    order: 3;
+    gap: 0.45rem;
+    padding: 0.7rem 0 0;
+  }
+  .sideTitle { font-size: 1.3rem; }
+  .sideText { font-size: 0.86rem; line-height: 1.45; }
+  .heroSide a { padding: 0.62rem 1.1rem; font-size: 0.85rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

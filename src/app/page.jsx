@@ -242,6 +242,8 @@ export default function HomePage() {
             </div>
           </div>
 
+          {/* On phones this slot takes whatever height is left, and the photo is sized to fit it */}
+          <div className={styles.stageSlot}>
           <div className={styles.stage} data-hero-scroll="portrait">
             <div className={styles.back} data-hero-back>
               <div className={styles.ring} data-hero-ring>
@@ -276,6 +278,8 @@ export default function HomePage() {
                 />
               </div>
             </div>
+          </div>
+
           </div>
 
           <div className={styles.heroSide} data-hero-side>

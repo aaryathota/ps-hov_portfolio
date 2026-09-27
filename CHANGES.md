@@ -7,6 +7,7 @@
 - Footer link "About the founder" renamed "About Me", as in the site content.
 
 ## Home
+- **Phone opening screen fits on one screen on every phone:** tagline, name, both buttons, the photo from head to knees inside its circle, and the "A founder-led ecosystem" block with Get involved all show above the tab bar. The photo shrinks to fit the space left and is never cropped. Checked at 360x740, 375x667, 375x812, 393x660 (iPhone 15 with Safari's bars), 393x852, 430x932, 440x830 and 440x956.
 - Tagline oval: only the turning gold outline is removed. The soft highlight drifting across it and the gold glint over the words stay.
 - **Fixed: the circle behind the photo drifted off to the right** as soon as the mouse moved over the hero (the pointer effect overwrote the CSS that centred it). It is now centred without a transform and stays behind the photo.
 - Ring behind the photo: the coin icon is now a hand with coins (fundraising), and the growth arrow is now a rising bar chart.
