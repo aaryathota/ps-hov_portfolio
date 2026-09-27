@@ -1,3 +1,81 @@
+# Round 4 (27 September 2026)
+
+## Every page
+- **Phones look the same on every phone.** The phone layout is set on iPhone 16 Pro Max (440 px). On narrower phones (iPhone 15 at 393, SE at 375, Android at 360) the whole page scales down in step, so line breaks and proportions match. Checked at 360, 375, 393, 430 and 440 px with no sideways scrolling. The full logo now shows on every phone. (`globals.css`, "Phones: one layout, scaled to the screen".)
+- **The closing "P.Sonkar" is shown in full** on every page and screen size. Its size is worked out from the screen width, and its rise-in animation always finishes fully visible.
+- **Even spacing between sections.** One spacing value (`--section-padding-y` in `variables.css`) is used by every section on every page, and it is smaller than before.
+- Footer link "About the founder" renamed "About Me", as in the site content.
+
+## Home
+- Tagline oval: the turning gold outline, the moving highlight and the glint over the words are gone. The oval itself is unchanged.
+- Ring behind the photo: the coin icon is now a hand with coins (fundraising), and the growth arrow is now a rising bar chart.
+- Space added between the venture name banner and the KPI cards.
+- Venture cards: photo, name and "Explore" only. Each card opens that venture on the Ventures page (links like `/ventures#rise-for-change`).
+- Closing panel: View My Ventures, Explore Services, Get Involved.
+- Copy restored to the site content: "What This Is About", "View All Ventures", "Based in Bangalore." and the closing line "Whether you want to invest, join a team, or grow your business...".
+- Removed the "How it works" section (its three steps were not in the site content).
+
+## About
+- Photo is the one from the previous site.
+- Closing buttons: View My Ventures, Explore Services, Get Involved.
+
+## Ventures
+- Intro text: "Two categories. In-House Ventures are built and operated by me directly. Collaborated Services are engagements I am part of through active partnerships."
+- **Phone fix:** the 01 to 07 rail no longer floats up when Safari's bars hide on scroll. It is fixed just above the tab bar and moves with it, and it hides once you scroll past the ventures.
+- Removed the made-up sector labels. Buttons read "Enquire about this venture" and "Visit Website" (shown only when a website is set). Closing: "See something that interests you?" with the site's sub-text and Get Involved.
+
+## Services
+- Heading, text and closing now use the site's own Collaborated Services copy. Removed the made-up "Focus" and "Works with" lines. Button: "Enquire about this service".
+
+## Get Involved
+- Back A Venture icon is the fundraising hand with coins; Grow Your Business uses the same growth chart as the home ring.
+
+---
+
+# Round 3 (27 September 2026): the 30-point change list
+
+## Every page
+- **Logo intro on first load.** Opening the site shows the PS logo on the navy screen (the same screen used between pages), then lifts. `index.html` paints a copy before any JavaScript runs, so there is no white flash. Home's entrance animation now starts after the logo lifts.
+- **Page-change screen has texture.** Gold and white semicircles on the right edge (slowly turning, with small gold beads), a smaller set bottom left, a thin gold frame and grain. It now covers the header and phone tab bar too (it used to sit under them).
+- **Semicircles on every page.** The same `Arcs` component sits on the right of the Home, About, Services and Get Involved opening panels and in the closing panels.
+- **Light blue tint** replaces plain white across Home, About, Services and Get Involved (`--color-tint`, `--color-bg-secondary`, `--color-bg-hero` in `variables.css`).
+- **Footer:** the closing "P.Sonkar" is now large, left-aligned and cut off by the bottom and right edges, as in the reference. It stays clear of the phone tab bar.
+- **Footer contact:** Name, Phone, Email and Place, each labelled. Phone and email come from the admin panel (Contact details tab) and show once filled in there.
+- **Instagram, LinkedIn and X icons** in the footer, linked. They use the admin panel links; until those are set they fall back to the handles in the site spec (@psonkarventures, /in/pratapsonkar, @pratapsonkar).
+
+## Home
+- Tagline in a liquid-glass oval with a moving gold outline. Always one line: on phones the type scales with the screen width (checked at 375, 390, 430 and 440 px).
+- "Explore ventures" and "Explore services" side by side under the name (also side by side on phones).
+- "Get involved" button under "A founder-led ecosystem"; "Read my story" removed from there. On laptops that text sits on frosted glass so the ring icons pass behind it cleanly.
+- Eight start-up icons (rocket, bulb, growth, target, handshake, team, coins, megaphone) ride the rotating gold ring behind the photo and stay upright.
+- Venture ticker: never stops or reverses, runs at the same 64 px per second on phone and laptop (phone was 35), scrolling only speeds it up. Slightly smaller type on phones so more names show.
+- KPI strip under the ticker: 5 In-house ventures, 10+ Services, 15+ Venture collaborations, 100% Impact driven, counting up once. Edit the numbers in `KPIS` at the top of `src/app/page.jsx`.
+- New "Here is what I am building" section before "Three ways to be part of this": venture cards that scroll by themselves, pause on hover or touch, can be swiped, and link to that venture on the Ventures page.
+- Closing panel: one "Get Involved" button instead of three.
+- Phones: "Read my story" now sits below the quote.
+
+## About
+- Photo added in the opening panel (arched light-blue frame, gold ring, name tag).
+- Much less empty space above and below the paragraphs.
+- "In my own words" is now a full-width navy card with a gold frame, large serif quote and a signature line.
+
+## Services
+- Cards move on by themselves every 15 seconds (`AUTOPLAY_MS` in `src/app/services/page.jsx`). Hovering pauses; any arrow, dot or drag restarts the wait.
+- Left and right arrows sit right beside the centre card on laptop and phone.
+- Instagram-style dots (one per card, current one blue) sit between the cards and their details.
+
+## Ventures
+- Phones now get the same sideways travel as you scroll down, with a numbered progress rail above the tab bar. Only "reduce motion" stacks the chapters.
+- Links like `/ventures#chapter-2` (used by the home cards) jump to that venture.
+
+## Get Involved
+- Cards and dropdown renamed: Back A Venture, Join The Team, Grow Your Business. Links like `/contact?intent=grow` pre-select the right one.
+- **Phone dropdown fix:** the native iPhone picker was drawn over the wrong field on this animated page. All dropdowns are now a custom list that always opens directly under its field (keyboard accessible, still `required`).
+- **Bug fixed:** choosing "Join The Team" crashed the page (venture objects were rendered as text). The venture checkboxes now work and are included in the message.
+- The email or WhatsApp message now includes the extra answers (role, stage, needs, ventures, link).
+
+---
+
 # Round 2 (September 2026)
 
 - **New tagline** everywhere (hero, footer, page metadata): "A network of

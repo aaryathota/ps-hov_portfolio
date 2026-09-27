@@ -1,6 +1,6 @@
 .footer {
   position: relative;
-  background: #0b1a2e;
+  background: #0f1b2d;
   color: rgba(255, 255, 255, 0.72);
   overflow: hidden;
   padding-top: clamp(4rem, 8vw, 6.5rem);
@@ -74,48 +74,76 @@
 .footerLink:hover,
 a.contactItem:hover { color: #fff; }
 
-.socials { display: flex; gap: var(--space-5); margin-top: var(--space-2); }
+.socials { display: flex; gap: 0.6rem; margin-top: var(--space-2); }
 
 .socialLink {
-  color: rgba(255, 255, 255, 0.78);
-  font-size: var(--text-sm);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  padding-bottom: 1px;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(230, 196, 107, 0.45);
+  background: rgba(255, 255, 255, 0.04);
+  transition: background 250ms, color 250ms, border-color 250ms, translate 400ms var(--ease-out-expo);
 }
 
-.socialLink:hover { color: #fff; border-color: #fff; }
+.socialLink:hover { background: #e6c46b; border-color: #e6c46b; color: #0b1a2e; translate: 0 -2px; }
 
-/* Large wordmark that rises into view */
+address.column { font-style: normal; }
+
+.contactItem { align-items: flex-start; line-height: 1.45; }
+.contactItem svg { flex-shrink: 0; margin-top: 0.2rem; color: #e6c46b; }
+.contactLabel {
+  display: block;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* The closing wordmark: large and shown in full on every screen.
+   The type is sized from the screen width so the whole word always fits
+   (P.Sonkar is about 3.7 times as wide as its font size). */
 .wordmarkWrap {
+  --wordmark-size: min(calc((100vw - 2 * var(--section-padding-x)) / 3.8), calc(var(--max-width-wide) / 3.8));
+  position: relative;
   overflow: hidden;
-  margin-top: clamp(2.5rem, 6vw, 5rem);
-  padding: 0 var(--section-padding-x);
-  line-height: 0.82;
-  text-align: center;
+  max-width: var(--max-width-wide);
+  margin: clamp(1.5rem, 4vw, 3rem) auto 0;
+  padding: 0 var(--section-padding-x) clamp(0.75rem, 2vw, 1.5rem);
+  box-sizing: content-box;
+  pointer-events: none;
 }
 
 .wordmark {
   display: block;
   font-family: var(--font-heading);
   font-weight: var(--weight-semibold);
-  font-size: clamp(5rem, 21vw, 22rem);
-  letter-spacing: -0.05em;
-  color: rgba(255, 255, 255, 0.09);
+  font-size: var(--wordmark-size);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+  color: #1c2a3e;
   user-select: none;
   will-change: transform;
-  padding-bottom: 0.06em;
 }
 
 .bottom {
   position: relative;
   z-index: 2;
   max-width: var(--max-width-wide);
-  margin: 0 auto;
-  padding: var(--space-6) var(--section-padding-x) var(--space-8);
+  margin: clamp(2.5rem, 5vw, 4rem) auto 0;
+  padding: var(--space-5) var(--section-padding-x) 0;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .bottom p { font-size: var(--text-xs); color: rgba(255, 255, 255, 0.5); max-width: none; }
+
+/* Keep the wordmark clear of the phone tab bar */
+@media (max-width: 768px) {
+  .footer { padding-bottom: calc(4.4rem + env(safe-area-inset-bottom)); }
+}
 
 @media (max-width: 860px) {
   .inner { grid-template-columns: 1fr 1fr; }

@@ -1,5 +1,5 @@
 /*
-  Picture, sector and tone for each venture.
+  Picture and tone for each venture.
 
   Image priority on the site:
     1. the image uploaded for that venture in the admin panel (image_url)
@@ -21,6 +21,9 @@
 */
 
 const key = (name = '') => name.toLowerCase().replace(/[^a-z0-9]+/g, '');
+
+/** Stable anchor for a venture, e.g. "printer-cartridge-wala". Used by /ventures#... links. */
+export const ventureSlug = (name = '') => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 /** Unsplash CDN address for a photo at a given width. */
 export const unsplash = (id, width = 1600) =>
@@ -89,16 +92,6 @@ const LOCAL = {
   },
 };
 
-const SECTORS = {
-  impactshaala: 'Careers',
-  guideshaala: 'Career guidance',
-  riseforchange: 'Non-profit',
-  printercartridgewala: 'B2B supplies',
-  laptopwalecom: 'B2B hardware',
-  evntra: 'Events',
-  wholecommunity: 'Community',
-};
-
 // Accent tones come from the site palette: navy, teal, gold
 const TONES = ['#2d5a8e', '#0d7377', '#b8860b'];
 
@@ -124,7 +117,7 @@ export function ventureMedia(venture, index = 0) {
     credit: local.credit || '',
     creditUrl: local.creditUrl || '',
     isUpload: false,
-    sector: venture?.sector || SECTORS[id] || '',
+    sector: venture?.sector || '',
     tone: TONES[index % TONES.length],
   };
 }

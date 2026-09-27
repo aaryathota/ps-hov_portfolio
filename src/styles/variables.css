@@ -13,13 +13,17 @@
 
   /* Base / Background */
   --color-bg-primary: #ffffff;
-  --color-bg-secondary: #f8f9fc;
-  --color-bg-tertiary: #f0f2f7;
+  --color-bg-secondary: #eaf2fc;
+  --color-bg-tertiary: #e1ebf8;
   --color-bg-card: rgba(255, 255, 255, 0.85);
   --color-bg-card-hover: rgba(255, 255, 255, 1);
   --color-bg-glass: rgba(255, 255, 255, 0.6);
   --color-bg-glass-border: rgba(0, 0, 0, 0.06);
-  --color-bg-hero: #f4f6fb;
+  --color-bg-hero: #e4eefa;
+
+  /* Light blue tint used behind every page (in place of plain white) */
+  --color-tint: #f1f6fd;
+  --color-tint-strong: #e4eefa;
 
   /* Text */
   --color-text-primary: #111827;
@@ -33,7 +37,7 @@
   --color-accent-dark: #0f2440;
   --color-accent-glow: rgba(30, 58, 95, 0.15);
   --color-accent-subtle: rgba(30, 58, 95, 0.06);
-  --color-accent-bg: #eef2f9;
+  --color-accent-bg: #e6eef9;
 
   /* Secondary — Warm Gold */
   --color-gold: #b8860b;
@@ -117,7 +121,8 @@
   --space-40: 10rem;
 
   /* Section Spacing */
-  --section-padding-y: clamp(4rem, 3rem + 5vw, 8rem);
+  /* One vertical rhythm for every section on every page */
+  --section-padding-y: clamp(3rem, 2.4rem + 2vw, 4.5rem);
   --section-padding-x: clamp(1.25rem, 0.5rem + 3vw, 4rem);
 
   /* ---- Layout ---- */

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowUpRight, ExternalLink } from 'lucide-react';
 import { getImageUrl, getVentures } from '@/api';
 import { gsap, ScrollTrigger, SplitText } from '@/lib/gsap';
-import { ventureMedia } from '@/data/ventureMedia';
+import { ventureMedia, ventureSlug } from '@/data/ventureMedia';
 import styles from './page.module.css';
 
 /*
@@ -12,10 +12,20 @@ import styles from './page.module.css';
   over the picture on a navy gradient. On desktop the page pins and the
   chapters travel sideways as you scroll, with each picture drifting a little
   slower than its chapter for depth. A rail at the bottom shows progress and
-  jumps to any venture. On phones and for reduced motion the chapters stack.
+  jumps to any venture. Phones get the same sideways travel as you scroll
+  down; only reduced motion stacks the chapters.
 */
 
 const pad = (n) => String(n + 1).padStart(2, '0');
+
+// Which venture a link like /ventures#guideshaala (or the older #chapter-2) points at
+function hashIndex(hash, ventures) {
+  const id = decodeURIComponent((hash || '').replace(/^#/, ''));
+  if (!id) return -1;
+  const legacy = id.match(/^chapter-(\d+)$/);
+  if (legacy) return Math.min(Number(legacy[1]), ventures.length - 1);
+  return ventures.findIndex((venture) => ventureSlug(venture.name) === id);
+}
 
 function uniqueByName(items) {
   const seen = new Set();
@@ -30,6 +40,7 @@ function uniqueByName(items) {
 export default function VenturesPage() {
   const [ventures, setVentures] = useState([]);
   const [active, setActive] = useState(-1); // -1 = the intro panel
+  const [pinned, setPinned] = useState(true); // phones: the rail shows only while the chapters are pinned
   const root = useRef(null);
   const trackRef = useRef(null);
   const triggerRef = useRef(null);
@@ -47,10 +58,9 @@ export default function VenturesPage() {
     const mm = gsap.matchMedia();
 
     mm.add({
-      desktop: '(min-width: 900px) and (prefers-reduced-motion: no-preference)',
-      handheld: '(max-width: 899px) and (prefers-reduced-motion: no-preference)',
+      horizontal: '(prefers-reduced-motion: no-preference)',
     }, (context) => {
-      const { desktop } = context.conditions;
+      const { horizontal } = context.conditions;
       const panels = gsap.utils.toArray('[data-panel]', root.current);
       const chapters = gsap.utils.toArray('[data-chapter]', root.current);
 
@@ -62,7 +72,7 @@ export default function VenturesPage() {
         gsap.from('[data-intro-copy]', { opacity: 0, y: 24, duration: 1, stagger: 0.12, ease: 'expo.out', delay: 0.6 });
       }
 
-      if (desktop) {
+      if (horizontal) {
         const track = trackRef.current;
         const distance = () => track.scrollWidth - window.innerWidth;
 
@@ -77,6 +87,7 @@ export default function VenturesPage() {
             scrub: 1.1,
             invalidateOnRefresh: true,
             anticipatePin: 1,
+            onToggle: (self) => setPinned(self.isActive),
             onUpdate: (self) => {
               const index = Math.round(self.progress * (panels.length - 1)) - 1;
               setActive(index);
@@ -85,6 +96,17 @@ export default function VenturesPage() {
           },
         });
         triggerRef.current = tween.scrollTrigger;
+
+        // Arriving from a venture card on the home page (/ventures#guideshaala)
+        const target = hashIndex(window.location.hash, ventures);
+        if (target >= 0) {
+          window.setTimeout(() => {
+            const st = tween.scrollTrigger;
+            const total = Math.max(1, panels.length - 1);
+            st.refresh();
+            window.scrollTo({ top: st.start + (st.end - st.start) * ((target + 1) / total), behavior: 'auto' });
+          }, 700);
+        }
 
         chapters.forEach((panel) => {
           const along = { trigger: panel, containerAnimation: tween, start: 'left right', end: 'right left', scrub: true };
@@ -110,32 +132,27 @@ export default function VenturesPage() {
             scrollTrigger: { trigger: panel, containerAnimation: tween, start: 'left 72%', end: 'left 34%', scrub: true },
           });
         });
-      } else {
-        chapters.forEach((panel, index) => {
-          gsap.fromTo(panel.querySelector('[data-chapter-image]'), { yPercent: -6, scale: 1.14 }, {
-            yPercent: 6, scale: 1.06, ease: 'none',
-            scrollTrigger: { trigger: panel, start: 'top bottom', end: 'bottom top', scrub: true },
-          });
-          gsap.from(panel.querySelectorAll('[data-chapter-copy], [data-chapter-title]'), {
-            opacity: 0, y: 36, duration: 1, stagger: 0.1, ease: 'expo.out',
-            scrollTrigger: { trigger: panel, start: 'top 62%', once: true },
-          });
-          ScrollTrigger.create({
-            trigger: panel, start: 'top 60%', end: 'bottom 40%',
-            onToggle: (self) => { if (self.isActive) setActive(index); },
-          });
-        });
       }
     }, root);
 
     const refresh = window.setTimeout(() => ScrollTrigger.refresh(), 400);
-    return () => { window.clearTimeout(refresh); mm.revert(); triggerRef.current = null; };
+    // Reduced motion stacks the chapters: a plain jump to the linked venture
+    let stackedJump = 0;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const target = hashIndex(window.location.hash, ventures);
+      if (target >= 0) {
+        stackedJump = window.setTimeout(() => {
+          document.getElementById(ventureSlug(ventures[target].name))?.scrollIntoView({ block: 'start' });
+        }, 300);
+      }
+    }
+    return () => { window.clearTimeout(refresh); window.clearTimeout(stackedJump); mm.revert(); triggerRef.current = null; };
   }, [ventures.length]);
 
   const jumpTo = (index) => {
     const st = triggerRef.current;
     if (!st) {
-      document.getElementById(`chapter-${index}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.getElementById(ventureSlug(ventures[index]?.name))?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       return;
     }
     const total = Math.max(1, ventures.length); // panels - 1, counting the intro
@@ -148,14 +165,11 @@ export default function VenturesPage() {
         <div ref={trackRef} className={styles.track}>
           <section className={`${styles.intro} grain`} data-panel aria-label="Introduction">
             <div className={styles.introInner}>
-              <p className={styles.introKicker} data-intro-copy>The portfolio</p>
+              <p className={styles.introKicker} data-intro-copy>The Portfolio</p>
               <h1 className={styles.introTitle} data-intro-title>What I am <em className="serif-accent">building.</em></h1>
               <p className={styles.introText} data-intro-copy>
-                {ventures.length} ventures at different stages. Some are being actively developed, some are still being shaped.
-                All of them are being worked on with full intent.
-              </p>
-              <p className={styles.introSide} data-intro-copy>
-                Looking for the businesses I collaborate with? See the <Link to="/services">services</Link>.
+                Two categories. In-House Ventures are built and operated by me directly. Collaborated Services are
+                engagements I am part of through active partnerships.
               </p>
             </div>
             <p className={styles.introCue} aria-hidden="true"><span />Scroll to explore</p>
@@ -169,7 +183,7 @@ export default function VenturesPage() {
             return (
               <section
                 key={venture.id || venture.name}
-                id={`chapter-${index}`}
+                id={ventureSlug(venture.name)}
                 className={styles.chapter}
                 data-kind={kind}
                 data-panel
@@ -225,20 +239,17 @@ export default function VenturesPage() {
                     <p className={styles.index} data-chapter-copy>
                       <span className={styles.indexNum}>{pad(index)}</span>
                       <span className={styles.count}>of {pad(ventures.length - 1)}</span>
-                      {media.sector && <span className={styles.sector}>{media.sector}</span>}
                     </p>
                     <h2 className={styles.title} data-chapter-title>{venture.name}</h2>
                     <p className={styles.text} data-chapter-copy>{venture.description}</p>
                     <div className={styles.links} data-chapter-copy>
                       <Link to={`/contact?venture=${encodeURIComponent(venture.name)}`} className={styles.primaryLink}>
-                        Ask about this venture <ArrowUpRight size={16} aria-hidden="true" />
+                        Enquire about this venture <ArrowUpRight size={16} aria-hidden="true" />
                       </Link>
-                      {venture.website_url ? (
+                      {venture.website_url && (
                         <a href={venture.website_url} target="_blank" rel="noopener noreferrer" className={styles.link}>
-                          Visit the website <ExternalLink size={15} aria-hidden="true" />
+                          Visit Website <ExternalLink size={15} aria-hidden="true" />
                         </a>
-                      ) : (
-                        <span className={styles.soon}>No public website yet</span>
                       )}
                     </div>
                   </div>
@@ -249,7 +260,7 @@ export default function VenturesPage() {
         </div>
 
         {ventures.length > 0 && (
-          <nav className={`${styles.rail} ${active >= 0 ? styles.railOnImage : ''}`} aria-label="Ventures">
+          <nav className={`${styles.rail} ${active >= 0 ? styles.railOnImage : ''} ${pinned ? '' : styles.railHidden}`} aria-label="Ventures">
             <span className={styles.railTrack} aria-hidden="true"><span className={styles.railFill} data-rail-fill /></span>
             <ul>
               {ventures.map((venture, index) => (
@@ -272,10 +283,13 @@ export default function VenturesPage() {
 
       <section className={styles.tail}>
         <div className={styles.tailInner}>
-          <h2 className={styles.tailTitle}>Want to be part of <span className={`serif-accent ${styles.tailSerif}`}>one of these?</span></h2>
+          <div className={styles.tailCopy}>
+            <h2 className={styles.tailTitle}>See something that <span className={`serif-accent ${styles.tailSerif}`}>interests you?</span></h2>
+            <p className={styles.tailText}>Reach out whether you want to invest, join a team, or collaborate. I personally review every message.</p>
+          </div>
           <div className={styles.tailActions}>
-            <Link to="/contact" className={styles.tailButton}>Get in touch <ArrowUpRight size={18} aria-hidden="true" /></Link>
-            <Link to="/services" className={styles.tailLink}>See the services</Link>
+            <Link to="/contact" className={styles.tailButton}>Get Involved <ArrowUpRight size={18} aria-hidden="true" /></Link>
+            <Link to="/services" className={styles.tailLink}>Explore Services</Link>
           </div>
         </div>
       </section>

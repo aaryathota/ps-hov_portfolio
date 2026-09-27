@@ -25,6 +25,7 @@ export default function CoverflowCarousel({
   showPagination = true,
   showNavigation = true,
   label = 'Partner services',
+  autoplay = 0, // ms between automatic moves to the next card; 0 turns it off
   onSelect,
 }) {
   const count = slides.length;
@@ -38,6 +39,7 @@ export default function CoverflowCarousel({
   const dragRef = useRef(null);
 
   const [selected, setSelected] = useState(0);
+  const [paused, setPaused] = useState(false);
 
   const indexAt = useCallback((pos) => ((Math.round(pos) % count) + count) % count, [count]);
 
@@ -145,11 +147,26 @@ export default function CoverflowCarousel({
 
   useEffect(() => { onSelect?.(selected); }, [selected, onSelect]);
 
+  // Autoplay: move to the next card after `autoplay` ms. Any change of card
+  // (arrow, dot, drag, or autoplay itself) restarts the wait.
+  useEffect(() => {
+    if (!autoplay || paused || count < 2) return undefined;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    const id = window.setTimeout(() => {
+      if (document.visibilityState === 'visible') nudge(1);
+    }, autoplay);
+    return () => window.clearTimeout(id);
+  }, [autoplay, paused, selected, count, nudge]);
+
   const active = slides[selected];
 
   return (
     <div className={styles.root} style={{ '--cf-card': cardWidth }} role="region" aria-roledescription="carousel" aria-label={label}>
-      <div className={styles.stage}>
+      <div
+        className={styles.stage}
+        onPointerEnter={(event) => { if (event.pointerType === 'mouse') setPaused(true); }}
+        onPointerLeave={(event) => { if (event.pointerType === 'mouse') setPaused(false); }}
+      >
         <div
           ref={frameRef}
           tabIndex={0}
@@ -201,6 +218,22 @@ export default function CoverflowCarousel({
         )}
       </div>
 
+      {showPagination && (
+        <div className={styles.dots} role="tablist" aria-label="Choose a card">
+          {slides.map((slide, index) => (
+            <button
+              key={slide.title || index}
+              type="button"
+              role="tab"
+              aria-label={`${slide.title || `Slide ${index + 1}`} (${index + 1} of ${count})`}
+              aria-selected={index === selected}
+              onClick={() => goTo(index)}
+              className={index === selected ? `${styles.dot} ${styles.dotActive}` : styles.dot}
+            />
+          ))}
+        </div>
+      )}
+
       {showCaption && active?.title && (
         <div key={selected} className={styles.caption}>
           <p className={styles.captionTitle}>{active.title}</p>
@@ -221,20 +254,6 @@ export default function CoverflowCarousel({
         </div>
       )}
 
-      {showPagination && (
-        <div className={styles.dots}>
-          {slides.map((slide, index) => (
-            <button
-              key={slide.title || index}
-              type="button"
-              aria-label={`Go to slide ${index + 1}`}
-              aria-current={index === selected}
-              onClick={() => goTo(index)}
-              className={index === selected ? `${styles.dot} ${styles.dotActive}` : styles.dot}
-            />
-          ))}
-        </div>
-      )}
     </div>
   );
 }

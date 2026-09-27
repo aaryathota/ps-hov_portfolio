@@ -34,8 +34,8 @@ const pageMeta = {
     description: 'Design, marketing and legal services I collaborate on through P.Sonkar House Of Ventures, run independently and connected through shared work.',
   },
   '/contact': {
-    title: 'Get Involved | Invest, Work, or Grow With P.Sonkar House Of Ventures, Bangalore',
-    description: 'Want to invest in a venture, join a team, or grow your business with my ecosystem? Tell me what you are looking for and I will take it from there.',
+    title: 'Get Involved | Back a Venture, Join the Team, or Grow Your Business | P.Sonkar House Of Ventures',
+    description: 'Want to back a venture, join the team, or grow your business with my ecosystem? Tell me what you are looking for and I will take it from there.',
   },
   '/admin': { title: 'Admin | P.Sonkar House Of Ventures', description: '' },
 };

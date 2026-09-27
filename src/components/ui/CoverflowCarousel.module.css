@@ -51,6 +51,7 @@
 .cardKind { font-size: 0.8rem; font-weight: 600; color: #e6c46b; }
 .cardTitle { font-family: var(--font-heading); font-size: 1.45rem; font-weight: 500; line-height: 1.1; color: #fff; }
 
+/* Arrows sit right beside the centre card, on every screen size */
 .navButton {
   position: absolute;
   top: 50%;
@@ -60,20 +61,24 @@
   place-items: center;
   width: 2.9rem;
   height: 2.9rem;
-  border: 1px solid var(--color-line-strong);
+  border: 1px solid rgba(184, 134, 11, 0.55);
   border-radius: 999px;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.92);
   color: var(--color-ink);
   cursor: pointer;
-  transition: background 200ms ease, color 200ms ease;
+  box-shadow: 0 10px 24px -12px rgba(15, 36, 64, 0.45);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  transition: background 200ms ease, color 200ms ease, transform 300ms var(--ease-out-expo);
 }
 
 .navButton:hover { background: var(--color-accent); color: #fff; }
-.navPrev { left: 0.75rem; }
-.navNext { right: 0.75rem; }
+.navButton:active { transform: translateY(-50%) scale(0.94); }
+.navPrev { left: max(0.25rem, calc(50% - var(--cf-card) / 2 - 3.9rem)); }
+.navNext { right: max(0.25rem, calc(50% - var(--cf-card) / 2 - 3.9rem)); }
 
 .caption {
-  margin-top: 0.5rem;
+  margin-top: 1.25rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -121,22 +126,27 @@
 
 .captionAction:hover { background: var(--color-accent-dark); color: #fff; }
 
-.dots { margin-top: 1.6rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+/* Instagram-style dots between the cards and their details:
+   one dot per card, the current one filled in blue */
+.dots { margin-top: 0.25rem; display: flex; align-items: center; justify-content: center; gap: 0.4rem; }
 
 .dot {
-  width: 0.5rem;
-  height: 0.5rem;
+  width: 0.45rem;
+  height: 0.45rem;
   padding: 0;
   border: 0;
-  border-radius: 999px;
-  background: var(--color-ink);
-  opacity: 0.25;
+  border-radius: 50%;
+  background: #c3cddb;
   cursor: pointer;
-  transition: opacity 200ms ease, width 300ms var(--ease-out-expo);
+  transition: background 250ms ease, transform 300ms var(--ease-out-expo);
 }
 
-.dotActive { opacity: 1; width: 1.5rem; }
+.dot:hover { background: #9aa9bf; }
+.dotActive { background: #1d6fe0; transform: scale(1.25); }
+.dotActive:hover { background: #1d6fe0; }
 
 @media (max-width: 640px) {
-  .navButton { display: none; }
+  .navButton { width: 2.5rem; height: 2.5rem; }
+  .navPrev { left: max(0.25rem, calc(50% - var(--cf-card) / 2 - 3rem)); }
+  .navNext { right: max(0.25rem, calc(50% - var(--cf-card) / 2 - 3rem)); }
 }

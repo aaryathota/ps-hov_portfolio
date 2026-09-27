@@ -20,10 +20,12 @@
   align-items: stretch;
   padding: var(--header-height) 4vw 0;
   background:
-    radial-gradient(70rem 40rem at 60% 45%, rgba(45, 90, 142, 0.07), transparent 70%),
-    linear-gradient(180deg, #fff 0%, var(--color-bg-hero) 100%);
+    radial-gradient(70rem 40rem at 60% 45%, rgba(45, 90, 142, 0.1), transparent 70%),
+    linear-gradient(180deg, var(--color-tint) 0%, var(--color-bg-hero) 100%);
   overflow: hidden;
 }
+
+.heroArcs { opacity: 0.9; }
 
 .heroGrid {
   position: relative;
@@ -46,11 +48,38 @@
   gap: var(--space-5);
 }
 
-.tagline {
+/* ---- Tagline: one line in a liquid-glass oval with a gold outline ----
+   Static: no turning outline, no moving highlight. */
+
+.taglinePill {
+  position: relative;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  width: max-content;
+  max-width: none;
+  padding: 0.62rem 1.25rem;
+  border-radius: 999px;
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.82), rgba(232, 240, 251, 0.62) 55%, rgba(255, 255, 255, 0.74)) padding-box,
+    linear-gradient(135deg, #d4a017, #f3d27a 45%, #b8860b) border-box;
+  -webkit-backdrop-filter: blur(16px) saturate(170%);
+  backdrop-filter: blur(16px) saturate(170%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 10px 30px -14px rgba(15, 36, 64, 0.3);
+  white-space: nowrap;
+}
+
+.pillText {
+  display: block;
+  color: var(--color-accent);
   font-size: var(--text-sm);
   font-weight: var(--weight-semibold);
-  color: var(--color-accent-light);
-  max-width: none;
+  letter-spacing: 0.005em;
+  line-height: 1.3;
+  white-space: nowrap;
 }
 
 .title {
@@ -72,7 +101,8 @@
   padding-right: 0.06em;
 }
 
-.heroCtas { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-4); }
+.heroCtas { display: flex; flex-wrap: nowrap; gap: var(--space-3); margin-top: var(--space-4); }
+.heroCtas > * { flex: 0 1 auto; white-space: nowrap; }
 
 /* Portrait stage */
 .stage {
@@ -105,8 +135,27 @@
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border: 1px dashed rgba(184, 134, 11, 0.55);
+  border: 1px dashed rgba(184, 134, 11, 0.6);
 }
+
+/* Start-up icons riding the gold ring */
+.ringBadge {
+  position: absolute;
+  width: clamp(2.1rem, 2.9vw, 2.9rem);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(232, 240, 251, 0.9));
+  border: 1px solid rgba(184, 134, 11, 0.7);
+  box-shadow: 0 6px 16px -8px rgba(15, 36, 64, 0.45), inset 0 1px 0 #fff;
+  color: var(--color-accent);
+}
+
+.ringIcon { display: grid; place-items: center; }
+.ringIcon svg { width: 46%; height: auto; min-width: 14px; }
+.ringBadge:nth-child(even) { color: var(--color-gold-dark); }
 
 .portraitWrap { position: absolute; inset: 0; }
 .portraitWrap > div { position: absolute; inset: 0; }
@@ -132,8 +181,23 @@
   align-items: flex-start;
   gap: var(--space-4);
   padding-bottom: clamp(2rem, 6vh, 5rem);
-  max-width: 21rem;
+  max-width: 22rem;
   justify-self: end;
+}
+
+/* On wide screens the side text sits on frosted glass, so the icons on the
+   ring can pass behind it without crossing the words */
+@media (min-width: 901px) {
+  .heroSide {
+    padding: 1.6rem 1.6rem 1.7rem;
+    margin-bottom: clamp(2rem, 6vh, 5rem);
+    border-radius: 20px;
+    background: rgba(241, 246, 253, 0.62);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 20px 40px -28px rgba(15, 36, 64, 0.35), inset 0 1px 0 #fff;
+    -webkit-backdrop-filter: blur(14px) saturate(150%);
+    backdrop-filter: blur(14px) saturate(150%);
+  }
 }
 
 .sideTitle {
@@ -144,30 +208,6 @@
 }
 
 .sideText { font-size: var(--text-base); }
-
-.textLink {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-weight: var(--weight-semibold);
-  font-size: var(--text-sm);
-  color: var(--color-accent);
-  padding-bottom: 3px;
-  background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat;
-  transition: background-size 500ms var(--ease-out-expo), color 250ms;
-}
-
-.textLink:hover { color: var(--color-accent-dark); background-size: 0% 1px; background-position: 100% 100%; }
-
-.heroNote {
-  position: absolute;
-  right: 4vw;
-  top: calc(var(--header-height) + 1rem);
-  font-size: var(--text-sm);
-  color: var(--color-text-tertiary);
-  max-width: none;
-  display: none;
-}
 
 /* ---------- Ticker ---------- */
 
@@ -191,7 +231,7 @@
   font-family: var(--font-serif);
   font-style: italic;
   font-weight: 300;
-  font-size: clamp(1.5rem, 0.95rem + 1.9vw, 2.75rem);
+  font-size: clamp(1.3rem, 0.95rem + 1.9vw, 2.75rem);
   letter-spacing: -0.01em;
   white-space: nowrap;
 }
@@ -211,12 +251,153 @@
 .ticker::before { top: 6px; }
 .ticker::after { bottom: 6px; }
 
+/* ---------- KPI strip ---------- */
+
+.kpis {
+  position: relative;
+  z-index: 3;
+  /* Clear space between the venture ticker (banner) and the cards */
+  margin-top: clamp(0.75rem, 1.6vw, 1.25rem);
+  padding: clamp(1.5rem, 2.6vw, 2.25rem) var(--section-padding-x);
+  background: linear-gradient(90deg, #0e3677 0%, #164390 50%, #1e4f9c 100%);
+}
+
+.kpiGrid {
+  max-width: var(--max-width-wide);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(0.6rem, 1.4vw, 1.25rem);
+}
+
+.kpiCard {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: clamp(0.85rem, 1.4vw, 1.15rem) clamp(0.9rem, 1.6vw, 1.4rem);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition: background 300ms, translate 400ms var(--ease-out-expo);
+}
+
+.kpiCard:hover { background: rgba(255, 255, 255, 0.1); translate: 0 -2px; }
+
+.kpiIcon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.kpiText { display: flex; flex-direction: column; min-width: 0; }
+
+.kpiValue {
+  font-family: var(--font-heading);
+  font-size: clamp(1.35rem, 1rem + 1.1vw, 1.9rem);
+  font-weight: var(--weight-bold);
+  line-height: 1.05;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+
+.kpiLabel {
+  margin-top: 0.2rem;
+  font-size: 0.66rem;
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(214, 226, 247, 0.78);
+  line-height: 1.25;
+}
+
+/* ---------- Here is what I am building ---------- */
+
+.building { background: var(--color-tint); overflow: hidden; }
+
+.buildingHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-6) var(--space-12);
+}
+
+.buildingHead > :first-child { flex: 1 1 26rem; }
+.buildingSide { flex: 0 1 30rem; display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-5); }
+.buildingSide p { font-size: var(--text-lg); }
+
+.scroller {
+  position: relative;
+  margin-top: clamp(1.75rem, 3.5vw, 2.75rem);
+}
+
+/* Soft fade at both edges */
+.scroller::before,
+.scroller::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  width: clamp(1.5rem, 6vw, 6rem);
+  pointer-events: none;
+}
+.scroller::before { left: 0; background: linear-gradient(90deg, var(--color-tint), transparent); }
+.scroller::after { right: 0; background: linear-gradient(-90deg, var(--color-tint), transparent); }
+
+.scrollerTrack {
+  display: flex;
+  gap: clamp(1rem, 1.6vw, 1.5rem);
+  overflow-x: auto;
+  padding: 0.75rem var(--section-padding-x) 1.75rem;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
+.scrollerTrack::-webkit-scrollbar { display: none; }
+
+.ventureCard {
+  flex: 0 0 clamp(16rem, 26vw, 21rem);
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--color-line);
+  box-shadow: 0 1px 2px rgba(15, 36, 64, 0.05), 0 22px 40px -30px rgba(15, 36, 64, 0.45);
+  color: inherit;
+  transition: translate 500ms var(--ease-out-expo), box-shadow 500ms var(--ease-out-expo), border-color 300ms;
+  user-select: none;
+}
+
+.ventureCard:hover {
+  translate: 0 -6px;
+  border-color: rgba(184, 134, 11, 0.45);
+  box-shadow: 0 1px 2px rgba(15, 36, 64, 0.05), 0 30px 50px -28px rgba(15, 36, 64, 0.5);
+  color: inherit;
+}
+
+.ventureImage { position: relative; display: block; aspect-ratio: 16 / 10; overflow: hidden; background: var(--color-bg-tertiary); }
+.ventureImage img { width: 100%; height: 100%; object-fit: cover; display: block; transition: scale 900ms var(--ease-out-expo); }
+.ventureCard:hover .ventureImage img { scale: 1.05; }
+
+.ventureBody { display: flex; flex-direction: column; gap: 0.35rem; padding: 1rem 1.25rem 1.15rem; flex: 1; }
+.ventureName { font-family: var(--font-heading); font-size: var(--text-xl); font-weight: var(--weight-semibold); color: var(--color-ink); line-height: 1.15; }
+.ventureMore { display: inline-flex; align-items: center; gap: 0.3rem; margin-top: auto; padding-top: 0.25rem; font-size: var(--text-sm); font-weight: var(--weight-semibold); color: var(--color-accent); transition: gap 300ms var(--ease-out-expo); }
+.ventureCard:hover .ventureMore { gap: 0.55rem; }
+
 /* ---------- Ways ---------- */
 
-.ways { background: #fff; }
+.ways { background: var(--color-bg-secondary); }
 
 .wayGrid {
-  margin-top: clamp(2.5rem, 5vw, 4rem);
+  margin-top: clamp(1.75rem, 3.5vw, 2.75rem);
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(1rem, 2vw, 1.75rem);
@@ -233,8 +414,8 @@
   gap: var(--space-3);
   padding: clamp(1.75rem, 3vw, 2.5rem);
   padding-top: clamp(2.25rem, 3.4vw, 3rem);
-  background: var(--color-bg-secondary);
-  border: 1px solid transparent;
+  background: #fff;
+  border: 1px solid var(--color-line);
   border-radius: var(--radius-lg);
   transition: background 400ms var(--ease-out-quart), translate 500ms var(--ease-out-expo), box-shadow 500ms var(--ease-out-expo);
 }
@@ -287,91 +468,11 @@
 
 .wayLink:hover { color: var(--tone); gap: 0.7rem; }
 
-/* ---------- How it works ---------- */
-
-.steps { background: var(--color-bg-secondary); }
-
-.stepsHead {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: var(--space-6) var(--space-12);
-  margin-bottom: clamp(3rem, 6vw, 5rem);
-}
-
-.stepsSub { max-width: 36ch; font-size: var(--text-lg); }
-
-.stepsWrap { position: relative; }
-
-/* The gold line that runs through the three numerals */
-.stepsTrack {
-  position: absolute;
-  top: 2rem;
-  left: 2rem;
-  right: 2rem;
-  height: 1px;
-  background: var(--color-line-strong);
-}
-
-.stepsLine {
-  display: block;
-  height: 1px;
-  background: linear-gradient(90deg, var(--color-gold), var(--color-gold-light));
-  transform-origin: left center;
-}
-
-.stepList {
-  position: relative;
-  list-style: none;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(1.5rem, 4vw, 4rem);
-}
-
-.step { display: flex; flex-direction: column; gap: var(--space-6); }
-
-/* Roman numeral in a gold ring, set in the serif */
-.stepNode {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 4rem;
-  height: 4rem;
-  border-radius: 50%;
-  background: var(--color-bg-secondary);
-  border: 1px solid var(--color-gold);
-  box-shadow: 0 0 0 6px var(--color-bg-secondary), inset 0 0 0 4px #fff, inset 0 0 0 5px rgba(184, 134, 11, 0.35);
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 1.35rem;
-  color: var(--color-gold-dark);
-  transition: background 400ms, color 400ms, translate 600ms var(--ease-out-expo);
-}
-
-/* translate, not transform, so the hover never fights the entrance animation */
-.step:hover .stepNode { background: var(--color-accent-dark); color: var(--color-gold-light); translate: 0 -3px; }
-
-.stepTitle {
-  font-size: var(--text-2xl);
-  font-weight: var(--weight-semibold);
-  color: var(--color-ink);
-  margin-bottom: var(--space-3);
-}
-
-.stepBody { font-size: var(--text-base); max-width: 34ch; }
-
-.stepsActions {
-  margin-top: clamp(3rem, 5vw, 4.5rem);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-4) var(--space-8);
-}
-
 /* ---------- Founder ---------- */
 
-.founder { background: #fff; }
+.founder { background: var(--color-bg-secondary); }
+
+.storyMobile { display: none; }
 
 .founderInner {
   display: grid;
@@ -429,7 +530,7 @@
 
 /* ---------- Closing ---------- */
 
-.closing { padding: 0 clamp(0.75rem, 2vw, 1.75rem) clamp(2rem, 4vw, 3.5rem); background: #fff; }
+.closing { padding: 0 clamp(0.75rem, 2vw, 1.75rem) var(--section-padding-y); background: var(--color-bg-secondary); }
 
 .closingBox {
   background: var(--color-accent-dark);
@@ -437,9 +538,13 @@
   padding: clamp(3.5rem, 9vw, 8rem) var(--section-padding-x);
   text-align: center;
   clip-path: inset(0% 0% 0% 0% round 28px);
+  position: relative;
+  overflow: hidden;
 }
 
-.closingCopy { display: flex; flex-direction: column; align-items: center; gap: var(--space-6); }
+.closingArcs { opacity: 0.8; }
+
+.closingCopy { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: var(--space-6); }
 
 .closingTitle {
   font-size: clamp(2.2rem, 1.2rem + 4vw, 5rem);
@@ -466,12 +571,29 @@
   .stage { order: 2; width: min(100%, 26rem); margin: var(--space-6) 0 0; justify-self: center; }
   .wayGrid { grid-template-columns: 1fr; }
   .founderInner { grid-template-columns: 1fr; }
+  .storyDesktop { display: none; }
+  .storyMobile { display: block; margin-top: calc(var(--space-2) * -1); }
+  .kpiGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .founderSide { position: static; }
-  .stepList { grid-template-columns: 1fr; gap: var(--space-10); }
-  .stepsTrack { top: 2rem; bottom: 2rem; left: 2rem; right: auto; width: 1px; height: auto; }
-  .stepsLine { width: 1px; height: 100%; transform-origin: center top; }
-  .step { flex-direction: row; align-items: flex-start; gap: var(--space-5); }
-  .stepNode { flex-shrink: 0; }
+}
+
+/* Phones (built against iPhone 16 Pro Max, 440 x 956) */
+@media (max-width: 600px) {
+  .hero { padding-left: var(--section-padding-x); padding-right: var(--section-padding-x); }
+  /* The tagline stays on one line: the type scales with the screen width */
+  .taglinePill { padding: 0.5rem 0.8rem; }
+  .pillText { font-size: min(0.9rem, 2.62vw); letter-spacing: 0; }
+  .heroCtas { gap: 0.6rem; }
+  .heroCtas > * { flex: 1 1 0; min-width: 0; }
+  .heroCtas a { width: 100%; padding: 0.95rem 0.8rem; font-size: 0.95rem; gap: 0.35rem; }
+  .heroArcs { opacity: 0.55; }
+  .ringBadge { width: 2.05rem; }
+  .kpiCard { gap: 0.6rem; padding: 0.75rem; }
+  .kpiIcon { width: 2rem; height: 2rem; }
+  .kpiLabel { font-size: 0.6rem; letter-spacing: 0.06em; }
+  .ventureCard { flex-basis: 78vw; }
+  .closingButtons > * { width: 100%; max-width: 20rem; }
+  .closingButtons a { width: 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -13,29 +13,92 @@
   transform-origin: center top;
 }
 
+/* The navy screen: first load and between pages */
 .overlay {
   position: fixed;
   inset: 0;
   z-index: var(--z-overlay);
   display: grid;
   place-items: center;
-  background: var(--color-accent-dark);
+  overflow: hidden;
+  background:
+    radial-gradient(60rem 40rem at 50% 45%, rgba(45, 90, 142, 0.45), transparent 70%),
+    radial-gradient(30rem 22rem at 12% 92%, rgba(184, 134, 11, 0.12), transparent 70%),
+    var(--color-accent-dark);
   color: #fff;
   pointer-events: none;
 }
 
+.overlay .arcsRight { height: min(150vh, 70rem); }
+.overlay .arcsLeft { top: auto; bottom: -12%; transform: scaleX(-1); height: min(60vh, 26rem); opacity: 0.55; }
+
+.frame {
+  position: absolute;
+  inset: clamp(0.75rem, 1.6vw, 1.5rem);
+  border: 1px solid rgba(212, 160, 23, 0.28);
+  border-radius: 6px;
+}
+
+.grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
 .label {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.1rem;
+  gap: 1rem;
   font-family: var(--font-heading);
   font-size: clamp(1.1rem, 2vw, 1.4rem);
   font-weight: var(--weight-medium);
   letter-spacing: 0.01em;
 }
 
+.markWrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(5.5rem, 10vw, 7.5rem);
+  aspect-ratio: 1;
+}
+
+/* A gold ring draws itself around the logo */
+.markRing {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(230, 196, 107, 0.7);
+  clip-path: inset(0 0 0 0 round 50%);
+  animation: ring 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes ring {
+  from { transform: scale(0.6) rotate(-90deg); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
 .mark {
-  width: clamp(3rem, 6vw, 4.5rem);
+  width: 56%;
   height: auto;
+}
+
+.rule {
+  width: 3rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #e6c46b, transparent);
+  animation: rule 0.9s 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes rule { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+.name { color: rgba(255, 255, 255, 0.92); }
+
+@media (prefers-reduced-motion: reduce) {
+  .markRing, .rule { animation: none; }
 }

@@ -1,8 +1,9 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { ArrowRight, Briefcase } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Briefcase } from 'lucide-react';
 import SectionLabel from '@/components/ui/SectionLabel';
 import Button from '@/components/ui/Button';
+import Arcs from '@/components/ui/Arcs';
 import { useGsap } from '@/hooks/useGsap';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import styles from './page.module.css';
@@ -105,15 +106,17 @@ export default function AboutPage() {
   const storyRef = useRef(null);
   const workRef = useRef(null);
   const portfolioRef = useRef(null);
+  const noteRef = useRef(null);
   const ctaRef = useRef(null);
   const storyInView = useInView(storyRef, { once: true, amount: 0.3 });
   const workInView = useInView(workRef, { once: true, amount: 0.3 });
   const portfolioInView = useInView(portfolioRef, { once: true, amount: 0.3 });
+  const noteInView = useInView(noteRef, { once: true, amount: 0.25 });
   const ctaInView = useInView(ctaRef, { once: true, amount: 0.3 });
   useGsap(heroRef, (gsapInstance, st) => createAboutHeroScrollAnimation(gsapInstance, st, heroRef));
   useGsap(storyRef, createStoryAnimation);
   useGsap(workRef, createPrinciplesAnimation);
-  useGsap(portfolioRef, createPortfolioAnimation);
+  useGsap(noteRef, createPortfolioAnimation);
   useGsap(ctaRef, (gsapInstance, st) => createClosingTransition(gsapInstance, st, ctaRef));
 
   const fadeUp = (delay = 0) => ({
@@ -123,7 +126,8 @@ export default function AboutPage() {
 
   return <>
     <section ref={heroRef} className={`${styles.hero} grain`} data-trigger="hero">
-      <div className="container"><div className={styles.heroContent} data-hero-content>
+      <Arcs className={styles.heroArcs} />
+      <div className={`container ${styles.heroGrid}`}><div className={styles.heroContent} data-hero-content>
         <motion.div {...fadeUp(0.08)} animate={{ opacity: 1, y: 0 }}><SectionLabel>About Pratap Sonkar</SectionLabel></motion.div>
         <motion.h1 className={styles.heroTitle} {...fadeUp(0.18)} animate={{ opacity: 1, y: 0 }}>
           {['Builder.', 'Operator.', 'Founder.'].map((word, index) => <span className={styles.heroWordMask} key={word}>
@@ -136,7 +140,22 @@ export default function AboutPage() {
           </span>)}
         </motion.h1>
         <motion.p className={styles.subheadline} {...fadeUp(0.33)} animate={{ opacity: 1, y: 0 }}>Here is my story and what I am building.</motion.p>
-      </div></div>
+      </div>
+      <motion.figure
+        className={styles.portrait}
+        initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 40, scale: 0.96 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ delay: prefersReducedMotion ? 0 : 0.35, duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <span className={styles.portraitRing} aria-hidden="true" />
+        <span className={styles.portraitDisc} aria-hidden="true" />
+        <img src="/images/founder-about.webp" alt="Pratap Sonkar" width="542" height="440" decoding="async" fetchPriority="high" />
+        <figcaption className={styles.portraitTag}>
+          <span className={styles.portraitName}>Pratap Sonkar</span>
+          <span className={styles.portraitRole}>Founder, P.Sonkar House Of Ventures</span>
+        </figcaption>
+      </motion.figure>
+      </div>
     </section>
 
     <section className={`${styles.contentSection} section`} ref={storyRef}>
@@ -187,20 +206,33 @@ export default function AboutPage() {
         <motion.aside className={styles.sidebar} {...fadeUp(0)} animate={portfolioInView ? { opacity: 1, y: 0 } : {}}><SectionLabel>Portfolio Intent</SectionLabel><h2 className={styles.sidebarTitle}>What Drives the Portfolio</h2></motion.aside>
         <div className={styles.mainContent}>
           <motion.div className={styles.prose} {...fadeUp(0.28)} animate={portfolioInView ? { opacity: 1, y: 0 } : {}}><p>Each venture in this ecosystem exists because there was a real gap worth addressing. The sectors vary but the reasoning is consistent: a problem that is large enough, a solution that is practical, and a model that can be made to work.</p></motion.div>
-          <section className={styles.ownWords}>
-            <motion.div {...fadeUp(0.48)} animate={portfolioInView ? { opacity: 1, y: 0 } : {}}><SectionLabel>In My Own Words</SectionLabel></motion.div>
-            <motion.div
-              className={styles.noteBox}
-              data-trigger="note-box"
-              {...fadeUp(0.76)}
-              animate={portfolioInView ? { opacity: 1, y: 0 } : {}}
-            >
-              <p className={styles.noteQuote} data-motion="note-quote">&ldquo;I did not set out to build a venture studio. I set out to work on things I believed needed to exist. This is what that looks like so far.</p>
-              <p className={styles.noteQuote} data-motion="note-quote">Along the way, I also built a network of people, businesses, and collaborations that became just as much a part of this ecosystem as the ventures I own. The Collaborated Services side of this is not separate from what I do. It is a reflection of the relationships and partnerships I have built over time for responsible and quality work getting delivered.&rdquo;</p>
-            </motion.div>
-          </section>
         </div>
       </div></div>
+    </section>
+
+    <section className={styles.ownWordsSection} ref={noteRef}>
+      <div className="container">
+        <motion.figure
+          className={styles.noteBox}
+          data-trigger="note-box"
+          {...fadeUp(0.1)}
+          animate={noteInView ? { opacity: 1, y: 0 } : {}}
+        >
+          <Arcs tone="light" className={styles.noteArcs} />
+          <div className={styles.noteHead}>
+            <span className={styles.noteIcon} aria-hidden="true">&ldquo;</span>
+            <span className={styles.noteLabel}>In my own words</span>
+          </div>
+          <blockquote className={styles.noteBody}>
+            <p className={styles.noteQuote} data-motion="note-quote">I did not set out to build a venture studio. I set out to work on things I believed needed to exist. This is what that looks like so far.</p>
+            <p className={styles.noteQuoteSmall} data-motion="note-quote">Along the way, I also built a network of people, businesses, and collaborations that became just as much a part of this ecosystem as the ventures I own. The Collaborated Services side of this is not separate from what I do. It is a reflection of the relationships and partnerships I have built over time for responsible and quality work getting delivered.</p>
+          </blockquote>
+          <figcaption className={styles.noteSign}>
+            <img src="/images/founder-about.webp" alt="" width="542" height="440" loading="lazy" decoding="async" />
+            <span><strong>Pratap Sonkar</strong><span>Founder</span></span>
+          </figcaption>
+        </motion.figure>
+      </div>
     </section>
 
     <section className={`${styles.closingCTA} section`} ref={ctaRef} data-trigger="closing-cta">
@@ -209,7 +241,8 @@ export default function AboutPage() {
         <motion.h2 className="section-title" {...fadeUp(0)} animate={ctaInView ? { opacity: 1, y: 0 } : {}}>Curious about the ventures or <span className="serif-accent">want to connect?</span></motion.h2>
         <div className={styles.closingButtons}>
           <motion.div {...fadeUp(0.2)} animate={ctaInView ? { opacity: 1, y: 0 } : {}}><Button to="/ventures" variant="primary" icon={<Briefcase size={16} />}>View My Ventures</Button></motion.div>
-          <motion.div {...fadeUp(0.32)} animate={ctaInView ? { opacity: 1, y: 0 } : {}}><Button to="/contact" variant="outline" icon={<ArrowRight size={16} />}>Get Involved</Button></motion.div>
+          <motion.div {...fadeUp(0.28)} animate={ctaInView ? { opacity: 1, y: 0 } : {}}><Button to="/services" variant="outline" iconAfter={<ArrowUpRight size={16} />}>Explore Services</Button></motion.div>
+          <motion.div {...fadeUp(0.36)} animate={ctaInView ? { opacity: 1, y: 0 } : {}}><Button to="/contact" variant="outline" icon={<ArrowRight size={16} />}>Get Involved</Button></motion.div>
         </div>
       </div></div>
     </section>

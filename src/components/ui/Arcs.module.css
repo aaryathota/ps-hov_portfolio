@@ -1,0 +1,41 @@
+.arcs {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  height: min(140%, 60rem);
+  aspect-ratio: 1 / 2;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.left { right: auto; left: 0; transform: translateY(-50%) scaleX(-1); }
+
+.arcs svg { display: block; width: 100%; height: 100%; overflow: visible; }
+
+.spin {
+  transform-origin: 400px 400px;
+  animation: spin 80s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* On navy (page-change screen, dark bands) */
+.light .line { fill: none; stroke: rgba(255, 255, 255, 0.14); }
+.light .gold { fill: none; stroke: rgba(230, 196, 107, 0.45); }
+.light .fill { fill: rgba(255, 255, 255, 0.04); stroke: none; }
+.light .bead { fill: #e6c46b; }
+
+/* On the light-blue pages */
+.dark .line { fill: none; stroke: rgba(30, 58, 95, 0.14); }
+.dark .gold { fill: none; stroke: rgba(184, 134, 11, 0.42); }
+.dark .fill { fill: rgba(45, 90, 142, 0.06); stroke: none; }
+.dark .bead { fill: var(--color-gold); }
+
+@media (max-width: 768px) {
+  .arcs { height: min(110%, 34rem); opacity: 0.8; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spin { animation: none; }
+}

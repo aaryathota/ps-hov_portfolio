@@ -63,8 +63,6 @@
 
 .introText { font-size: var(--text-lg); max-width: 46ch; }
 
-.introSide { font-size: var(--text-sm); color: var(--color-text-tertiary); }
-.introSide a { color: var(--color-accent); font-weight: var(--weight-semibold); border-bottom: 1px solid currentColor; }
 
 .introCue {
   position: absolute;
@@ -247,26 +245,6 @@
 
 .count { font-size: var(--text-sm); color: rgba(255, 255, 255, 0.6); }
 
-.sector {
-  position: relative;
-  margin-left: 0.9rem;
-  padding-left: 1.4rem;
-  font-size: var(--text-sm);
-  font-weight: var(--weight-semibold);
-  letter-spacing: 0.02em;
-  color: rgba(255, 255, 255, 0.92);
-}
-
-.sector::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  width: 0.9rem;
-  height: 1px;
-  background: var(--color-gold-light);
-}
-
 .title {
   font-size: clamp(2.8rem, 1.2rem + 5vw, 6.6rem);
   font-weight: var(--weight-semibold);
@@ -315,7 +293,6 @@
 
 .link:hover { color: var(--color-gold-light); background-size: 0% 1px; background-position: 100% 100%; }
 
-.soon { font-size: var(--text-sm); color: rgba(255, 255, 255, 0.6); }
 
 /* ---------- Rail ---------- */
 
@@ -373,7 +350,7 @@
 .tailInner {
   max-width: var(--max-width-wide);
   margin: 0 auto;
-  padding: clamp(4.5rem, 10vw, 8rem) var(--section-padding-x);
+  padding: calc(var(--section-padding-y) * 1.2) var(--section-padding-x);
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
@@ -390,6 +367,9 @@
 }
 
 .tailSerif { color: var(--color-gold-light); font-weight: 350; }
+
+.tailCopy { display: flex; flex-direction: column; gap: var(--space-5); max-width: 40rem; }
+.tailText { color: rgba(255, 255, 255, 0.78); font-size: var(--text-lg); max-width: 46ch; }
 
 .tailActions { display: flex; align-items: center; gap: var(--space-8); flex-wrap: wrap; }
 
@@ -410,31 +390,53 @@
 .tailLink { color: rgba(255, 255, 255, 0.82); border-bottom: 1px solid rgba(255, 255, 255, 0.4); padding-bottom: 2px; }
 .tailLink:hover { color: #fff; border-color: #fff; }
 
-/* ---------- Phones and reduced motion: chapters stack ---------- */
+/* ---------- Phones: same sideways chapters, text set at the bottom ---------- */
 
 @media (max-width: 899px) {
-  .pin { height: auto; overflow: visible; }
-  .track { flex-direction: column; width: 100%; height: auto; }
-  .intro { width: 100%; height: auto; min-height: 88svh; padding: calc(var(--header-height) + 2rem) var(--section-padding-x) 4rem; }
-  .introCue { display: none; }
-  .chapter { width: 100%; height: auto; min-height: 100svh; align-items: flex-end; }
-  .mediaImage { left: 0; width: 100%; }
+  /* Phones: panels are as tall as the screen with the browser bars hidden
+     (100lvh), so nothing shows beneath them when Safari's bars collapse on
+     scroll. --bars is the part hidden behind the bars while they are showing,
+     added to the bottom padding so the copy always clears the rail. */
+  .page { --bars: calc(100lvh - 100svh); }
+  .pin,
+  .intro,
+  .chapter { height: 100svh; height: 100lvh; }
+  .intro { padding: calc(var(--header-height) + 1.5rem) var(--section-padding-x) calc(11rem + env(safe-area-inset-bottom) + var(--bars, 0px)); }
+  .introCue { right: auto; left: var(--section-padding-x); bottom: calc(9.25rem + env(safe-area-inset-bottom) + var(--bars, 0px)); }
+  .chapter { align-items: flex-end; }
+  .mediaImage { left: -6%; width: 112%; }
   .scrim,
   .chapter[data-kind='screenshot'] .scrim {
     background: linear-gradient(180deg,
       rgba(var(--ink-deep), 0.3) 0%,
       rgba(var(--ink-deep), 0.25) 30%,
-      rgba(var(--ink-deep), 0.78) 58%,
-      rgba(var(--ink-deep), 0.95) 100%);
+      rgba(var(--ink-deep), 0.8) 56%,
+      rgba(var(--ink-deep), 0.96) 100%);
   }
-  .chapter::after { inset: 0.75rem; }
-  .deviceWrap { top: 5.5rem; left: 1.5rem; width: 150vw; }
+  .chapter::after { inset: calc(var(--header-height) + 0.5rem) 0.75rem 0.75rem; }
+  .deviceWrap { top: calc(var(--header-height) + 2.5rem); left: 1.5rem; width: 150vw; }
   .device { transform: perspective(1400px) rotateY(-8deg); }
-  .credit { top: auto; bottom: 1.4rem; right: 1.5rem; }
-  .chapterInner { padding: 8rem 1.5rem 4.25rem; }
-  .title { font-size: clamp(2.4rem, 1.4rem + 5vw, 3.6rem); }
+  .credit { top: calc(var(--header-height) + 1.3rem); right: 1.5rem; }
+  .chapterInner { padding: 6rem 1.5rem calc(10.5rem + env(safe-area-inset-bottom) + var(--bars, 0px)); }
+  .copy { gap: var(--space-4); }
+  .title { font-size: clamp(2.3rem, 1.4rem + 5vw, 3.4rem); }
   .text { font-size: var(--text-base); }
-  .rail { display: none; }
+  /* Rail is fixed to the screen, just above the phone tab bar, so it moves
+     with the tab bar (never floats up) as Safari's bars show and hide.
+     It shows only while the chapters are pinned. */
+  .rail {
+    position: fixed;
+    left: 1.5rem;
+    right: 1.5rem;
+    bottom: calc(5.1rem + env(safe-area-inset-bottom));
+    transition: opacity 250ms ease, visibility 250ms;
+  }
+  .railHidden { opacity: 0; visibility: hidden; pointer-events: none; }
+  .rail ul { gap: 0; }
+  .railButton,
+  .railActive { min-width: 2.25rem; justify-content: center; padding: 0.35rem 0; }
+  .railName { display: none; }
+  .railNum { font-size: 0.9rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -442,7 +444,7 @@
   .track { flex-direction: column; width: 100%; height: auto; }
   .intro { width: 100%; height: auto; min-height: 70svh; }
   .introCue { display: none; }
-  .chapter { width: 100%; min-height: 100svh; }
+  .chapter { width: 100%; height: auto; min-height: 100svh; }
   .mediaImage { left: 0; width: 100%; }
   .rail { display: none; }
 }

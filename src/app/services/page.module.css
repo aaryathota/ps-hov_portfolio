@@ -1,10 +1,14 @@
 .page {
+  position: relative;
   overflow: hidden;
-  padding: calc(var(--header-height) + clamp(3rem, 6vw, 5rem)) var(--section-padding-x) clamp(4rem, 8vw, 7rem);
+  padding: calc(var(--header-height) + var(--section-padding-y)) var(--section-padding-x) var(--section-padding-y);
   background:
     radial-gradient(60rem 30rem at 50% 0%, rgba(45, 90, 142, 0.08), transparent 70%),
-    var(--color-bg-secondary);
+    linear-gradient(180deg, var(--color-tint) 0%, var(--color-bg-secondary) 100%);
 }
+
+.arcs { top: 26rem; height: min(120vh, 56rem); opacity: 0.8; }
+.head, .tail { position: relative; z-index: 1; }
 
 .head {
   max-width: var(--max-width-wide);
@@ -30,7 +34,7 @@
 
 .tail {
   max-width: var(--max-width-wide);
-  margin: clamp(3rem, 7vw, 6rem) auto 0;
+  margin: var(--section-padding-y) auto 0;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -48,3 +52,6 @@
   color: var(--color-ink);
   max-width: 20ch;
 }
+
+.tailCopy { display: flex; flex-direction: column; gap: var(--space-4); }
+.tailText { font-size: var(--text-base); max-width: 46ch; }

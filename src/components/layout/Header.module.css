@@ -188,7 +188,13 @@
   }
 }
 
-@media (max-width: 420px) {
+/* Phones: the full logo on every phone, sized with the page scale (see globals.css) */
+@media (max-width: 480px) {
+  .logoImage { width: 11.875rem; max-height: none; }
+}
+
+/* Only very narrow screens fall back to the mark */
+@media (max-width: 319px) {
   .logoImage {
     display: none;
   }
