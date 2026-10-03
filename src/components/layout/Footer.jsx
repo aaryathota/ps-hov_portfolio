@@ -14,13 +14,6 @@ const siteLinks = [
   { href: '/contact', label: 'Get involved' },
 ];
 
-// Used until the admin panel's Contact details tab has its own links
-const FALLBACK_SOCIALS = {
-  instagram: 'https://instagram.com/psonkarventures',
-  linkedin: 'https://linkedin.com/in/pratapsonkar',
-  x: 'https://x.com/pratapsonkar',
-};
-
 const FOUNDER_NAME = 'Pratap Sonkar';
 
 export default function Footer() {
@@ -54,10 +47,10 @@ export default function Footer() {
   }, []);
 
   const socials = [
-    ['instagram', settings.instagram_url || FALLBACK_SOCIALS.instagram],
-    ['linkedin', settings.linkedin_url || FALLBACK_SOCIALS.linkedin],
-    ['x', settings.twitter_url || FALLBACK_SOCIALS.x],
-  ];
+    ['instagram', settings.instagram_url],
+    ['linkedin', settings.linkedin_url],
+    ['x', settings.twitter_url],
+  ].filter(([, url]) => url);
 
   // Admin panel values win; src/data/config.js is the fallback so the footer always shows a number and an email
   const phone = settings.primary_whatsapp || siteSettings.primaryWhatsapp;

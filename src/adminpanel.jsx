@@ -179,7 +179,7 @@ function SiteEditor({ settings, onSave, onUpload, busy, message }) {
               <label>Description <textarea rows="4" value={service.description || ''} onChange={(event) => updateService(index, 'description', limitWords(event.target.value))} /></label>
               <div className={styles.formRow}>
                 <label>Button label <input value={service.ctaLabel || ''} onChange={(event) => updateService(index, 'ctaLabel', event.target.value)} /></label>
-                <label className={styles.uploadBox}><ImagePlus size={19} /><span><strong>Upload card image</strong><small>Optional service artwork</small></span><input type="file" accept="image/*" onChange={(event) => uploadServiceImage(index, event)} disabled={busy} /></label>
+                <label className={styles.uploadBox}><ImagePlus size={19} /><span><strong>Upload card image</strong><small>Recommended: 1200 x 400 px (3:1)</small></span><input type="file" accept="image/*" onChange={(event) => uploadServiceImage(index, event)} disabled={busy} /></label>
               </div>
               <label className={styles.switchLabel}>Visible on site <input className={styles.switch} type="checkbox" checked={service.is_active !== false} onChange={(event) => updateService(index, 'is_active', event.target.checked)} /></label>
             </article>
@@ -626,7 +626,7 @@ export default function AdminPanel() {
                 <ImagePlus size={21} />
                 <span>
                   <strong>Upload image</strong>
-                  <small>Stored in website-images / {type}</small>
+                  <small>Stored in website-images / {type} · Recommended: {type === "services" ? "1200 x 400 px (3:1)" : "1600 x 1000 px (16:10)"}</small>
                 </span>
                 <input
                   type="file"
