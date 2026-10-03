@@ -85,6 +85,9 @@ function SiteEditor({ settings, onSave, onUpload, busy, message }) {
     ...current,
     pages: { ...current.pages, [page]: { ...current.pages[page], [key]: value } },
   }));
+  const updateHome = (key, value) => setDraft((current) => ({ ...current, home: { ...current.home, [key]: value } }));
+  const updateHomeKpi = (index, key, value) => setDraft((current) => ({ ...current, home: { ...current.home, kpis: current.home.kpis.map((kpi, kpiIndex) => kpiIndex === index ? { ...kpi, [key]: value } : kpi) } }));
+  const updateHomeWay = (index, key, value) => setDraft((current) => ({ ...current, home: { ...current.home, ways: current.home.ways.map((way, wayIndex) => wayIndex === index ? { ...way, [key]: value } : way) } }));
   const addService = () => setDraft((current) => ({
     ...current,
     services: [...current.services, { id: `service-${Date.now()}`, graphic: 'events', name: 'New service', tagline: '', description: '', ctaLabel: "Let's Talk", image: '', is_active: true }],
@@ -120,6 +123,27 @@ function SiteEditor({ settings, onSave, onUpload, busy, message }) {
           <label>Hero side copy <textarea rows="3" value={hero.sideText || ''} onChange={(event) => updateHero('sideText', event.target.value)} /></label>
           <label className={styles.uploadBox}><ImagePlus size={19} /><span><strong>Upload founder image</strong><small>Stored in website-images / site</small></span><input type="file" accept="image/*" onChange={uploadHero} disabled={busy} /></label>
           {hero.portraitUrl && <img className={styles.preview} src={getImageUrl(hero.portraitUrl)} alt="Founder preview" />}
+          <div className={styles.subheading}><Settings2 size={17} /><span>Homepage sections</span></div>
+          <div className={styles.formRow}>
+            <label>Portfolio label <input value={draft.home?.buildingLabel || ''} onChange={(event) => updateHome('buildingLabel', event.target.value)} /></label>
+            <label>Portfolio title <input value={draft.home?.buildingTitle || ''} onChange={(event) => updateHome('buildingTitle', event.target.value)} /></label>
+          </div>
+          <label>Portfolio description <textarea rows="3" value={draft.home?.buildingText || ''} onChange={(event) => updateHome('buildingText', event.target.value)} /></label>
+          <div className={styles.formRow}>
+            <label>Ways section label <input value={draft.home?.waysLabel || ''} onChange={(event) => updateHome('waysLabel', event.target.value)} /></label>
+            <label>Ways section title <input value={draft.home?.waysTitle || ''} onChange={(event) => updateHome('waysTitle', event.target.value)} /></label>
+          </div>
+          <div className={styles.copyGroup}><strong>At-a-glance bar</strong>{(draft.home?.kpis || []).map((kpi, index) => <div className={styles.formRow} key={index}><label>Number {index + 1}<input type="number" value={kpi.value} onChange={(event) => updateHomeKpi(index, 'value', event.target.value)} /></label><label>Label {index + 1}<input value={kpi.label || ''} onChange={(event) => updateHomeKpi(index, 'label', event.target.value)} /></label></div>)}</div>
+          <div className={styles.copyGroup}><strong>Three ways cards</strong>{(draft.home?.ways || []).map((way, index) => <div className={styles.serviceEditorCard} key={index}><div className={styles.formRow}><label>Kicker <input value={way.kicker || ''} onChange={(event) => updateHomeWay(index, 'kicker', event.target.value)} /></label><label>Heading <input value={way.heading || ''} onChange={(event) => updateHomeWay(index, 'heading', event.target.value)} /></label></div><label>Card copy <textarea rows="3" value={way.body || ''} onChange={(event) => updateHomeWay(index, 'body', event.target.value)} /></label></div>)}</div>
+          <div className={styles.formRow}>
+            <label>Founder section label <input value={draft.home?.founderLabel || ''} onChange={(event) => updateHome('founderLabel', event.target.value)} /></label>
+            <label>Founder title <input value={draft.home?.founderTitle || ''} onChange={(event) => updateHome('founderTitle', event.target.value)} /></label>
+          </div>
+          <label>Founder copy <textarea rows="3" value={draft.home?.founderBody || ''} onChange={(event) => updateHome('founderBody', event.target.value)} /></label>
+          <label>Founder quote <textarea rows="3" value={draft.home?.quote || ''} onChange={(event) => updateHome('quote', event.target.value)} /></label>
+          <label>Quote attribution <input value={draft.home?.quoteFooter || ''} onChange={(event) => updateHome('quoteFooter', event.target.value)} /></label>
+          <label>Closing section title <input value={draft.home?.closingTitle || ''} onChange={(event) => updateHome('closingTitle', event.target.value)} /></label>
+          <label>Closing section copy <textarea rows="3" value={draft.home?.closingText || ''} onChange={(event) => updateHome('closingText', event.target.value)} /></label>
         </>}
 
         <div className={styles.subheading}><Settings2 size={17} /><span>Page copy</span></div>

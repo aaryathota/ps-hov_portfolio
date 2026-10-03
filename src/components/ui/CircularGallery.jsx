@@ -62,7 +62,6 @@ function MobileGallery({ items, label = 'Services', onAction }) {
       </div>
       <div className={styles.mobileControls}>
         <button type="button" className={styles.mobileControl} onClick={() => move(-1)} aria-label="Previous service"><ArrowLeft size={17} /></button>
-        <span className={styles.mobileHint}><span /> Swipe to explore <span /></span>
         <button type="button" className={styles.mobileControl} onClick={() => move(1)} aria-label="Next service"><ArrowRight size={17} /></button>
       </div>
     </section>

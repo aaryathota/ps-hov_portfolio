@@ -52,3 +52,32 @@ on conflict (id) do update set
 insert into public.site_settings (id, content)
 values (1, '{"hero":{"tagline":"A network of ventures built for people and businesses to grow.","title":"P.Sonkar","titleLine":"House Of","titleAccent":"Ventures.","sideTitle":"A founder-led ecosystem.","sideText":"Built around the ventures I build, the people I work with, and the opportunities I create. Based in Bangalore.","portraitUrl":"/images/founder.webp"},"services":[]}'::jsonb)
 on conflict (id) do nothing;
+
+update public.site_settings
+set content = content || '{
+  "home": {
+    "kpis": [
+      {"value": 5, "suffix": "", "label": "In-house ventures"},
+      {"value": 10, "suffix": "+", "label": "Services"},
+      {"value": 15, "suffix": "+", "label": "Venture collaborations"},
+      {"value": 100, "suffix": "%", "label": "Impact driven"}
+    ],
+    "buildingLabel": "The portfolio",
+    "buildingTitle": "Here is what I am *building.*",
+    "buildingText": "A set of ventures I own and operate, and services I am part of through active partnerships. All at different stages.",
+    "waysLabel": "What This Is About",
+    "waysTitle": "Three ways to be *part of this.*",
+    "ways": [
+      {"kicker": "Invest", "heading": "Back a venture", "body": "I am building a small, focused set of ventures. If something in the portfolio interests you, there is a way to have that conversation."},
+      {"kicker": "Work", "heading": "Join the team", "body": "Internships, part-time, and full-time roles across ventures in progress. Real work. Real ownership."},
+      {"kicker": "Grow", "heading": "Grow your business", "body": "Looking for a growth partner who actually works with you? I have the resources and the experience to help."}
+    ],
+    "founderLabel": "The person behind this",
+    "founderTitle": "I am Pratap Sonkar.",
+    "founderBody": "I build ventures, enable collaborations, and work at the intersection of people, systems, and execution. P.Sonkar House Of Ventures is the ecosystem I have built around all of it.",
+    "quote": "I did not set out to build a venture studio. I set out to work on things I believed needed to exist. This is what that looks like so far.",
+    "quoteFooter": "Pratap Sonkar, Founder",
+    "closingTitle": "Something here catch your eye?",
+    "closingText": "Whether you want to invest, join a team, or grow your business, reach out and I will take it from there."
+  }
+}'::jsonb;

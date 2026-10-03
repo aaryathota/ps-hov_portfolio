@@ -19,12 +19,7 @@ import { whenIntroDone } from '@/lib/intro';
 import styles from './page.module.css';
 
 // Numbers carried over from the previous site. Edit here to update them.
-const KPIS = [
-  { icon: Building2, value: 5, suffix: '', label: 'In-house ventures' },
-  { icon: Settings, value: 10, suffix: '+', label: 'Services' },
-  { icon: Users, value: 15, suffix: '+', label: 'Venture collaborations' },
-  { icon: Star, value: 100, suffix: '%', label: 'Impact driven' },
-];
+const KPI_ICONS = [Building2, Settings, Users, Star];
 
 // Start-up icons that ride the gold ring behind the portrait
 // (HandCoins = fundraising, ChartNoAxesCombined = growth)
@@ -48,14 +43,13 @@ const WAYS = [
   },
 ];
 
-const QUOTE = 'I did not set out to build a venture studio. I set out to work on things I believed needed to exist. This is what that looks like so far.';
-
 // Ticker speed in pixels per second, the same on every screen size
 const TICKER_SPEED = 64;
 
 export default function HomePage() {
   const [ventures, setVentures] = useState([]);
   const [siteSettings, setSiteSettings] = useState(defaultSiteSettings);
+  const homeCopy = siteSettings.home;
   const root = useRef(null);
   const heroRef = useRef(null);
   const tickerRef = useRef(null);
@@ -312,7 +306,9 @@ export default function HomePage() {
       {/* ============ KPI STRIP ============ */}
       <section ref={kpiRef} className={styles.kpis} aria-label="At a glance">
         <div className={styles.kpiGrid}>
-          {KPIS.map(({ icon: Icon, value, suffix, label }) => (
+          {homeCopy.kpis.map(({ value, suffix, label }, index) => {
+            const Icon = KPI_ICONS[index % KPI_ICONS.length];
+            return (
             <div key={label} className={styles.kpiCard} data-kpi-card>
               <span className={styles.kpiIcon}><Icon size={18} strokeWidth={1.8} aria-hidden="true" /></span>
               <span className={styles.kpiText}>
@@ -320,7 +316,8 @@ export default function HomePage() {
                 <span className={styles.kpiLabel}>{label}</span>
               </span>
             </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
@@ -329,13 +326,12 @@ export default function HomePage() {
         <div className="container">
           <div className={styles.buildingHead}>
             <div>
-              <SectionLabel>The portfolio</SectionLabel>
-              <AnimatedText id="building-title" text="Here is what I am *building.*" as="h2" className={styles.h2} />
+              <SectionLabel>{homeCopy.buildingLabel}</SectionLabel>
+              <AnimatedText id="building-title" text={homeCopy.buildingTitle} as="h2" className={styles.h2} />
             </div>
             <div className={styles.buildingSide} data-reveal>
               <p>
-                A set of ventures I own and operate, and services I am part of through active partnerships.
-                All at different stages.
+                {homeCopy.buildingText}
               </p>
             </div>
           </div>
@@ -346,19 +342,21 @@ export default function HomePage() {
       {/* ============ THREE WAYS ============ */}
       <section className={`${styles.ways} section`} aria-labelledby="ways-title">
         <div className="container">
-          <SectionLabel>What This Is About</SectionLabel>
-          <AnimatedText id="ways-title" text="Three ways to be *part of this.*" as="h2" className={styles.h2} />
+          <SectionLabel>{homeCopy.waysLabel}</SectionLabel>
+          <AnimatedText id="ways-title" text={homeCopy.waysTitle} as="h2" className={styles.h2} />
           <div className={styles.wayGrid} data-ways>
-            {WAYS.map(({ icon: Icon, tone, kicker, heading, body, href }) => (
-              <SpotlightCard as="article" key={heading} className={`${styles.way} ${styles[tone]}`} data-way>
+            {WAYS.map(({ icon: Icon, tone, href }, index) => {
+              const copy = homeCopy.ways[index] || {};
+              return (
+              <SpotlightCard as="article" key={copy.heading} className={`${styles.way} ${styles[tone]}`} data-way>
                 <span className={styles.wayRule} data-way-rule aria-hidden="true" />
                 <div className={styles.wayIcon}><Icon size={22} strokeWidth={1.7} aria-hidden="true" /></div>
-                <p className={styles.wayKicker}>{kicker}</p>
-                <h3 className={styles.wayHeading}>{heading}</h3>
-                <p className={styles.wayBody}>{body}</p>
+                <p className={styles.wayKicker}>{copy.kicker}</p>
+                <h3 className={styles.wayHeading}>{copy.heading}</h3>
+                <p className={styles.wayBody}>{copy.body}</p>
                 <Link to={href} className={styles.wayLink}>Get involved <ArrowUpRight size={16} aria-hidden="true" /></Link>
               </SpotlightCard>
-            ))}
+            ); })}
           </div>
         </div>
       </section>
@@ -367,12 +365,9 @@ export default function HomePage() {
       <section ref={quoteRef} className={`${styles.founder} section`} aria-label="In Pratap's words">
         <div className={`container ${styles.founderInner}`}>
           <div className={styles.founderSide}>
-            <SectionLabel>The person behind this</SectionLabel>
-            <h2 className={styles.founderTitle}>I am <span className="serif-accent">Pratap Sonkar.</span></h2>
-            <p className={styles.founderBody} data-reveal>
-              I build ventures, enable collaborations, and work at the intersection of people, systems, and execution.
-              P.Sonkar House Of Ventures is the ecosystem I have built around all of it.
-            </p>
+            <SectionLabel>{homeCopy.founderLabel}</SectionLabel>
+            <h2 className={styles.founderTitle}>{homeCopy.founderTitle}</h2>
+            <p className={styles.founderBody} data-reveal>{homeCopy.founderBody}</p>
             {/* On laptops the button sits here; on phones it moves below the quote */}
             <div className={styles.storyDesktop} data-reveal="2">
               <Button to="/about" variant="outline" iconAfter={<ArrowUpRight size={16} />}>Read my story</Button>
@@ -380,8 +375,8 @@ export default function HomePage() {
           </div>
           <blockquote className={styles.quote}>
             <span className={styles.quoteMark} aria-hidden="true">&ldquo;</span>
-            <p className={styles.quoteText} data-quote>{QUOTE}</p>
-            <footer className={styles.quoteFooter}>Pratap Sonkar, Founder</footer>
+            <p className={styles.quoteText} data-quote>{homeCopy.quote}</p>
+            <footer className={styles.quoteFooter}>{homeCopy.quoteFooter}</footer>
           </blockquote>
           <div className={styles.storyMobile}>
             <Button to="/about" variant="outline" iconAfter={<ArrowUpRight size={16} />}>Read my story</Button>
@@ -395,10 +390,8 @@ export default function HomePage() {
           <Arcs tone="light" className={styles.closingArcs} />
           <div className={styles.closingCopy} data-closing-copy>
             <Ornament center light />
-            <h2 className={styles.closingTitle}>Something here <span className={`serif-accent ${styles.closingSerif}`}>catch your eye?</span></h2>
-            <p className={styles.closingText}>
-              Whether you want to invest, join a team, or grow your business, reach out and I will take it from there.
-            </p>
+            <h2 className={styles.closingTitle}>{homeCopy.closingTitle}</h2>
+            <p className={styles.closingText}>{homeCopy.closingText}</p>
             <div className={styles.closingButtons}>
               <Button to="/ventures" variant="onDarkOutline" size="lg" magnetic icon={<Briefcase size={17} />}>View My Ventures</Button>
               <Button to="/services" variant="onDarkOutline" size="lg" magnetic iconAfter={<ArrowUpRight size={18} />}>Explore Services</Button>
