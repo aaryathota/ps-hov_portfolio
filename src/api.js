@@ -44,7 +44,12 @@ export async function getSiteSettings() {
 export async function saveSiteSettings(settings) {
   if (!supabase) throw new Error('Supabase is not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY to .env.');
   const { data, error } = await supabase.from('site_settings').upsert({ id: 1, content: settings }).select('content').single();
-  if (error) throw error;
+  if (error) {
+    if (error.code === '42P01' || error.code === 'PGRST205' || error.message?.includes('site_settings')) {
+      throw new Error('The site_settings table is missing. Run supabase/site_settings.sql in Supabase SQL Editor, then refresh this page.');
+    }
+    throw error;
+  }
   return mergeSiteSettings(data.content);
 }
 
