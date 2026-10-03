@@ -134,6 +134,23 @@ export const signOut = () => {
   return supabase.auth.signOut();
 };
 
+export async function changePassword(password) {
+  if (!supabase) throw new Error('Supabase is not configured.');
+  const { data, error } = await supabase.auth.updateUser({ password });
+  if (error) throw error;
+  return data;
+}
+
+export async function inviteAdmin(email) {
+  if (!supabase) throw new Error('Supabase is not configured.');
+  const { data, error } = await supabase.functions.invoke('admin-create-user', {
+    body: { email: email.trim() },
+  });
+  if (error) throw error;
+  if (data?.error) throw new Error(data.error);
+  return data;
+}
+
 export async function saveContent(type, item) {
   const table = contentTable(type);
   if (!supabase) throw new Error('Supabase is not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY to .env.');

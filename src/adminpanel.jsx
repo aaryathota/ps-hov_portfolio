@@ -11,6 +11,8 @@ import {
   X,
   Home,
   Settings2,
+  KeyRound,
+  UserPlus,
 } from "lucide-react";
 import {
   deleteContent,
@@ -23,6 +25,8 @@ import {
   saveContactSettings,
   saveSiteSettings,
   syncServiceCatalog,
+  changePassword,
+  inviteAdmin,
   signIn,
   signOut,
   uploadImage,
@@ -164,6 +168,50 @@ function SiteEditor({ settings, onSave, onUpload, busy, message }) {
   );
 }
 
+function AccountEditor({ user, busy, message, onPasswordChange, onInvite }) {
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [inviteEmail, setInviteEmail] = useState('');
+
+  function submitPassword(event) {
+    event.preventDefault();
+    if (password.length < 6) return onPasswordChange(null, 'Password must be at least 6 characters.');
+    if (password !== confirmPassword) return onPasswordChange(null, 'Passwords do not match.');
+    onPasswordChange(password);
+  }
+
+  function submitInvite(event) {
+    event.preventDefault();
+    onInvite(inviteEmail);
+    setInviteEmail('');
+  }
+
+  return (
+    <section className={styles.siteEditor}>
+      <div className={styles.editorIntro}>
+        <div><p className={styles.kicker}>ADMIN ACCESS</p><h2>Account & users</h2></div>
+        <p>Manage your own password and invite trusted people to help maintain the site.</p>
+      </div>
+      <div className={styles.contentGrid}>
+        <form onSubmit={submitPassword} className={`${styles.editor} ${styles.form}`}>
+          <div className={styles.subheading}><KeyRound size={17} /><span>Change my password</span></div>
+          <p className={styles.accountMeta}>{user.email}</p>
+          <label>New password <input type="password" minLength="6" required value={password} onChange={(event) => setPassword(event.target.value)} /></label>
+          <label>Confirm password <input type="password" minLength="6" required value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} /></label>
+          <button className={styles.primaryButton} disabled={busy}>{busy ? 'Updating...' : 'Update password'} <ArrowUpRight size={17} /></button>
+        </form>
+        <form onSubmit={submitInvite} className={`${styles.editor} ${styles.form}`}>
+          <div className={styles.subheading}><UserPlus size={17} /><span>Invite another admin</span></div>
+          <p className={styles.accountMeta}>They will receive an email invitation to create their own password.</p>
+          <label>Admin email <input type="email" required value={inviteEmail} onChange={(event) => setInviteEmail(event.target.value)} placeholder="team@example.com" /></label>
+          <button className={styles.secondaryButton} disabled={busy}>{busy ? 'Sending...' : 'Send invitation'} <UserPlus size={16} /></button>
+        </form>
+      </div>
+      {message && <p className={styles.message} role="status">{message}</p>}
+    </section>
+  );
+}
+
 export default function AdminPanel() {
   const [type, setType] = useState("site");
   const [items, setItems] = useState([]);
@@ -252,6 +300,33 @@ export default function AdminPanel() {
       setMessage("Homepage and all service cards published to the site and database.");
     } catch (error) {
       setMessage(error.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function handlePasswordChange(password, validationMessage) {
+    if (validationMessage) { setMessage(validationMessage); return; }
+    setBusy(true);
+    setMessage("");
+    try {
+      await changePassword(password);
+      setMessage("Password updated successfully.");
+    } catch (error) {
+      setMessage(error.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function handleInvite(email) {
+    setBusy(true);
+    setMessage("");
+    try {
+      await inviteAdmin(email);
+      setMessage(`Invitation sent to ${email}.`);
+    } catch (error) {
+      setMessage(error.message || 'Could not send invitation.');
     } finally {
       setBusy(false);
     }
@@ -396,6 +471,12 @@ export default function AdminPanel() {
             <Mail size={17} /> Contact details{" "}
             <span>{type === "contact" ? "•" : ""}</span>
           </button>
+          <button
+            className={type === "account" ? styles.navActive : styles.navItem}
+            onClick={() => { setType("account"); resetForm(); }}
+          >
+            <KeyRound size={17} /> Account & users <span>{type === "account" ? "•" : ""}</span>
+          </button>
         </nav>
         <div className={styles.sidebarFoot}>
           <span className={styles.userDot} />
@@ -414,14 +495,16 @@ export default function AdminPanel() {
             <p className={styles.kicker}>
               CONTENT WORKSPACE / {type.toUpperCase()}
             </p>
-            <h1>{type === "ventures" ? "Ventures" : type === "site" ? "Site content" : "Contact details"}</h1>
+            <h1>{type === "ventures" ? "Ventures" : type === "site" ? "Site content" : type === "account" ? "Account & users" : "Contact details"}</h1>
           </div>
           <span className={styles.liveBadge}>
             <span /> Live database
           </span>
         </header>
         <div className={styles.contentGrid}>
-          {type === "site" ? (
+          {type === "account" ? (
+            <AccountEditor user={user} busy={busy} message={message} onPasswordChange={handlePasswordChange} onInvite={handleInvite} />
+          ) : type === "site" ? (
             <SiteEditor settings={siteSettings} onSave={handleSiteSubmit} onUpload={handleSiteImage} busy={busy} message={message} />
           ) : type === "contact" ? (
             <section className={styles.editor}>
