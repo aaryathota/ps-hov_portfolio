@@ -12,14 +12,6 @@ Deno.serve(async (request) => {
     const authorization = request.headers.get('Authorization');
     if (!authorization) throw new Error('You must be signed in.');
 
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-      { global: { headers: { Authorization: authorization } } },
-    );
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) throw new Error('Your admin session has expired.');
-
     const { email, password } = await request.json();
     if (!email || !String(email).includes('@')) throw new Error('Enter a valid email address.');
     if (!password || String(password).length < 6) throw new Error('Password must be at least 6 characters.');
@@ -31,6 +23,10 @@ Deno.serve(async (request) => {
       Deno.env.get('SUPABASE_URL') ?? '',
       serviceRoleKey,
     );
+    const accessToken = authorization.replace(/^Bearer\s+/i, '');
+    const { data: { user }, error: sessionError } = await adminClient.auth.getUser(accessToken);
+    if (sessionError || !user) throw new Error('Your admin session has expired. Sign out, sign in again, and retry.');
+
     const { error } = await adminClient.auth.admin.createUser({
       email: String(email).trim(),
       password: String(password),
