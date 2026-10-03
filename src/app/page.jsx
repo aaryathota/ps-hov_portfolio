@@ -11,13 +11,12 @@ import Button from '@/components/ui/Button';
 import Ornament from '@/components/ui/Ornament';
 import SpotlightCard from '@/components/ui/SpotlightCard';
 import Arcs from '@/components/ui/Arcs';
-import { getImageUrl, getVentures } from '@/api';
+import { getImageUrl, getSiteSettings, getVentures } from '@/api';
+import { defaultSiteSettings } from '@/data/siteContent';
 import { ventureMedia, ventureSlug } from '@/data/ventureMedia';
 import { gsap, ScrollTrigger, SplitText } from '@/lib/gsap';
 import { whenIntroDone } from '@/lib/intro';
 import styles from './page.module.css';
-
-const TAGLINE = 'A network of ventures built for people and businesses to grow.';
 
 // Numbers carried over from the previous site. Edit here to update them.
 const KPIS = [
@@ -56,6 +55,7 @@ const TICKER_SPEED = 64;
 
 export default function HomePage() {
   const [ventures, setVentures] = useState([]);
+  const [siteSettings, setSiteSettings] = useState(defaultSiteSettings);
   const root = useRef(null);
   const heroRef = useRef(null);
   const tickerRef = useRef(null);
@@ -66,6 +66,7 @@ export default function HomePage() {
   useEffect(() => {
     let alive = true;
     getVentures().then((rows) => { if (alive) setVentures(rows.filter((row) => row.is_active !== false)); });
+    getSiteSettings().then((settings) => { if (alive) setSiteSettings(settings); });
     return () => { alive = false; };
   }, []);
 
@@ -230,11 +231,11 @@ export default function HomePage() {
           <div className={styles.heroText} data-hero-scroll="text">
             <p className={styles.taglinePill} data-hero-tagline>
               <span className={styles.pillGlow} aria-hidden="true" />
-              <span className={`sheen ${styles.pillText}`}>{TAGLINE}</span>
+              <span className={`sheen ${styles.pillText}`}>{siteSettings.hero.tagline}</span>
             </p>
             <h1 className={styles.title} data-hero-title>
-              P.Sonkar<br />
-              <span className={styles.titleSub}>House Of <em className={`serif-accent ${styles.titleSerif}`}>Ventures.</em></span>
+              {siteSettings.hero.title}<br />
+              <span className={styles.titleSub}>{siteSettings.hero.titleLine} <em className={`serif-accent ${styles.titleSerif}`}>{siteSettings.hero.titleAccent}</em></span>
             </h1>
             <div className={styles.heroCtas} data-hero-cta>
               <Button to="/ventures" size="lg" magnetic iconAfter={<ArrowUpRight size={18} />}>Explore ventures</Button>
@@ -269,7 +270,7 @@ export default function HomePage() {
                 <img
                   className={styles.portrait}
                   data-hero-portrait
-                  src="/images/founder.webp"
+                  src={siteSettings.hero.portraitUrl || '/images/founder.webp'}
                   width="1015"
                   height="1194"
                   alt="Pratap Sonkar, founder"
@@ -283,10 +284,8 @@ export default function HomePage() {
           </div>
 
           <div className={styles.heroSide} data-hero-side>
-            <h2 className={styles.sideTitle}>A <span style={{ whiteSpace: 'nowrap' }}>founder-led</span> ecosystem.</h2>
-            <p className={styles.sideText}>
-              Built around the ventures I build, the people I work with, and the opportunities I create. Based in Bangalore.
-            </p>
+            <h2 className={styles.sideTitle}>{siteSettings.hero.sideTitle}</h2>
+            <p className={styles.sideText}>{siteSettings.hero.sideText}</p>
             <Button to="/contact" iconAfter={<ArrowUpRight size={16} />}>Get involved</Button>
           </div>
         </div>
@@ -335,10 +334,9 @@ export default function HomePage() {
             </div>
             <div className={styles.buildingSide} data-reveal>
               <p>
-                A set of ventures at different stages. Some are being actively developed. Some are still being shaped.
-                All of them are being worked on with full intent.
+                A set of ventures I own and operate, and services I am part of through active partnerships.
+                All at different stages.
               </p>
-              <Button to="/ventures" variant="outline" iconAfter={<ArrowUpRight size={16} />}>View All Ventures</Button>
             </div>
           </div>
         </div>
@@ -416,7 +414,7 @@ export default function HomePage() {
 /*
   Venture cards that scroll on their own, slowly and continuously.
   Hovering (or touching) pauses it, and it can be swiped or dragged by hand;
-  it picks up again a moment after you let go.
+  it starts moving again the instant you let go.
 */
 function VentureScroller({ ventures }) {
   const trackRef = useRef(null);
@@ -447,7 +445,9 @@ function VentureScroller({ ventures }) {
     const pause = () => { paused = true; window.clearTimeout(resumeTimer); };
     const resumeSoon = () => {
       window.clearTimeout(resumeTimer);
-      resumeTimer = window.setTimeout(() => { pos = track.scrollLeft; paused = false; }, 1600);
+      // No waiting: it starts moving again the moment the cursor or finger leaves
+      pos = track.scrollLeft;
+      paused = false;
     };
     const onScroll = () => {
       // Someone scrolled it by hand: follow them, and wrap round seamlessly

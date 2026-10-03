@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { ArrowRight, ArrowUpRight, Briefcase } from 'lucide-react';
 import SectionLabel from '@/components/ui/SectionLabel';
@@ -7,12 +7,8 @@ import Arcs from '@/components/ui/Arcs';
 import { useGsap } from '@/hooks/useGsap';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import styles from './page.module.css';
-
-const principles = [
-  ['Start With Clarity', 'Every venture I work on begins with a clear understanding of the problem being solved, who it is being solved for, and whether there is a sustainable model behind it. Clarity before action, always.'],
-  ['Stay Close to the Work', 'I stay operationally close to what I build. Not from a distance. I am inside the decisions, the conversations, and the details that actually determine whether something works or not.'],
-  ['Build Systems, Not Dependencies', 'The goal is always to build something that does not depend entirely on me. Systems and teams are built alongside what we are building, not after it.'],
-];
+import { getSiteSettings } from '@/api';
+import { defaultSiteSettings } from '@/data/siteContent';
 
 function createAboutHeroScrollAnimation(gsap, ScrollTrigger, rootRef) {
   const root = rootRef.current;
@@ -101,6 +97,7 @@ function SectionProgress() {
 }
 
 export default function AboutPage() {
+  const [copy, setCopy] = useState(defaultSiteSettings.pages.about);
   const prefersReducedMotion = useReducedMotion();
   const heroRef = useRef(null);
   const storyRef = useRef(null);
@@ -113,6 +110,7 @@ export default function AboutPage() {
   const portfolioInView = useInView(portfolioRef, { once: true, amount: 0.3 });
   const noteInView = useInView(noteRef, { once: true, amount: 0.25 });
   const ctaInView = useInView(ctaRef, { once: true, amount: 0.3 });
+  useEffect(() => { getSiteSettings().then((settings) => setCopy(settings.pages.about)); }, []);
   useGsap(heroRef, (gsapInstance, st) => createAboutHeroScrollAnimation(gsapInstance, st, heroRef));
   useGsap(storyRef, createStoryAnimation);
   useGsap(workRef, createPrinciplesAnimation);
@@ -128,9 +126,9 @@ export default function AboutPage() {
     <section ref={heroRef} className={`${styles.hero} grain`} data-trigger="hero">
       <Arcs className={styles.heroArcs} />
       <div className={`container ${styles.heroGrid}`}><div className={styles.heroContent} data-hero-content>
-        <motion.div {...fadeUp(0.08)} animate={{ opacity: 1, y: 0 }}><SectionLabel>About Pratap Sonkar</SectionLabel></motion.div>
+        <motion.div {...fadeUp(0.08)} animate={{ opacity: 1, y: 0 }}><SectionLabel>{copy.heroLabel}</SectionLabel></motion.div>
         <motion.h1 className={styles.heroTitle} {...fadeUp(0.18)} animate={{ opacity: 1, y: 0 }}>
-          {['Builder.', 'Operator.', 'Founder.'].map((word, index) => <span className={styles.heroWordMask} key={word}>
+          {copy.heroTitle.split(' ').map((word, index) => <span className={styles.heroWordMask} key={`${word}-${index}`}>
             <motion.span
               className={index === 2 ? `serif-accent ${styles.heroSerif}` : undefined}
               initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: '110%' }}
@@ -139,7 +137,7 @@ export default function AboutPage() {
             >{word}</motion.span>
           </span>)}
         </motion.h1>
-        <motion.p className={styles.subheadline} {...fadeUp(0.33)} animate={{ opacity: 1, y: 0 }}>Here is my story and what I am building.</motion.p>
+        <motion.p className={styles.subheadline} {...fadeUp(0.33)} animate={{ opacity: 1, y: 0 }}>{copy.heroSubtitle}</motion.p>
       </div>
       <motion.figure
         className={styles.portrait}
@@ -159,12 +157,12 @@ export default function AboutPage() {
     </section>
 
     <section className={`${styles.contentSection} section`} ref={storyRef}>
-      <SectionProgress />
+        <SectionProgress />
       <div className="container"><div className={styles.grid}>
-        <motion.aside className={styles.sidebar} {...fadeUp(0)} animate={storyInView ? { opacity: 1, y: 0 } : {}}><SectionLabel>My Story</SectionLabel><h2 className={styles.sidebarTitle}>The Story</h2></motion.aside>
+        <motion.aside className={styles.sidebar} {...fadeUp(0)} animate={storyInView ? { opacity: 1, y: 0 } : {}}><SectionLabel>{copy.storyLabel}</SectionLabel><h2 className={styles.sidebarTitle}>{copy.storyTitle}</h2></motion.aside>
         <div className={styles.mainContent}><motion.div className={styles.prose} data-trigger="prose" {...fadeUp(0.28)} animate={storyInView ? { opacity: 1, y: 0 } : {}}>
-          <p data-motion="story-paragraph">P.Sonkar House Of Ventures did not come together through a single plan. It came together through years of working on things I genuinely believed needed to exist, starting from scratch, figuring things out on the ground, and building across areas I found myself drawn to.</p>
-          <p data-motion="story-paragraph">Over time, what started as individual projects began to take shape as a connected ecosystem. P.Sonkar House Of Ventures is the formal structure that holds all of it together. It is the parent entity behind every venture I build and every collaboration I am part of.</p>
+          <p data-motion="story-paragraph">{copy.storyOne}</p>
+          <p data-motion="story-paragraph">{copy.storyTwo}</p>
         </motion.div></div>
       </div></div>
     </section>
@@ -172,9 +170,9 @@ export default function AboutPage() {
     <section className={`${styles.contentSection} section`} ref={workRef}>
       <SectionProgress />
       <div className="container"><div className={styles.grid}>
-        <motion.aside className={styles.sidebar} {...fadeUp(0)} animate={workInView ? { opacity: 1, y: 0 } : {}}><SectionLabel>Working Principles</SectionLabel><h2 className={styles.sidebarTitle}>How I Work</h2></motion.aside>
+        <motion.aside className={styles.sidebar} {...fadeUp(0)} animate={workInView ? { opacity: 1, y: 0 } : {}}><SectionLabel>{copy.principlesLabel}</SectionLabel><h2 className={styles.sidebarTitle}>{copy.principlesTitle}</h2></motion.aside>
         <div className={styles.mainContent}><div className={styles.principlesList} data-trigger="principles-list">
-          {principles.map(([title, body], index) => <motion.article className={styles.principle} key={title}
+          {[[copy.principleOneTitle, copy.principleOneText], [copy.principleTwoTitle, copy.principleTwoText], [copy.principleThreeTitle, copy.principleThreeText]].map(([title, body], index) => <motion.article className={styles.principle} key={title}
             initial={{ opacity: 1 }}
             animate={workInView ? { opacity: 1 } : { opacity: 0 }}>
             <motion.span
@@ -225,7 +223,7 @@ export default function AboutPage() {
           </div>
           <blockquote className={styles.noteBody}>
             <p className={styles.noteQuote} data-motion="note-quote">I did not set out to build a venture studio. I set out to work on things I believed needed to exist. This is what that looks like so far.</p>
-            <p className={styles.noteQuoteSmall} data-motion="note-quote">Along the way, I also built a network of people, businesses, and collaborations that became just as much a part of this ecosystem as the ventures I own. The Collaborated Services side of this is not separate from what I do. It is a reflection of the relationships and partnerships I have built over time for responsible and quality work getting delivered.</p>
+            <p className={styles.noteQuoteSmall} data-motion="note-quote">Along the way, I also built a network of people, businesses, and collaborations that became just as much a part of this ecosystem as the ventures I own. The collaborated services side of this is not separate from what I do. It is a reflection of the relationships and partnerships I have built over time for responsible and quality work getting delivered.</p>
           </blockquote>
           <figcaption className={styles.noteSign}>
             <img src="/images/founder-about.webp" alt="" width="542" height="440" loading="lazy" decoding="async" />

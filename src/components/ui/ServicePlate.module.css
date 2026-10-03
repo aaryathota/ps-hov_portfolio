@@ -1,0 +1,26 @@
+/* Living covers: each drawing keeps moving quietly behind the card text */
+.orbit, .bar, .line, .col, .roof, .pulse { transform-box: fill-box; }
+
+/* Identity: the three marks drift round each other, the gold point breathes */
+.orbit { transform-origin: 50% 50%; animation: orbit 26s linear infinite; }
+.orbitRev { animation-direction: reverse; animation-duration: 34s; }
+.pulse { transform-origin: 50% 50%; animation: pulse 2.8s ease-in-out infinite; }
+
+/* Growth: bars rise in turn, the gold line draws itself, then it all repeats */
+.bar { transform-origin: 50% 100%; animation: rise 6s var(--ease-out-expo, ease-out) infinite; animation-delay: calc(var(--i) * 110ms); }
+.line { stroke-dasharray: 420; animation: draw 6s ease-in-out infinite; }
+
+/* Structure: columns lift into place one by one, the roof settles last */
+.col { transform-origin: 50% 100%; animation: lift 6s var(--ease-out-expo, ease-out) infinite; animation-delay: calc(var(--i) * 120ms); }
+.roof { transform-origin: 50% 100%; animation: settle 6s ease-in-out infinite; }
+
+@keyframes orbit { to { transform: rotate(360deg); } }
+@keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(2.2); opacity: 0.55; } }
+@keyframes rise { 0% { transform: scaleY(0); } 22%, 88% { transform: scaleY(1); } 100% { transform: scaleY(0); } }
+@keyframes draw { 0% { stroke-dashoffset: 420; } 40%, 88% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -420; } }
+@keyframes lift { 0% { transform: scaleY(0); } 24%, 88% { transform: scaleY(1); } 100% { transform: scaleY(0); } }
+@keyframes settle { 0%, 20% { transform: translateY(-16px); opacity: 0; } 40%, 88% { transform: none; opacity: 1; } 100% { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit, .pulse, .bar, .line, .col, .roof { animation: none; }
+}

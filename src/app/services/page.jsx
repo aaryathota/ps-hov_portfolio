@@ -1,69 +1,71 @@
 import { useEffect, useMemo, useState } from 'react';
-import { getImageUrl, getServices } from '@/api';
-import CoverflowCarousel from '@/components/ui/CoverflowCarousel';
-import ServicePlate from '@/components/ui/ServicePlate';
+import { getImageUrl, getSiteSettings } from '@/api';
+import { defaultSiteSettings } from '@/data/siteContent';
+import CircularGallery from '@/components/ui/CircularGallery';
 import SectionLabel from '@/components/ui/SectionLabel';
 import Arcs from '@/components/ui/Arcs';
 import Button from '@/components/ui/Button';
 import styles from './page.module.css';
 
-/* Collaborated services, shown in a drag-and-arrow-key 3D carousel. */
+/* Services, shown on a 3D ring that turns as you scroll. */
 
-// Drawn cover for each service until a real image is uploaded in the admin panel
-const PLATES = {
-  'Brand Identity Studio': 'identity',
-  'Digital Marketing Solutions': 'growth',
-  'Legal & Compliance': 'structure',
+// Drawing for each service already in the admin panel; any new one gets the cycle below
+const GRAPHICS = {
+  'Brand Identity Studio': 'brand-identity',
+  'Digital Marketing Solutions': 'digital-marketing',
+  'Legal & Compliance': 'legal-compliance',
 };
+const GRAPHIC_CYCLE = ['brand-identity', 'digital-marketing', 'legal-compliance'];
 
-const PLATE_ORDER = ['identity', 'growth', 'structure'];
-
-// The cards move on by themselves every 15 seconds
-const AUTOPLAY_MS = 15000;
+const contactHref = (title) => (title ? `/contact?venture=${encodeURIComponent(title)}` : '/contact');
 
 export default function ServicesPage() {
-  const [services, setServices] = useState([]);
+  const [services, setServices] = useState(defaultSiteSettings.services);
+  const [copy, setCopy] = useState(defaultSiteSettings.pages.services);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     let alive = true;
-    getServices().then((rows) => { if (alive) setServices(rows.filter((row) => row.is_active !== false)); });
+    getSiteSettings().then((settings) => {
+      if (!alive) return;
+      setServices(settings.services.filter((row) => row.is_active !== false));
+      setCopy(settings.pages.services);
+      setLoaded(true);
+    });
     return () => { alive = false; };
   }, []);
 
-  const slides = useMemo(() => services.map((service, index) => ({
-    src: service.image_url ? getImageUrl(service.image_url) : undefined,
-    plate: service.image_url ? undefined : <ServicePlate variant={PLATES[service.name] || PLATE_ORDER[index % 3]} />,
-    alt: service.name,
-    kind: 'Collaborated Service',
-    title: service.name,
-    subtitle: service.description,
-    action: { label: 'Enquire about this service', href: `/contact?venture=${encodeURIComponent(service.name)}` },
-  })), [services]);
+  const items = useMemo(() => services.map((service, index) => ({
+      graphic: service.graphic || GRAPHICS[service.name] || GRAPHIC_CYCLE[index % GRAPHIC_CYCLE.length],
+      id: service.id || service.name,
+      title: service.name,
+      tagline: service.tagline,
+      description: service.description,
+      image: service.image || (service.image_url ? getImageUrl(service.image_url) : undefined),
+      action: { label: service.ctaLabel || "Let's Talk", href: contactHref(service.name || service.title) },
+    })), [services]);
 
   return (
     <div className={styles.page}>
       <Arcs className={styles.arcs} />
       <header className={styles.head}>
-        <div data-reveal><SectionLabel>The Portfolio</SectionLabel></div>
-        <h1 className={styles.title} data-reveal="2">Collaborated <span className="serif-accent">Services.</span></h1>
-        <p className={styles.lede} data-reveal="3">
-          Services and businesses I am part of through active collaborations. These are managed independently but connected
-          to this ecosystem through shared work and partnerships built over time.
-        </p>
+        <div data-reveal><SectionLabel>{copy.label}</SectionLabel></div>
+        <h1 className={styles.title} data-reveal="2">{copy.title}</h1>
+        <p className={styles.lede} data-reveal="3">{copy.intro}</p>
       </header>
 
-      {slides.length > 0 ? (
-        <CoverflowCarousel slides={slides} label="Collaborated services" autoplay={AUTOPLAY_MS} cardWidth="clamp(210px, 58vw, 330px)" />
+      {loaded ? (
+        <CircularGallery items={items} label="Services" />
       ) : (
         <p className={styles.loading}>Loading services.</p>
       )}
 
       <section className={styles.tail} data-reveal>
         <div className={styles.tailCopy}>
-          <h2 className={styles.tailTitle}>See something that <span className="serif-accent">interests you?</span></h2>
-          <p className={styles.tailText}>Reach out whether you want to invest, join a team, or collaborate. I personally review every message.</p>
+          <h2 className={styles.tailTitle}>{copy.tailTitle}</h2>
+          <p className={styles.tailText}>{copy.tailText}</p>
         </div>
-        <Button to="/contact" size="lg">Get Involved</Button>
+        <Button to="/contact" size="lg">{copy.tailButton}</Button>
       </section>
     </div>
   );

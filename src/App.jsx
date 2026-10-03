@@ -88,6 +88,10 @@ export default function App() {
   useRevealOnScroll(location.pathname);
   const isAdmin = location.pathname.startsWith('/admin');
 
+  useEffect(() => {
+    if (isAdmin) document.getElementById('boot-splash')?.remove();
+  }, [isAdmin]);
+
   if (isAdmin) {
     return (
       <>

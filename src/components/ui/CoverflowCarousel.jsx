@@ -25,7 +25,7 @@ export default function CoverflowCarousel({
   showPagination = true,
   showNavigation = true,
   label = 'Partner services',
-  autoplay = 0, // ms between automatic moves to the next card; 0 turns it off
+  autoplay = 0, // ms each card stays in front before the next one rotates in; 0 turns it off
   onSelect,
 }) {
   const count = slides.length;
@@ -39,7 +39,8 @@ export default function CoverflowCarousel({
   const dragRef = useRef(null);
 
   const [selected, setSelected] = useState(0);
-  const [paused, setPaused] = useState(false);
+  const [holding, setHolding] = useState(false); // finger or mouse is dragging the cards
+  const [canRotate, setCanRotate] = useState(false);
 
   const indexAt = useCallback((pos) => ((Math.round(pos) % count) + count) % count, [count]);
 
@@ -101,11 +102,23 @@ export default function CoverflowCarousel({
   const onPointerDown = (event) => {
     if (rafRef.current !== null) { cancelAnimationFrame(rafRef.current); rafRef.current = null; }
     event.currentTarget.setPointerCapture(event.pointerId);
+    setHolding(true);
     targetRef.current = posRef.current;
     dragRef.current = { id: event.pointerId, x: event.clientX, pos: posRef.current, v: 0, t: performance.now() };
   };
 
+  // A soft light follows the mouse across the front card
+  const glare = (event) => {
+    if (event.pointerType !== 'mouse') return;
+    const card = cardRefs.current[indexAt(posRef.current)];
+    if (!card) return;
+    const box = card.getBoundingClientRect();
+    card.style.setProperty('--gx', `${((event.clientX - box.left) / box.width) * 100}%`);
+    card.style.setProperty('--gy', `${((event.clientY - box.top) / box.height) * 100}%`);
+  };
+
   const onPointerMove = (event) => {
+    glare(event);
     const drag = dragRef.current;
     if (!drag || drag.id !== event.pointerId) return;
     const pitch = widthRef.current * (1 + gap);
@@ -124,6 +137,7 @@ export default function CoverflowCarousel({
     const drag = dragRef.current;
     if (!drag || drag.id !== event.pointerId) return;
     dragRef.current = null;
+    setHolding(false);
     const carried = Math.max(-2, Math.min(2, drag.v * 0.18));
     settle(clamp(Math.round(posRef.current + carried)));
   };
@@ -147,26 +161,20 @@ export default function CoverflowCarousel({
 
   useEffect(() => { onSelect?.(selected); }, [selected, onSelect]);
 
-  // Autoplay: move to the next card after `autoplay` ms. Any change of card
-  // (arrow, dot, drag, or autoplay itself) restarts the wait.
+  // Autoplay is driven by the progress fill in the dots: when it finishes the
+  // next card rotates in, so what you see and what happens always agree.
+  // Nothing waits on the mouse; it only holds while a card is being dragged.
   useEffect(() => {
-    if (!autoplay || paused || count < 2) return undefined;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
-    const id = window.setTimeout(() => {
-      if (document.visibilityState === 'visible') nudge(1);
-    }, autoplay);
-    return () => window.clearTimeout(id);
-  }, [autoplay, paused, selected, count, nudge]);
+    setCanRotate(Boolean(autoplay) && count > 1 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }, [autoplay, count]);
+
+  const advance = () => { if (canRotate) nudge(1); };
 
   const active = slides[selected];
 
   return (
-    <div className={styles.root} style={{ '--cf-card': cardWidth }} role="region" aria-roledescription="carousel" aria-label={label}>
-      <div
-        className={styles.stage}
-        onPointerEnter={(event) => { if (event.pointerType === 'mouse') setPaused(true); }}
-        onPointerLeave={(event) => { if (event.pointerType === 'mouse') setPaused(false); }}
-      >
+    <div className={styles.root} style={{ '--cf-card': cardWidth, '--cf-ms': `${autoplay}ms` }} role="region" aria-roledescription="carousel" aria-label={label}>
+      <div className={styles.stage}>
         <div
           ref={frameRef}
           tabIndex={0}
@@ -190,6 +198,7 @@ export default function CoverflowCarousel({
                 aria-roledescription="slide"
                 aria-label={`${index + 1} of ${count}`}
                 className={styles.card}
+                data-active={index === selected ? 'true' : undefined}
                 onClick={() => goTo(index)}
               >
                 {slide.plate ? (
@@ -229,14 +238,27 @@ export default function CoverflowCarousel({
               aria-selected={index === selected}
               onClick={() => goTo(index)}
               className={index === selected ? `${styles.dot} ${styles.dotActive}` : styles.dot}
-            />
+            >
+              {index === selected && canRotate && (
+                <span
+                  key={selected}
+                  className={styles.dotFill}
+                  data-holding={holding ? 'true' : undefined}
+                  onAnimationEnd={advance}
+                />
+              )}
+            </button>
           ))}
         </div>
       )}
 
       {showCaption && active?.title && (
         <div key={selected} className={styles.caption}>
-          <p className={styles.captionTitle}>{active.title}</p>
+          <p className={styles.captionTitle} aria-label={active.title}>
+            {active.title.split(' ').map((word, i) => (
+              <span key={`${word}-${i}`} className={styles.word} style={{ '--i': i }} aria-hidden="true">{word}</span>
+            ))}
+          </p>
           {active.subtitle && <p className={styles.captionSubtitle}>{active.subtitle}</p>}
           {active.meta?.length > 0 && (
             <dl className={styles.meta}>

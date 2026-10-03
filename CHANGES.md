@@ -1,3 +1,41 @@
+# Round 8: Service drawings on the cards
+
+- Every card now has a drawing across the top, in the card's own colour (navy, teal or gold panel with white line work and gold accents): events (spotlights over a crowd), US visa (globe, flight path, passport), real estate and BBMP (house between buildings, approval badge), turnkey (key on a blueprint grid), SaaS (browser with a rising chart), AI tools (small neural network), 360 marketing (four touchpoints orbiting a brand), apparel (shirt being stitched), corporate travel (route with plane), MacBooks (laptop with certified badge), cartridge refilling (cartridge, ink drop, refill cycle), plus brand identity, digital marketing and legal and compliance for the existing three.
+- Each drawing draws itself in when its card comes to the front. Reduced-motion users see the finished drawing.
+- Cards are slightly taller (1.75 times their width) to make room. A service with an uploaded image in the admin panel still shows that image instead of a drawing.
+- Code: `ServiceGraphic.jsx` and `.module.css` (drawings), `graphic` key per service in `src/data/services.js`.
+
+---
+
+# Round 7: Services gallery, smoother and livelier
+
+- Removed the "Scroll to explore" text. Below the counter there is now an **"Up next"** line that names the following service and scrolls to it when clicked. It uses the service names already on the page.
+- **Smoother:** the ring now eases toward the scroll position instead of following it step by step.
+- **New effects:** ring spins in on first view; the front card rises toward you, catches a light sweep, and its text rises into place; a soft glare follows the mouse over it; the ring leans slightly with the mouse; a floor shadow sits under the ring; a progress line sits beside the counter.
+- Reduced-motion users get no drift, easing, sweep or lean.
+
+---
+
+# Round 6: Services page circular gallery
+
+- **Services:** the 3D carousel is replaced by a circular gallery (21st.dev "circular-gallery", ported to JSX + CSS Modules, no Tailwind). Scrolling turns the ring; it also drifts slowly when idle and pauses on hover or focus. Cards use the site's tokens (navy, teal and gold accents, Outfit headings, Fraunces italic taglines).
+- **Services added:** 11 services supplied in the brief (`src/data/services.js`). Services already in the admin panel stay and come first. Service 1 has no title or tagline because none was supplied.
+- `.page` on the Services page uses `overflow: clip` so the gallery's sticky stage can stick.
+- `CoverflowCarousel` and `ServicePlate` are no longer used by the Services page and were left in place.
+
+---
+
+# Round 5 (2 October 2026): final corrections list
+
+- **Home, venture strip:** it starts moving again the instant the cursor (or finger) leaves it. No waiting.
+- **Footer:** phone number and email added (admin panel values first, `src/data/config.js` as fallback). The Name / Place / Phone / Email label placeholders are gone; icon + value only.
+- **Ventures:** intro text confirmed as supplied. One scroll now moves to the next venture slide (snap, one slide per scroll).
+- **Home, "Here is what I am building":** "View All Ventures" button removed; sub-text replaced with the supplied line.
+- **About:** "collaborated services" now starts with small letters.
+- **Services (main page):** cards rotate on their own every 5 seconds (was 15) and no longer wait for the mouse or a click. New: story-style progress dot that fills before each rotation, title words slide up out of a blur, a light sweep crosses each card as it arrives, a soft glow follows the mouse on the front card, and the three cover drawings are alive (marks orbit, bars rise and the line draws, columns lift and the roof settles). All motion switches off for reduced-motion users.
+
+---
+
 # Round 4 (27 September 2026)
 
 ## Every page

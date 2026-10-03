@@ -9,21 +9,27 @@ import {
   Plus,
   Trash2,
   X,
+  Home,
+  Settings2,
 } from "lucide-react";
 import {
   deleteContent,
   getImageUrl,
-  getServices,
   getVentures,
   getContactSettings,
+  getSiteSettings,
   getSession,
   saveContent,
   saveContactSettings,
+  saveSiteSettings,
+  syncServiceCatalog,
   signIn,
   signOut,
   uploadImage,
 } from "@/api";
+import { defaultSiteSettings } from "@/data/siteContent";
 import styles from "./adminpanel.module.css";
+import tabStyles from "./adminTabs.module.css";
 
 const emptyItem = {
   name: "",
@@ -47,8 +53,119 @@ function countWords(value) {
   return value.trim().split(/\s+/).filter(Boolean).length;
 }
 
+function SiteEditor({ settings, onSave, onUpload, busy, message }) {
+  const [draft, setDraft] = useState(settings || defaultSiteSettings);
+  const [contentTab, setContentTab] = useState('home');
+  const hero = draft.hero || defaultSiteSettings.hero;
+  const services = draft.services || [];
+
+  useEffect(() => setDraft(settings || defaultSiteSettings), [settings]);
+
+  const updateHero = (key, value) => setDraft((current) => ({
+    ...current,
+    hero: { ...current.hero, [key]: value },
+  }));
+  const updateService = (index, key, value) => setDraft((current) => ({
+    ...current,
+    services: current.services.map((service, serviceIndex) => serviceIndex === index ? { ...service, [key]: value } : service),
+  }));
+  const uploadHero = async (event) => {
+    const imageUrl = await onUpload(event.target.files[0], 'site');
+    if (imageUrl) updateHero('portraitUrl', imageUrl);
+  };
+  const uploadServiceImage = async (index, event) => {
+    const imageUrl = await onUpload(event.target.files[0], 'site');
+    if (imageUrl) updateService(index, 'image', imageUrl);
+  };
+  const updatePage = (page, key, value) => setDraft((current) => ({
+    ...current,
+    pages: { ...current.pages, [page]: { ...current.pages[page], [key]: value } },
+  }));
+  const addService = () => setDraft((current) => ({
+    ...current,
+    services: [...current.services, { id: `service-${Date.now()}`, graphic: 'events', name: 'New service', tagline: '', description: '', ctaLabel: "Let's Talk", image: '', is_active: true }],
+  }));
+  const removeService = (index) => setDraft((current) => ({
+    ...current,
+    services: current.services.filter((_, serviceIndex) => serviceIndex !== index),
+  }));
+
+  return (
+    <section className={styles.siteEditor}>
+      <div className={styles.editorIntro}>
+        <div><p className={styles.kicker}>PUBLIC SITE CONTENT</p><h2>Edit your website</h2></div>
+        <div><p>Choose a page, make your changes, then publish. Every field here maps to the live website.</p><a className={tabStyles.liveLink} href="/" target="_blank" rel="noreferrer">View live site <ArrowUpRight size={14} /></a></div>
+      </div>
+      <div className={tabStyles.tabs} role="tablist" aria-label="Website pages">
+        {[['home', 'Home'], ['about', 'About'], ['services', 'Services'], ['ventures', 'Ventures'], ['contact', 'Contact']].map(([key, label]) => (
+          <button key={key} type="button" role="tab" aria-selected={contentTab === key} className={contentTab === key ? tabStyles.tabActive : tabStyles.tab} onClick={() => setContentTab(key)}>{label}</button>
+        ))}
+      </div>
+      <form onSubmit={(event) => { event.preventDefault(); onSave(draft); }} className={styles.form}>
+        {contentTab === 'home' && <>
+          <div className={styles.subheading}><Settings2 size={17} /><span>Homepage hero</span></div>
+          <div className={styles.formRow}>
+            <label>Eyebrow <input value={hero.tagline || ''} onChange={(event) => updateHero('tagline', event.target.value)} /></label>
+            <label>Main title <input value={hero.title || ''} onChange={(event) => updateHero('title', event.target.value)} /></label>
+          </div>
+          <div className={styles.formRow}>
+            <label>Title second line <input value={hero.titleLine || ''} onChange={(event) => updateHero('titleLine', event.target.value)} /></label>
+            <label>Serif accent <input value={hero.titleAccent || ''} onChange={(event) => updateHero('titleAccent', event.target.value)} /></label>
+          </div>
+          <label>Hero side heading <input value={hero.sideTitle || ''} onChange={(event) => updateHero('sideTitle', event.target.value)} /></label>
+          <label>Hero side copy <textarea rows="3" value={hero.sideText || ''} onChange={(event) => updateHero('sideText', event.target.value)} /></label>
+          <label className={styles.uploadBox}><ImagePlus size={19} /><span><strong>Upload founder image</strong><small>Stored in website-images / site</small></span><input type="file" accept="image/*" onChange={uploadHero} disabled={busy} /></label>
+          {hero.portraitUrl && <img className={styles.preview} src={getImageUrl(hero.portraitUrl)} alt="Founder preview" />}
+        </>}
+
+        <div className={styles.subheading}><Settings2 size={17} /><span>Page copy</span></div>
+        {[
+          ['about', 'About page', ['heroLabel', 'heroTitle', 'heroSubtitle', 'storyLabel', 'storyTitle', 'storyOne', 'storyTwo', 'principlesLabel', 'principlesTitle', 'principleOneTitle', 'principleOneText', 'principleTwoTitle', 'principleTwoText', 'principleThreeTitle', 'principleThreeText']],
+          ['services', 'Services page', ['label', 'title', 'intro', 'tailTitle', 'tailText', 'tailButton']],
+          ['ventures', 'Ventures page', ['introLabel', 'introTitle', 'introText', 'tailTitle', 'tailText']],
+          ['contact', 'Contact page', ['heroLabel', 'heroTitle', 'heroText', 'pillarInvestTitle', 'pillarInvestText', 'pillarWorkTitle', 'pillarWorkText', 'pillarGrowTitle', 'pillarGrowText', 'formTitle']],
+        ].filter(([page]) => contentTab === page).map(([page, title, fields]) => (
+          <fieldset className={styles.copyGroup} key={page}>
+            <legend>{title}</legend>
+            {fields.map((key) => {
+              const label = key.replace(/([A-Z])/g, ' $1').replace(/^./, (letter) => letter.toUpperCase());
+              const multiline = key.toLowerCase().includes('text') || key.toLowerCase().includes('intro') || key.toLowerCase().includes('one') || key.toLowerCase().includes('two');
+              return <label key={key}>{label}{multiline ? <textarea rows="3" value={draft.pages?.[page]?.[key] || ''} onChange={(event) => updatePage(page, key, event.target.value)} /> : <input value={draft.pages?.[page]?.[key] || ''} onChange={(event) => updatePage(page, key, event.target.value)} />}</label>;
+            })}
+          </fieldset>
+        ))}
+
+        {contentTab === 'services' && <><div className={styles.serviceHeader}>
+          <div className={styles.subheading}><Home size={17} /><span>Service cards <small>{services.length} total</small></span></div>
+          <button type="button" className={styles.addButton} onClick={addService}><Plus size={17} /> Add card</button>
+        </div></>}
+        {contentTab === 'services' && <div className={styles.serviceEditorList}>
+          {services.map((service, index) => (
+            <article className={styles.serviceEditorCard} key={service.id || index}>
+              <div className={styles.serviceEditorTitle}><span>{String(index + 1).padStart(2, '0')}</span><strong>{service.name || 'Untitled service'}</strong><button type="button" className={styles.iconButton} onClick={() => removeService(index)} title="Delete service"><Trash2 size={16} /></button></div>
+              <div className={styles.formRow}>
+                <label>Name <input value={service.name || service.title || ''} onChange={(event) => updateService(index, 'name', event.target.value)} required /></label>
+                <label>Graphic key <input value={service.graphic || ''} onChange={(event) => updateService(index, 'graphic', event.target.value)} placeholder="events, visa, saas" /></label>
+              </div>
+              <label>Tagline <input value={service.tagline || ''} onChange={(event) => updateService(index, 'tagline', event.target.value)} /></label>
+              <label>Description <textarea rows="4" value={service.description || ''} onChange={(event) => updateService(index, 'description', limitWords(event.target.value))} /></label>
+              <div className={styles.formRow}>
+                <label>Button label <input value={service.ctaLabel || ''} onChange={(event) => updateService(index, 'ctaLabel', event.target.value)} /></label>
+                <label className={styles.uploadBox}><ImagePlus size={19} /><span><strong>Upload card image</strong><small>Optional service artwork</small></span><input type="file" accept="image/*" onChange={(event) => uploadServiceImage(index, event)} disabled={busy} /></label>
+              </div>
+              <label className={styles.switchLabel}>Visible on site <input className={styles.switch} type="checkbox" checked={service.is_active !== false} onChange={(event) => updateService(index, 'is_active', event.target.checked)} /></label>
+            </article>
+          ))}
+        </div>}
+        <div className={styles.formActions}><button className={styles.primaryButton} disabled={busy}>{busy ? 'Saving...' : 'Publish site changes'} <ArrowUpRight size={17} /></button></div>
+        {message && <p className={styles.message} role="status">{message}</p>}
+      </form>
+    </section>
+  );
+}
+
 export default function AdminPanel() {
-  const [type, setType] = useState("ventures");
+  const [type, setType] = useState("site");
   const [items, setItems] = useState([]);
   const [form, setForm] = useState(emptyItem);
   const [busy, setBusy] = useState(false);
@@ -56,16 +173,18 @@ export default function AdminPanel() {
   const [user, setUser] = useState(null);
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [contactSettings, setContactSettings] = useState(null);
+  const [siteSettings, setSiteSettings] = useState(defaultSiteSettings);
 
   useEffect(() => {
     getSession()?.then(({ data }) => setUser(data.session?.user || null));
   }, []);
   useEffect(() => {
-    if (user && type !== "contact") loadItems();
+    if (user && type === "ventures") loadItems();
     if (user && type === "contact") getContactSettings().then(setContactSettings);
+    if (user && type === "site") getSiteSettings().then(setSiteSettings);
   }, [type, user]);
   async function loadItems() {
-    setItems(type === "ventures" ? await getVentures() : await getServices());
+    setItems(await getVentures());
   }
 
   function editItem(item) {
@@ -101,6 +220,36 @@ export default function AdminPanel() {
     try {
       await saveContactSettings(contactSettings);
       setMessage("Contact details saved and published.");
+    } catch (error) {
+      setMessage(error.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function handleSiteImage(file, type) {
+    if (!file) return '';
+    setBusy(true);
+    setMessage("Uploading image...");
+    try {
+      const imageUrl = await uploadImage(file, type);
+      setMessage("Image uploaded. Publish to make it live.");
+      return imageUrl;
+    } catch (error) {
+      setMessage(error.message);
+      return '';
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function handleSiteSubmit(settings) {
+    setBusy(true);
+    setMessage("");
+    try {
+      setSiteSettings(await saveSiteSettings(settings));
+      await syncServiceCatalog(settings.services || []);
+      setMessage("Homepage and all service cards published to the site and database.");
     } catch (error) {
       setMessage(error.message);
     } finally {
@@ -220,7 +369,13 @@ export default function AdminPanel() {
           </span>
         </div>
         <nav>
-          <p className={styles.navLabel}>Manage</p>
+          <p className={styles.navLabel}>Content control</p>
+          <button
+            className={type === "site" ? styles.navActive : styles.navItem}
+            onClick={() => { setType("site"); resetForm(); }}
+          >
+            <Home size={17} /> Site content <span>{type === "site" ? "•" : ""}</span>
+          </button>
           <button
             className={type === "ventures" ? styles.navActive : styles.navItem}
             onClick={() => {
@@ -230,16 +385,6 @@ export default function AdminPanel() {
           >
             <LayoutDashboard size={17} /> Ventures{" "}
             <span>{type === "ventures" ? "•" : ""}</span>
-          </button>
-          <button
-            className={type === "services" ? styles.navActive : styles.navItem}
-            onClick={() => {
-              setType("services");
-              resetForm();
-            }}
-          >
-            <ArrowUpRight size={17} /> Services{" "}
-            <span>{type === "services" ? "•" : ""}</span>
           </button>
           <button
             className={type === "contact" ? styles.navActive : styles.navItem}
@@ -269,14 +414,16 @@ export default function AdminPanel() {
             <p className={styles.kicker}>
               CONTENT WORKSPACE / {type.toUpperCase()}
             </p>
-            <h1>{type === "ventures" ? "Ventures" : type === "services" ? "Services" : "Contact details"}</h1>
+            <h1>{type === "ventures" ? "Ventures" : type === "site" ? "Site content" : "Contact details"}</h1>
           </div>
           <span className={styles.liveBadge}>
             <span /> Live database
           </span>
         </header>
         <div className={styles.contentGrid}>
-          {type === "contact" ? (
+          {type === "site" ? (
+            <SiteEditor settings={siteSettings} onSave={handleSiteSubmit} onUpload={handleSiteImage} busy={busy} message={message} />
+          ) : type === "contact" ? (
             <section className={styles.editor}>
               <div className={styles.sectionHeading}>
                 <div><p className={styles.kicker}>PUBLIC FOOTER AND FORM RECIPIENT</p><h2>Contact details</h2></div>
@@ -442,7 +589,7 @@ export default function AdminPanel() {
             </form>
           </section>
           )}
-          {type !== "contact" && <section className={styles.library}>
+          {type === "ventures" && <section className={styles.library}>
             <div className={styles.sectionHeading}>
               <div>
                 <p className={styles.kicker}>DATABASE RECORDS</p>

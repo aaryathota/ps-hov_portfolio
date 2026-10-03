@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { fallbackServices, fallbackVentures } from '@/data/portfolio';
+import { defaultSiteSettings, mergeSiteSettings } from '@/data/siteContent';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || import.meta.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
@@ -29,6 +30,38 @@ export async function getContent(type) {
 
 export const getVentures = () => getContent('ventures');
 export const getServices = () => getContent('services');
+
+export async function getSiteSettings() {
+  if (!supabase) return defaultSiteSettings;
+  const { data, error } = await supabase.from('site_settings').select('content').eq('id', 1).maybeSingle();
+  if (error) {
+    console.warn('Could not load site settings from Supabase.', error.message);
+    return defaultSiteSettings;
+  }
+  return mergeSiteSettings(data?.content);
+}
+
+export async function saveSiteSettings(settings) {
+  if (!supabase) throw new Error('Supabase is not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY to .env.');
+  const { data, error } = await supabase.from('site_settings').upsert({ id: 1, content: settings }).select('content').single();
+  if (error) throw error;
+  return mergeSiteSettings(data.content);
+}
+
+export async function syncServiceCatalog(services) {
+  if (!supabase) throw new Error('Supabase is not configured.');
+  const { data: existing, error: existingError } = await supabase.from('services').select('id,name');
+  if (existingError) throw existingError;
+  const byName = new Map((existing || []).map((service) => [service.name.trim().toLowerCase(), service.id]));
+  await Promise.all(services.map((service, index) => saveContent('services', {
+    id: byName.get((service.name || '').trim().toLowerCase()),
+    name: service.name,
+    description: service.description,
+    image_url: service.image || null,
+    display_order: index,
+    is_live: service.is_active !== false,
+  })));
+}
 
 // No invented contact details: fill these from the admin panel (Contact details tab).
 const defaultContactSettings = {
@@ -124,7 +157,7 @@ export async function deleteContent(type, id) {
 
 export async function uploadImage(file, type) {
   if (!supabase) throw new Error('Supabase is not configured.');
-  if (type !== 'ventures' && type !== 'services') throw new Error('Choose ventures or services before uploading an image.');
+  if (type !== 'ventures' && type !== 'services' && type !== 'site') throw new Error('Choose a valid content area before uploading an image.');
   if (!file.type.startsWith('image/')) throw new Error('Please choose an image file.');
   const { data: sessionData } = await supabase.auth.getSession();
   if (!sessionData.session) throw new Error('Your admin session has expired. Please sign in again.');

@@ -1,6 +1,8 @@
 .page {
   position: relative;
   overflow: hidden;
+  /* clip, not hidden: hidden would stop the gallery's sticky stage from sticking */
+  overflow: clip;
   padding: calc(var(--header-height) + var(--section-padding-y)) var(--section-padding-x) var(--section-padding-y);
   background:
     radial-gradient(60rem 30rem at 50% 0%, rgba(45, 90, 142, 0.08), transparent 70%),

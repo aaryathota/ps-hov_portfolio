@@ -8,7 +8,8 @@ import Button from '@/components/ui/Button';
 import Select from '@/components/ui/Select';
 import Arcs from '@/components/ui/Arcs';
 import styles from './page.module.css';
-import { createWhatsAppUrl, getContactSettings, getVentures } from '@/api';
+import { createWhatsAppUrl, getContactSettings, getSiteSettings, getVentures } from '@/api';
+import { defaultSiteSettings } from '@/data/siteContent';
 import { useGsap } from '@/hooks/useGsap';
 
 function createContactEntrance(gsap, ScrollTrigger) {
@@ -80,6 +81,7 @@ export default function ContactPage() {
   const [formIntent, setFormIntent] = useState('');
   const [selectedVenture, setSelectedVenture] = useState('');
   const [contactSettings, setContactSettings] = useState({});
+  const [copy, setCopy] = useState(defaultSiteSettings.pages.contact);
   const [status, setStatus] = useState('');
   const [investInterest, setInvestInterest] = useState(INVEST_INTEREST[0].value);
   const [workRole, setWorkRole] = useState(WORK_ROLES[0].value);
@@ -94,6 +96,7 @@ export default function ContactPage() {
   useEffect(() => {
     getVentures().then((ventures) => setActiveVentures(ventures.filter((venture) => venture.is_active !== false)));
     getContactSettings().then(setContactSettings);
+    getSiteSettings().then((settings) => setCopy(settings.pages.contact));
     const params = new URLSearchParams(window.location.search);
     const venture = params.get('venture');
     const intent = params.get('intent');
@@ -172,9 +175,9 @@ export default function ContactPage() {
         <Arcs className={styles.heroArcs} />
         <div className="container">
           <div className={styles.heroContent}>
-            <SectionLabel>Get Involved</SectionLabel>
+            <SectionLabel>{copy.heroLabel}</SectionLabel>
             <AnimatedText
-              text="Tell Me What You Are *Looking For.*"
+              text={copy.heroTitle}
               as="h1"
               animation="words"
             />
@@ -184,7 +187,7 @@ export default function ContactPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             >
-              Three ways to be part of what I am building. Pick the one that fits and fill in the form below.
+              {copy.heroText}
             </motion.p>
           </div>
         </div>
@@ -195,7 +198,13 @@ export default function ContactPage() {
         <div className="container">
           <div className={styles.pillarsGrid}>
             
-            {PILLARS.map(({ intent, icon: Icon, title, text }, index) => (
+            {PILLARS.map(({ intent, icon: Icon }, index) => {
+              const pillarCopy = intent === 'invest'
+                ? [copy.pillarInvestTitle, copy.pillarInvestText]
+                : intent === 'work'
+                  ? [copy.pillarWorkTitle, copy.pillarWorkText]
+                  : [copy.pillarGrowTitle, copy.pillarGrowText];
+              return (
               <motion.button
                 key={intent}
                 type="button"
@@ -209,10 +218,10 @@ export default function ContactPage() {
                 transition={{ duration: 0.5, delay: 0.1 + index * 0.1 }}
               >
                 <div className={styles.pillarIcon}><Icon size={26} strokeWidth={1.5} /></div>
-                <h3 className={styles.pillarTitle}>{title}</h3>
-                <p className={styles.pillarText}>{text}</p>
+                <h3 className={styles.pillarTitle}>{pillarCopy[0]}</h3>
+                <p className={styles.pillarText}>{pillarCopy[1]}</p>
               </motion.button>
-            ))}
+            ); })}
           </div>
         </div>
       </section>
@@ -222,7 +231,7 @@ export default function ContactPage() {
         <div className="container">
           <div className={styles.formContainer}>
             <div className={styles.formHeader}>
-              <h2>Drop Your Details and I Will Get Back to You.</h2>
+              <h2>{copy.formTitle}</h2>
             </div>
 
             <form className={styles.form} onSubmit={(e) => submitContact(e, 'email')}>

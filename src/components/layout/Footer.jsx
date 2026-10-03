@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Mail, Phone, MapPin, User } from 'lucide-react';
 import styles from './Footer.module.css';
 import { getContactSettings } from '@/api';
+import { siteSettings } from '@/data/config';
 import { gsap, ScrollTrigger } from '@/lib/gsap';
 import SocialIcon, { SOCIAL_LABELS } from '@/components/ui/SocialIcons';
 
@@ -58,8 +59,9 @@ export default function Footer() {
     ['x', settings.twitter_url || FALLBACK_SOCIALS.x],
   ];
 
-  const phone = settings.primary_whatsapp;
-  const email = settings.primary_email;
+  // Admin panel values win; src/data/config.js is the fallback so the footer always shows a number and an email
+  const phone = settings.primary_whatsapp || siteSettings.primaryWhatsapp;
+  const email = settings.primary_email || siteSettings.primaryEmail;
 
   return (
     <footer className={styles.footer} ref={footerRef}>
@@ -96,20 +98,20 @@ export default function Footer() {
         <address className={styles.column}>
           <h2 className={styles.columnTitle}>Contact</h2>
           <span className={styles.contactItem}>
-            <User size={14} aria-hidden="true" /> <span><span className={styles.contactLabel}>Name</span>{FOUNDER_NAME}</span>
+            <User size={14} aria-hidden="true" /> <span>{FOUNDER_NAME}</span>
           </span>
           {phone && (
             <a className={styles.contactItem} href={`tel:${phone.replace(/[^\d+]/g, '')}`}>
-              <Phone size={14} aria-hidden="true" /> <span><span className={styles.contactLabel}>Phone</span>{phone}</span>
+              <Phone size={14} aria-hidden="true" /> <span>{phone}</span>
             </a>
           )}
           {email && (
             <a className={styles.contactItem} href={`mailto:${email}`}>
-              <Mail size={14} aria-hidden="true" /> <span><span className={styles.contactLabel}>Email</span>{email}</span>
+              <Mail size={14} aria-hidden="true" /> <span>{email}</span>
             </a>
           )}
           <span className={styles.contactItem}>
-            <MapPin size={14} aria-hidden="true" /> <span><span className={styles.contactLabel}>Place</span>{settings.location || 'Bangalore, Karnataka, India'}</span>
+            <MapPin size={14} aria-hidden="true" /> <span>{settings.location || 'Bangalore, Karnataka, India'}</span>
           </span>
         </address>
       </div>

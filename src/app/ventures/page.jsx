@@ -1,7 +1,8 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, ExternalLink } from 'lucide-react';
-import { getImageUrl, getVentures } from '@/api';
+import { getImageUrl, getSiteSettings, getVentures } from '@/api';
+import { defaultSiteSettings } from '@/data/siteContent';
 import { gsap, ScrollTrigger, SplitText } from '@/lib/gsap';
 import { ventureMedia, ventureSlug } from '@/data/ventureMedia';
 import styles from './page.module.css';
@@ -39,6 +40,7 @@ function uniqueByName(items) {
 
 export default function VenturesPage() {
   const [ventures, setVentures] = useState([]);
+  const [copy, setCopy] = useState(defaultSiteSettings.pages.ventures);
   const [active, setActive] = useState(-1); // -1 = the intro panel
   const [pinned, setPinned] = useState(true); // phones: the rail shows only while the chapters are pinned
   const root = useRef(null);
@@ -50,6 +52,7 @@ export default function VenturesPage() {
     getVentures().then((rows) => {
       if (alive) setVentures(uniqueByName(rows.filter((row) => row.is_active !== false)));
     });
+    getSiteSettings().then((settings) => setCopy(settings.pages.ventures));
     return () => { alive = false; };
   }, []);
 
@@ -84,7 +87,17 @@ export default function VenturesPage() {
             pin: '[data-pin]',
             start: 'top top',
             end: () => `+=${distance()}`,
-            scrub: 1.1,
+            scrub: 0.6,
+            // One scroll = one slide: the page glides to the next (or previous)
+            // venture in the direction you scrolled and settles on it
+            snap: {
+              snapTo: 1 / Math.max(1, panels.length - 1),
+              directional: true,
+              inertia: false,
+              delay: 0.04,
+              duration: { min: 0.45, max: 0.9 },
+              ease: 'power2.inOut',
+            },
             invalidateOnRefresh: true,
             anticipatePin: 1,
             onToggle: (self) => setPinned(self.isActive),
@@ -165,12 +178,9 @@ export default function VenturesPage() {
         <div ref={trackRef} className={styles.track}>
           <section className={`${styles.intro} grain`} data-panel aria-label="Introduction">
             <div className={styles.introInner}>
-              <p className={styles.introKicker} data-intro-copy>The Portfolio</p>
-              <h1 className={styles.introTitle} data-intro-title>What I am <em className="serif-accent">building.</em></h1>
-              <p className={styles.introText} data-intro-copy>
-                Two categories. In-House Ventures are built and operated by me directly. Collaborated Services are
-                engagements I am part of through active partnerships.
-              </p>
+              <p className={styles.introKicker} data-intro-copy>{copy.introLabel}</p>
+              <h1 className={styles.introTitle} data-intro-title>{copy.introTitle}</h1>
+              <p className={styles.introText} data-intro-copy>{copy.introText}</p>
             </div>
             <p className={styles.introCue} aria-hidden="true"><span />Scroll to explore</p>
           </section>
@@ -284,8 +294,8 @@ export default function VenturesPage() {
       <section className={styles.tail}>
         <div className={styles.tailInner}>
           <div className={styles.tailCopy}>
-            <h2 className={styles.tailTitle}>See something that <span className={`serif-accent ${styles.tailSerif}`}>interests you?</span></h2>
-            <p className={styles.tailText}>Reach out whether you want to invest, join a team, or collaborate. I personally review every message.</p>
+            <h2 className={styles.tailTitle}>{copy.tailTitle}</h2>
+            <p className={styles.tailText}>{copy.tailText}</p>
           </div>
           <div className={styles.tailActions}>
             <Link to="/contact" className={styles.tailButton}>Get Involved <ArrowUpRight size={18} aria-hidden="true" /></Link>

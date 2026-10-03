@@ -4,15 +4,19 @@
   identity (overlapping marks), growth (rising bars), structure (ruled columns).
 */
 
+import styles from './ServicePlate.module.css';
+
 const PLATES = {
   identity: {
     from: '#16406f', to: '#0f2440',
     art: (
       <g fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1.2">
-        <circle cx="150" cy="150" r="78" />
-        <circle cx="210" cy="150" r="78" />
-        <circle cx="180" cy="98" r="78" />
-        <circle cx="180" cy="98" r="6" fill="#e6c46b" stroke="none" />
+        <g className={styles.orbit} style={{ transformOrigin: '180px 130px' }}>
+          <circle cx="150" cy="150" r="78" />
+          <circle cx="210" cy="150" r="78" />
+          <circle cx="180" cy="98" r="78" />
+        </g>
+        <circle cx="180" cy="98" r="6" fill="#e6c46b" stroke="none" className={styles.pulse} />
         <path d="M60 268 H300" stroke="rgba(255,255,255,0.25)" />
       </g>
     ),
@@ -22,9 +26,9 @@ const PLATES = {
     art: (
       <g>
         {[54, 92, 78, 130, 112, 170, 148, 214].map((h, i) => (
-          <rect key={i} x={40 + i * 32} y={290 - h} width="20" height={h} fill="rgba(255,255,255,0.16)" />
+          <rect key={i} className={styles.bar} style={{ '--i': i }} x={40 + i * 32} y={290 - h} width="20" height={h} fill="rgba(255,255,255,0.16)" />
         ))}
-        <polyline fill="none" stroke="#e6c46b" strokeWidth="2" points="50,230 82,190 114,204 146,150 178,166 210,110 242,128 274,66" />
+        <polyline className={styles.line} fill="none" stroke="#e6c46b" strokeWidth="2" points="50,230 82,190 114,204 146,150 178,166 210,110 242,128 274,66" />
         <circle cx="274" cy="66" r="5" fill="#e6c46b" />
       </g>
     ),
@@ -33,8 +37,11 @@ const PLATES = {
     from: '#a97c12', to: '#6b4c08',
     art: (
       <g fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="1.2">
-        <path d="M60 250 H300 M70 250 V120 M110 250 V120 M150 250 V120 M190 250 V120 M230 250 V120 M270 250 V120" />
-        <path d="M50 120 H310 L180 56 Z" />
+        <path d="M60 250 H300" />
+        {[70, 110, 150, 190, 230, 270].map((x, i) => (
+          <path key={x} className={styles.col} style={{ '--i': i }} d={`M${x} 250 V120`} />
+        ))}
+        <path className={styles.roof} d="M50 120 H310 L180 56 Z" />
         <path d="M50 270 H310" stroke="rgba(255,255,255,0.22)" />
       </g>
     ),

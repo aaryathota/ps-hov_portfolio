@@ -39,6 +39,7 @@
 .plate > svg { display: block; width: 100%; height: 100%; }
 
 .cardLabel {
+  z-index: 1;
   position: absolute;
   inset: auto 0 0 0;
   padding: 1.6rem 1.4rem 1.3rem;
@@ -98,7 +99,28 @@
   text-align: center;
 }
 
-.captionSubtitle { margin-top: 0.7rem; max-width: 46ch; text-align: center; color: var(--color-text-secondary); }
+.captionSubtitle {
+  margin-top: 0.7rem;
+  max-width: 46ch;
+  text-align: center;
+  color: var(--color-text-secondary);
+  animation: subIn 700ms 280ms var(--ease-out-expo) both;
+}
+
+/* Title words slide up out of a blur, one after another */
+.word {
+  display: inline-block;
+  margin-right: 0.26em;
+  animation: wordIn 800ms calc(var(--i) * 90ms) var(--ease-out-expo) both;
+}
+.word:last-child { margin-right: 0; }
+
+@keyframes wordIn {
+  from { opacity: 0; transform: translateY(0.45em); filter: blur(8px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
+}
+
+@keyframes subIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 
 .meta { width: 100%; max-width: 26rem; margin: 2rem 0 0; }
 
@@ -126,24 +148,63 @@
 
 .captionAction:hover { background: var(--color-accent-dark); color: #fff; }
 
-/* Instagram-style dots between the cards and their details:
-   one dot per card, the current one filled in blue */
+/* Dots: the current card's dot stretches into a bar that fills while the
+   card waits; when it is full the next card rotates in */
 .dots { margin-top: 0.25rem; display: flex; align-items: center; justify-content: center; gap: 0.4rem; }
 
 .dot {
+  position: relative;
+  overflow: hidden;
   width: 0.45rem;
   height: 0.45rem;
   padding: 0;
   border: 0;
-  border-radius: 50%;
+  border-radius: 999px;
   background: #c3cddb;
   cursor: pointer;
-  transition: background 250ms ease, transform 300ms var(--ease-out-expo);
+  transition: background 250ms ease, width 500ms var(--ease-out-expo);
 }
 
 .dot:hover { background: #9aa9bf; }
-.dotActive { background: #1d6fe0; transform: scale(1.25); }
-.dotActive:hover { background: #1d6fe0; }
+.dotActive, .dotActive:hover { width: 2.1rem; background: #c3cddb; }
+
+.dotFill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: #1d6fe0;
+  transform-origin: left center;
+  animation: dotFill var(--cf-ms, 5000ms) linear both;
+}
+.dotFill[data-holding='true'] { animation-play-state: paused; }
+
+@keyframes dotFill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* Front card: a light sweeps over it as it arrives, and a soft glow follows the mouse */
+.card::before,
+.card::after { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+
+.card[data-active='true']::before {
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.34) 50%, transparent 65%);
+  transform: translateX(-120%);
+  animation: sweep 1.3s 0.15s var(--ease-out-expo) forwards;
+}
+
+.card::after {
+  background: radial-gradient(18rem circle at var(--gx, 50%) var(--gy, 40%), rgba(255, 255, 255, 0.22), transparent 60%);
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card[data-active='true']:hover::after { opacity: 1; }
+}
+
+@keyframes sweep { to { transform: translateX(120%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .word, .captionSubtitle, .card[data-active='true']::before { animation: none; }
+}
 
 @media (max-width: 640px) {
   .navButton { width: 2.5rem; height: 2.5rem; }

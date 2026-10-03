@@ -92,7 +92,7 @@ a.contactItem:hover { color: #fff; }
 
 address.column { font-style: normal; }
 
-.contactItem { align-items: flex-start; line-height: 1.45; }
+.contactItem { align-items: flex-start; line-height: 1.45; overflow-wrap: anywhere; }
 .contactItem svg { flex-shrink: 0; margin-top: 0.2rem; color: #e6c46b; }
 .contactLabel {
   display: block;
