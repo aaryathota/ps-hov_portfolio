@@ -375,6 +375,7 @@
     background: linear-gradient(180deg, #fff 0%, var(--color-tint) 100%);
     box-shadow: var(--shadow-xl);
     backface-visibility: hidden;
+    animation: mobileFaceIn 700ms var(--ease-out-expo) both;
   }
 
   .mobileFace::before {
@@ -402,7 +403,9 @@
   .mobileTitle { margin-top: .65rem; font-size: 1.55rem; line-height: 1.08; }
   .mobileTagline { margin-top: .55rem; font-size: 1rem; line-height: 1.25; }
   .mobileText { margin-top: .85rem; font-size: .9rem; line-height: 1.55; }
-  .mobileAction { display: inline-flex; align-items: center; gap: .45rem; margin-top: auto; padding: 1rem 0 0; border: 0; background: transparent; color: var(--color-accent); cursor: pointer; font: 600 .85rem var(--font-body); text-align: left; }
+  .mobileAction { display: inline-flex; align-items: center; align-self: flex-start; gap: .45rem; margin-top: auto; padding: .85em 1.35em; border: 0; border-radius: 999px; background: var(--color-accent); color: #fff; cursor: pointer; font: 600 .85rem var(--font-body); text-align: left; transition: background 180ms ease, transform 180ms ease, gap 180ms ease; }
+  .mobileAction:hover,.mobileAction:active { background: var(--color-accent-dark); color: #fff; transform: translateY(-2px); gap: .65rem; }
+  .mobileAction:focus-visible { outline: 2px solid var(--color-gold); outline-offset: 3px; }
   .mobileControls { display: flex; align-items: center; justify-content: space-between; gap: .8rem; margin: .25rem var(--section-padding-x) 0; }
   .mobileControl { display: grid; place-items: center; width: 2.35rem; height: 2.35rem; border: 1px solid var(--color-line); border-radius: 50%; background: var(--color-bg-primary); color: var(--color-ink); cursor: pointer; box-shadow: 0 5px 18px rgba(15, 36, 64, .1); transition: transform 180ms ease, background 180ms ease, color 180ms ease; }
   .mobileControl:active { transform: scale(.92); background: var(--color-accent); color: #fff; }
@@ -414,6 +417,11 @@
   to { opacity: 1; }
 }
 
+@keyframes mobileFaceIn {
+  from { opacity: .7; transform: translateY(1rem) scale(.98); }
+  to { opacity: 1; transform: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .mobileCard { animation: none; }
+  .mobileCard,.mobileFace { animation: none; }
 }
