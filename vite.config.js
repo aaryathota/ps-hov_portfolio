@@ -1,9 +1,24 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import fs from 'node:fs';
 import path from 'node:path';
 
+function routeFallbacks() {
+  return {
+    name: 'route-fallbacks',
+    closeBundle() {
+      const dist = path.resolve(process.cwd(), 'dist');
+      ['admin', 'about', 'ventures', 'services', 'contact'].forEach((route) => {
+        const routeDir = path.join(dist, route);
+        fs.mkdirSync(routeDir, { recursive: true });
+        fs.copyFileSync(path.join(dist, 'index.html'), path.join(routeDir, 'index.html'));
+      });
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [react({ include: /src\/.*\.[jt]sx?$/ })],
+  plugins: [react({ include: /src\/.*\.[jt]sx?$/ }), routeFallbacks()],
   resolve: {
     alias: {
       '@': path.resolve(process.cwd(), 'src'),
