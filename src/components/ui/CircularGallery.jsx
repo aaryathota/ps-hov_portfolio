@@ -41,13 +41,26 @@ function MobileGallery({ items, label = 'Services', onAction }) {
       frame = 0;
       const bounds = rail.getBoundingClientRect();
       const center = bounds.left + bounds.width / 2;
-      cardRefs.current.forEach((card) => {
+      let nearest = -1;
+      let best = Infinity;
+      cardRefs.current.forEach((card, index) => {
         if (!card) return;
         const cardBounds = card.getBoundingClientRect();
         const distance = Math.max(-1, Math.min(1, (cardBounds.left + cardBounds.width / 2 - center) / (bounds.width * 0.72)));
         const amount = Math.abs(distance);
         card.style.transform = `rotateY(${(-distance * 18).toFixed(2)}deg) scale(${(1 - amount * 0.08).toFixed(3)}) translateZ(${((1 - amount) * 18).toFixed(1)}px)`;
         card.style.opacity = String(1 - amount * 0.2);
+        if (amount < best) { best = amount; nearest = index; }
+      });
+      // The card in front gets the same data-front flag as on desktop, which plays its drawing, light sweep and text rise
+      cardRefs.current.forEach((card, index) => {
+        const face = card?.firstElementChild;
+        if (!face) return;
+        const front = index === nearest;
+        if (card._front !== front) {
+          card._front = front;
+          if (front) face.setAttribute('data-front', ''); else face.removeAttribute('data-front');
+        }
       });
     };
     const requestPaint = () => { if (!frame) frame = requestAnimationFrame(paint); };
@@ -70,6 +83,7 @@ function MobileGallery({ items, label = 'Services', onAction }) {
         {items.map((item, index) => (
           <article className={styles.mobileCard} ref={(node) => { cardRefs.current[index] = node; }} key={item.id || index}>
             <div className={styles.mobileFace} data-tone={['navy', 'teal', 'gold'][index % 3]}>
+              <span className={styles.mobileSheen} aria-hidden="true" />
               {item.image ? (
                 <img className={styles.mobileMedia} src={item.image} alt="" loading="lazy" decoding="async" draggable={false} />
               ) : (

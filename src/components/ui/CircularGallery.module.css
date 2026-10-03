@@ -378,16 +378,45 @@
     animation: mobileFaceIn 700ms var(--ease-out-expo) both;
   }
 
+  .mobileFace {
+    --tone-a: var(--color-accent-dark);
+    --tone-b: var(--color-accent-light);
+    --tone-ink: var(--color-accent);
+    --panel-a: #16406f;
+    --panel-b: #0f2440;
+  }
+
+  .mobileFace[data-tone='teal'] { --tone-a: var(--color-teal-dark); --tone-b: var(--color-teal-light); --tone-ink: var(--color-teal); --panel-a: #0f7a7e; --panel-b: #0a4a4d; }
+  .mobileFace[data-tone='gold'] { --tone-a: var(--color-gold-dark); --tone-b: var(--color-gold-light); --tone-ink: var(--color-gold); --panel-a: #a97c12; --panel-b: #6b4c08; }
+
   .mobileFace::before {
     content: '';
+    z-index: 2;
     position: absolute;
     inset: 0 0 auto;
     height: 4px;
-    background: var(--color-accent);
+    background: linear-gradient(90deg, var(--tone-a), var(--tone-b));
   }
 
-  .mobileFace[data-tone='teal']::before { background: var(--color-teal); }
-  .mobileFace[data-tone='gold']::before { background: var(--color-gold); }
+  /* Light sweep across the card in front, as on desktop */
+  .mobileSheen {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.75) 50%, transparent 65%);
+    transform: translateX(-120%);
+  }
+
+  .mobileFace[data-front] .mobileSheen { animation: sweep 1.1s var(--ease-out-quart) both; }
+
+  /* Text rises into place on the card in front */
+  .mobileFace[data-front] .mobileTitle,
+  .mobileFace[data-front] .mobileTagline,
+  .mobileFace[data-front] .mobileText { animation: mobileRise 700ms var(--ease-out-expo) both; }
+  .mobileFace[data-front] .mobileTagline { animation-delay: 70ms; }
+  .mobileFace[data-front] .mobileText { animation-delay: 140ms; }
 
   .mobilePanel,.mobileMedia {
     width: calc(100% + 2.4rem);
@@ -398,8 +427,30 @@
     background: var(--color-accent-dark);
   }
 
-  .mobilePanel > svg { width: 100%; height: 100%; }
-  .mobileNumber { color: var(--color-accent); font: 600 12px var(--font-heading); letter-spacing: .14em; }
+  .mobilePanel {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--panel-a), var(--panel-b));
+  }
+
+  .mobilePanel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1.5px) 0 0 / 14px 14px;
+    -webkit-mask-image: linear-gradient(180deg, #000, transparent 85%);
+    mask-image: linear-gradient(180deg, #000, transparent 85%);
+  }
+
+  .mobilePanel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(60% 90% at 85% 0%, rgba(255, 255, 255, 0.18), transparent 70%);
+  }
+
+  .mobilePanel > svg { position: relative; z-index: 1; width: 100%; height: 100%; }
+  .mobileNumber { color: var(--tone-ink); font: 600 12px var(--font-heading); letter-spacing: .14em; }
   .mobileTitle { margin-top: .65rem; font-size: 1.55rem; line-height: 1.08; }
   .mobileTagline { margin-top: .55rem; font-size: 1rem; line-height: 1.25; }
   .mobileText { margin-top: .85rem; font-size: .9rem; line-height: 1.55; }
@@ -410,6 +461,11 @@
   .mobileControl { display: grid; place-items: center; width: 2.35rem; height: 2.35rem; border: 1px solid var(--color-line); border-radius: 50%; background: var(--color-bg-primary); color: var(--color-ink); cursor: pointer; box-shadow: 0 5px 18px rgba(15, 36, 64, .1); transition: transform 180ms ease, background 180ms ease, color 180ms ease; }
   .mobileControl:active { transform: scale(.92); background: var(--color-accent); color: #fff; }
   .mobileControl:focus-visible { outline: 2px solid var(--color-gold); outline-offset: 3px; }
+}
+
+@keyframes mobileRise {
+  from { opacity: 0.35; transform: translateY(3px); }
+  to { opacity: 1; transform: none; }
 }
 
 @keyframes mobileCardIn {
