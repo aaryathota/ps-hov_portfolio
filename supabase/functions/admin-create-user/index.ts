@@ -24,9 +24,12 @@ Deno.serve(async (request) => {
     if (!email || !String(email).includes('@')) throw new Error('Enter a valid email address.');
     if (!password || String(password).length < 6) throw new Error('Password must be at least 6 characters.');
 
+    const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    if (!serviceRoleKey) throw new Error('SUPABASE_SERVICE_ROLE_KEY is not configured for this Edge Function.');
+
     const adminClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+      serviceRoleKey,
     );
     const { error } = await adminClient.auth.admin.createUser({
       email: String(email).trim(),
@@ -40,9 +43,11 @@ Deno.serve(async (request) => {
       status: 200,
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
+    const message = error instanceof Error ? error.message : 'Could not create admin user.';
+    const status = message.toLowerCase().includes('already') || message.toLowerCase().includes('registered') ? 409 : 400;
+    return new Response(JSON.stringify({ error: message }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      status: 400,
+      status,
     });
   }
 });

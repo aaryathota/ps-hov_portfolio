@@ -146,7 +146,18 @@ export async function createAdminUser(email, password) {
   const { data, error } = await supabase.functions.invoke('admin-create-user', {
     body: { email: email.trim(), password },
   });
-  if (error) throw error;
+  if (error) {
+    let message = error.message;
+    if (error.context && typeof error.context.json === 'function') {
+      try {
+        const details = await error.context.json();
+        message = details.error || details.message || message;
+      } catch {
+        // Keep the SDK message when the function response is not JSON.
+      }
+    }
+    throw new Error(message);
+  }
   if (data?.error) throw new Error(data.error);
   return data;
 }
