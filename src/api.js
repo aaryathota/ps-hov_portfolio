@@ -141,10 +141,10 @@ export async function changePassword(password) {
   return data;
 }
 
-export async function inviteAdmin(email) {
+export async function createAdminUser(email, password) {
   if (!supabase) throw new Error('Supabase is not configured.');
   const { data, error } = await supabase.functions.invoke('admin-create-user', {
-    body: { email: email.trim() },
+    body: { email: email.trim(), password },
   });
   if (error) throw error;
   if (data?.error) throw new Error(data.error);

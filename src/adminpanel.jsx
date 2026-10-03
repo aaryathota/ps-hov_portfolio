@@ -26,7 +26,7 @@ import {
   saveSiteSettings,
   syncServiceCatalog,
   changePassword,
-  inviteAdmin,
+  createAdminUser,
   signIn,
   signOut,
   uploadImage,
@@ -172,6 +172,8 @@ function AccountEditor({ user, busy, message, onPasswordChange, onInvite }) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [inviteEmail, setInviteEmail] = useState('');
+  const [invitePassword, setInvitePassword] = useState('');
+  const [inviteConfirmPassword, setInviteConfirmPassword] = useState('');
 
   function submitPassword(event) {
     event.preventDefault();
@@ -182,8 +184,12 @@ function AccountEditor({ user, busy, message, onPasswordChange, onInvite }) {
 
   function submitInvite(event) {
     event.preventDefault();
-    onInvite(inviteEmail);
+    if (invitePassword.length < 6) return onInvite(null, null, 'New user password must be at least 6 characters.');
+    if (invitePassword !== inviteConfirmPassword) return onInvite(null, null, 'New user passwords do not match.');
+    onInvite(inviteEmail, invitePassword);
     setInviteEmail('');
+    setInvitePassword('');
+    setInviteConfirmPassword('');
   }
 
   return (
@@ -201,10 +207,12 @@ function AccountEditor({ user, busy, message, onPasswordChange, onInvite }) {
           <button className={styles.primaryButton} disabled={busy}>{busy ? 'Updating...' : 'Update password'} <ArrowUpRight size={17} /></button>
         </form>
         <form onSubmit={submitInvite} className={`${styles.editor} ${styles.form}`}>
-          <div className={styles.subheading}><UserPlus size={17} /><span>Invite another admin</span></div>
-          <p className={styles.accountMeta}>They will receive an email invitation to create their own password.</p>
+          <div className={styles.subheading}><UserPlus size={17} /><span>Create another admin</span></div>
+          <p className={styles.accountMeta}>Create a confirmed admin account with an email and password now.</p>
           <label>Admin email <input type="email" required value={inviteEmail} onChange={(event) => setInviteEmail(event.target.value)} placeholder="team@example.com" /></label>
-          <button className={styles.secondaryButton} disabled={busy}>{busy ? 'Sending...' : 'Send invitation'} <UserPlus size={16} /></button>
+          <label>New user password <input type="password" minLength="6" required value={invitePassword} onChange={(event) => setInvitePassword(event.target.value)} /></label>
+          <label>Confirm password <input type="password" minLength="6" required value={inviteConfirmPassword} onChange={(event) => setInviteConfirmPassword(event.target.value)} /></label>
+          <button className={styles.secondaryButton} disabled={busy}>{busy ? 'Creating...' : 'Create admin user'} <UserPlus size={16} /></button>
         </form>
       </div>
       {message && <p className={styles.message} role="status">{message}</p>}
@@ -319,12 +327,13 @@ export default function AdminPanel() {
     }
   }
 
-  async function handleInvite(email) {
+  async function handleInvite(email, password, validationMessage) {
+    if (validationMessage) { setMessage(validationMessage); return; }
     setBusy(true);
     setMessage("");
     try {
-      await inviteAdmin(email);
-      setMessage(`Invitation sent to ${email}.`);
+      await createAdminUser(email, password);
+      setMessage(`Admin user created for ${email}.`);
     } catch (error) {
       setMessage(error.message || 'Could not send invitation.');
     } finally {

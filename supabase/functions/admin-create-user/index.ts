@@ -20,14 +20,19 @@ Deno.serve(async (request) => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) throw new Error('Your admin session has expired.');
 
-    const { email } = await request.json();
+    const { email, password } = await request.json();
     if (!email || !String(email).includes('@')) throw new Error('Enter a valid email address.');
+    if (!password || String(password).length < 6) throw new Error('Password must be at least 6 characters.');
 
     const adminClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
     );
-    const { error } = await adminClient.auth.admin.inviteUserByEmail(String(email).trim());
+    const { error } = await adminClient.auth.admin.createUser({
+      email: String(email).trim(),
+      password: String(password),
+      email_confirm: true,
+    });
     if (error) throw error;
 
     return new Response(JSON.stringify({ invited: true }), {
