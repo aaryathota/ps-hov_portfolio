@@ -29,7 +29,7 @@ const TWO_DIGITS = (n) => String(n).padStart(2, '0');
 const SMOOTHING_MS = 120; // how loosely the ring follows the scroll
 const INTRO_DEGREES = 70; // how far the ring spins in from
 
-function MobileGallery({ items, label = 'Services' }) {
+function MobileGallery({ items, label = 'Services', onAction }) {
   const railRef = useRef(null);
 
   const move = (direction) => {
@@ -53,7 +53,9 @@ function MobileGallery({ items, label = 'Services' }) {
               <h2 className={styles.mobileTitle}>{item.title || `Service ${index + 1}`}</h2>
               {item.tagline && <p className={`${styles.mobileTagline} serif-accent`}>{item.tagline}</p>}
               {item.description && <p className={styles.mobileText}>{item.description}</p>}
-              {item.action && <Link className={styles.mobileAction} to={item.action.href}><span>{item.action.label}</span><ArrowRight size={17} /></Link>}
+              {item.action && (item.action.onClick ? (
+                <button type="button" className={styles.mobileAction} onClick={() => onAction?.(item)}><span>{item.action.label}</span><ArrowRight size={17} /></button>
+              ) : <Link className={styles.mobileAction} to={item.action.href}><span>{item.action.label}</span><ArrowRight size={17} /></Link>)}
             </div>
           </article>
         ))}
@@ -70,6 +72,7 @@ function MobileGallery({ items, label = 'Services' }) {
 function DesktopCircularGallery({
   items,
   label = 'Services',
+  onAction,
   autoRotateSpeed = 1.2, // degrees per second while idle
   scrollPerItem = 38, // screen heights of scrolling per card
 }) {
@@ -315,12 +318,9 @@ function DesktopCircularGallery({
                     {item.title && <h2 className={styles.title}>{item.title}</h2>}
                     {item.tagline && <p className={`${styles.tagline} serif-accent`}>{item.tagline}</p>}
                     {item.description && <p className={styles.text}>{item.description}</p>}
-                    {item.action && (
-                      <Link className={styles.action} to={item.action.href}>
-                        <span>{item.action.label}</span>
-                        <ArrowRight size="1.05em" aria-hidden="true" />
-                      </Link>
-                    )}
+                    {item.action && (item.action.onClick ? (
+                      <button type="button" className={styles.action} onClick={() => onAction?.(item)}><span>{item.action.label}</span><ArrowRight size="1.05em" aria-hidden="true" /></button>
+                    ) : <Link className={styles.action} to={item.action.href}><span>{item.action.label}</span><ArrowRight size="1.05em" aria-hidden="true" /></Link>)}
                   </article>
                 </div>
               );

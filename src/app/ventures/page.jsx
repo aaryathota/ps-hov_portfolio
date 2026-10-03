@@ -6,6 +6,7 @@ import { defaultSiteSettings } from '@/data/siteContent';
 import { gsap, ScrollTrigger, SplitText } from '@/lib/gsap';
 import { ventureMedia, ventureSlug } from '@/data/ventureMedia';
 import styles from './page.module.css';
+import ContactModal from '@/components/ui/ContactModal';
 
 /*
   Ventures, told as chapters.
@@ -41,6 +42,7 @@ function uniqueByName(items) {
 export default function VenturesPage() {
   const [ventures, setVentures] = useState([]);
   const [copy, setCopy] = useState(defaultSiteSettings.pages.ventures);
+  const [contactSubject, setContactSubject] = useState('');
   const [active, setActive] = useState(-1); // -1 = the intro panel
   const [pinned, setPinned] = useState(true); // phones: the rail shows only while the chapters are pinned
   const root = useRef(null);
@@ -253,9 +255,9 @@ export default function VenturesPage() {
                     <h2 className={styles.title} data-chapter-title>{venture.name}</h2>
                     <p className={styles.text} data-chapter-copy>{venture.description}</p>
                     <div className={styles.links} data-chapter-copy>
-                      <Link to={`/contact?venture=${encodeURIComponent(venture.name)}`} className={styles.primaryLink}>
+                      <button type="button" onClick={() => setContactSubject(venture.name)} className={styles.primaryLink}>
                         Enquire about this venture <ArrowUpRight size={16} aria-hidden="true" />
-                      </Link>
+                      </button>
                       {venture.website_url && (
                         <a href={venture.website_url} target="_blank" rel="noopener noreferrer" className={styles.link}>
                           Visit Website <ExternalLink size={15} aria-hidden="true" />
@@ -303,6 +305,7 @@ export default function VenturesPage() {
           </div>
         </div>
       </section>
+      <ContactModal open={Boolean(contactSubject)} subject={contactSubject} onClose={() => setContactSubject('')} />
     </div>
   );
 }

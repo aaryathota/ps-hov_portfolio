@@ -5,6 +5,7 @@ import CircularGallery from '@/components/ui/CircularGallery';
 import SectionLabel from '@/components/ui/SectionLabel';
 import Arcs from '@/components/ui/Arcs';
 import Button from '@/components/ui/Button';
+import ContactModal from '@/components/ui/ContactModal';
 import styles from './page.module.css';
 
 /* Services, shown on a 3D ring that turns as you scroll. */
@@ -22,6 +23,7 @@ const contactHref = (title) => (title ? `/contact?venture=${encodeURIComponent(t
 export default function ServicesPage() {
   const [services, setServices] = useState(defaultSiteSettings.services);
   const [copy, setCopy] = useState(defaultSiteSettings.pages.services);
+  const [contactSubject, setContactSubject] = useState('');
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -42,7 +44,7 @@ export default function ServicesPage() {
       tagline: service.tagline,
       description: service.description,
       image: service.image || (service.image_url ? getImageUrl(service.image_url) : undefined),
-      action: { label: service.ctaLabel || "Let's Talk", href: contactHref(service.name || service.title) },
+      action: { label: service.ctaLabel || "Let's Talk", onClick: () => setContactSubject(service.name || service.title) },
     })), [services]);
 
   return (
@@ -55,7 +57,7 @@ export default function ServicesPage() {
       </header>
 
       {loaded ? (
-        <CircularGallery items={items} label="Services" />
+        <CircularGallery items={items} label="Services" onAction={(item) => setContactSubject(item.title)} />
       ) : (
         <p className={styles.loading}>Loading services.</p>
       )}
@@ -67,6 +69,7 @@ export default function ServicesPage() {
         </div>
         <Button to="/contact" size="lg">{copy.tailButton}</Button>
       </section>
+      <ContactModal open={Boolean(contactSubject)} subject={contactSubject} onClose={() => setContactSubject('')} />
     </div>
   );
 }

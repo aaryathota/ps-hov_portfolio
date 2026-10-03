@@ -175,11 +175,11 @@ export async function saveContent(type, item) {
     ...(table === 'ventures' ? { website_url: item.website_url || null } : {}),
   };
   const query = item.id
-    ? supabase.from(table).update(payload).eq('id', item.id).select().single()
-    : supabase.from(table).insert(payload).select().single();
+    ? supabase.from(table).update(payload).eq('id', item.id).select().maybeSingle()
+    : supabase.from(table).insert(payload).select().maybeSingle();
   const { data, error } = await query;
   if (error) throw error;
-  return data;
+  return data || { ...item, ...payload };
 }
 
 export async function deleteContent(type, id) {

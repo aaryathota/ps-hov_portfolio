@@ -272,6 +272,9 @@
   border-radius: 999px;
   background: #fff;
   color: var(--color-accent-dark);
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
   font-weight: var(--weight-semibold);
   font-size: var(--text-sm);
   transition: background 300ms, transform 500ms var(--ease-out-expo), gap 400ms var(--ease-out-expo);

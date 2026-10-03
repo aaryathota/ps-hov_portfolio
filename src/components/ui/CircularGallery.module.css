@@ -215,6 +215,10 @@
   color: #fff;
   font-size: 4.4cqw;
   font-weight: var(--weight-semibold);
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
   transition: background 250ms;
 }
 
@@ -391,7 +395,7 @@
   .mobileTitle { margin-top: .65rem; font-size: 1.55rem; line-height: 1.08; }
   .mobileTagline { margin-top: .55rem; font-size: 1rem; line-height: 1.25; }
   .mobileText { margin-top: .85rem; font-size: .9rem; line-height: 1.55; }
-  .mobileAction { display: inline-flex; align-items: center; gap: .45rem; margin-top: auto; padding-top: 1rem; color: var(--color-accent); font-size: .85rem; font-weight: 600; }
+  .mobileAction { display: inline-flex; align-items: center; gap: .45rem; margin-top: auto; padding: 1rem 0 0; border: 0; background: transparent; color: var(--color-accent); cursor: pointer; font: 600 .85rem var(--font-body); text-align: left; }
   .mobileControls { display: flex; align-items: center; justify-content: center; gap: .8rem; margin-top: .25rem; }
   .mobileControl { display: grid; place-items: center; width: 2.35rem; height: 2.35rem; border: 1px solid var(--color-line); border-radius: 50%; background: var(--color-bg-primary); color: var(--color-ink); cursor: pointer; box-shadow: 0 5px 18px rgba(15, 36, 64, .1); transition: transform 180ms ease, background 180ms ease, color 180ms ease; }
   .mobileControl:active { transform: scale(.92); background: var(--color-accent); color: #fff; }
