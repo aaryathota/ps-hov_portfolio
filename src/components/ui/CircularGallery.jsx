@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import ServiceGraphic from '@/components/ui/ServiceGraphic';
 import styles from './CircularGallery.module.css';
 
@@ -29,7 +29,45 @@ const TWO_DIGITS = (n) => String(n).padStart(2, '0');
 const SMOOTHING_MS = 120; // how loosely the ring follows the scroll
 const INTRO_DEGREES = 70; // how far the ring spins in from
 
-export default function CircularGallery({
+function MobileGallery({ items, label = 'Services' }) {
+  const railRef = useRef(null);
+
+  const move = (direction) => {
+    const rail = railRef.current;
+    if (!rail) return;
+    rail.scrollBy({ left: direction * rail.clientWidth * 0.82, behavior: 'smooth' });
+  };
+
+  return (
+    <section className={styles.mobileSection} aria-roledescription="carousel" aria-label={label}>
+      <div ref={railRef} className={styles.mobileRail}>
+        {items.map((item, index) => (
+          <article className={styles.mobileCard} key={item.id || index}>
+            <div className={styles.mobileFace} data-tone={['navy', 'teal', 'gold'][index % 3]}>
+              {item.image ? (
+                <img className={styles.mobileMedia} src={item.image} alt="" loading="lazy" decoding="async" draggable={false} />
+              ) : (
+                <div className={styles.mobilePanel} aria-hidden="true"><ServiceGraphic name={item.graphic} /></div>
+              )}
+              <span className={styles.mobileNumber}>{TWO_DIGITS(index + 1)}</span>
+              <h2 className={styles.mobileTitle}>{item.title || `Service ${index + 1}`}</h2>
+              {item.tagline && <p className={`${styles.mobileTagline} serif-accent`}>{item.tagline}</p>}
+              {item.description && <p className={styles.mobileText}>{item.description}</p>}
+              {item.action && <Link className={styles.mobileAction} to={item.action.href}><span>{item.action.label}</span><ArrowRight size={17} /></Link>}
+            </div>
+          </article>
+        ))}
+      </div>
+      <div className={styles.mobileControls}>
+        <button type="button" className={styles.mobileControl} onClick={() => move(-1)} aria-label="Previous service"><ArrowLeft size={17} /></button>
+        <span className={styles.mobileHint}><span /> Swipe to explore <span /></span>
+        <button type="button" className={styles.mobileControl} onClick={() => move(1)} aria-label="Next service"><ArrowRight size={17} /></button>
+      </div>
+    </section>
+  );
+}
+
+function DesktopCircularGallery({
   items,
   label = 'Services',
   autoRotateSpeed = 1.2, // degrees per second while idle
@@ -305,4 +343,18 @@ export default function CircularGallery({
       </div>
     </section>
   );
+}
+
+export default function CircularGallery(props) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 768px)');
+    const update = () => setIsMobile(media.matches);
+    update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
+
+  return isMobile ? <MobileGallery {...props} /> : <DesktopCircularGallery {...props} />;
 }
