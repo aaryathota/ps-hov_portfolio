@@ -31,6 +31,32 @@ const INTRO_DEGREES = 70; // how far the ring spins in from
 
 function MobileGallery({ items, label = 'Services', onAction }) {
   const railRef = useRef(null);
+  const cardRefs = useRef([]);
+
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail) return undefined;
+    let frame = 0;
+    const paint = () => {
+      frame = 0;
+      const bounds = rail.getBoundingClientRect();
+      const center = bounds.left + bounds.width / 2;
+      cardRefs.current.forEach((card) => {
+        if (!card) return;
+        const cardBounds = card.getBoundingClientRect();
+        const distance = Math.max(-1, Math.min(1, (cardBounds.left + cardBounds.width / 2 - center) / (bounds.width * 0.72)));
+        const amount = Math.abs(distance);
+        card.style.transform = `rotateY(${(-distance * 18).toFixed(2)}deg) scale(${(1 - amount * 0.08).toFixed(3)}) translateZ(${((1 - amount) * 18).toFixed(1)}px)`;
+        card.style.opacity = String(1 - amount * 0.2);
+      });
+    };
+    const requestPaint = () => { if (!frame) frame = requestAnimationFrame(paint); };
+    const observer = new ResizeObserver(requestPaint);
+    observer.observe(rail);
+    rail.addEventListener('scroll', requestPaint, { passive: true });
+    requestPaint();
+    return () => { observer.disconnect(); rail.removeEventListener('scroll', requestPaint); if (frame) cancelAnimationFrame(frame); };
+  }, [items.length]);
 
   const move = (direction) => {
     const rail = railRef.current;
@@ -42,7 +68,7 @@ function MobileGallery({ items, label = 'Services', onAction }) {
     <section className={styles.mobileSection} aria-roledescription="carousel" aria-label={label}>
       <div ref={railRef} className={styles.mobileRail}>
         {items.map((item, index) => (
-          <article className={styles.mobileCard} key={item.id || index}>
+          <article className={styles.mobileCard} ref={(node) => { cardRefs.current[index] = node; }} key={item.id || index}>
             <div className={styles.mobileFace} data-tone={['navy', 'teal', 'gold'][index % 3]}>
               {item.image ? (
                 <img className={styles.mobileMedia} src={item.image} alt="" loading="lazy" decoding="async" draggable={false} />

@@ -336,6 +336,8 @@
   .mobileRail {
     display: flex;
     gap: 1rem;
+    perspective: 1100px;
+    perspective-origin: center center;
     overflow-x: auto;
     overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory;
@@ -352,6 +354,9 @@
     flex: 0 0 min(76vw, 20rem);
     min-height: 31rem;
     scroll-snap-align: start;
+    transform-style: preserve-3d;
+    will-change: transform, opacity;
+    transition: transform 180ms var(--ease-out-expo), opacity 180ms ease;
     animation: mobileCardIn 700ms var(--ease-out-expo) both;
   }
 
@@ -369,6 +374,7 @@
     border-radius: var(--radius-lg);
     background: linear-gradient(180deg, #fff 0%, var(--color-tint) 100%);
     box-shadow: var(--shadow-xl);
+    backface-visibility: hidden;
   }
 
   .mobileFace::before {
@@ -384,7 +390,8 @@
 
   .mobilePanel,.mobileMedia {
     width: calc(100% + 2.4rem);
-    height: 7.5rem;
+    aspect-ratio: 3 / 1;
+    height: auto;
     margin: -1rem -1.2rem 1rem;
     object-fit: cover;
     background: var(--color-accent-dark);
@@ -403,8 +410,8 @@
 }
 
 @keyframes mobileCardIn {
-  from { opacity: 0; transform: translateX(1.5rem); }
-  to { opacity: 1; transform: none; }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
