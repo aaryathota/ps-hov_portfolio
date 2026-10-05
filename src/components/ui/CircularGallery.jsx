@@ -32,13 +32,17 @@ const INTRO_DEGREES = 70; // how far the ring spins in from
 function MobileGallery({ items, label = 'Services', onAction }) {
   const railRef = useRef(null);
   const cardRefs = useRef([]);
+  const isInteracting = useRef(false);
+  const lastInteraction = useRef(0);
 
   useEffect(() => {
     const rail = railRef.current;
     if (!rail) return undefined;
+
     let frame = 0;
+    let lastTime = 0;
+
     const paint = () => {
-      frame = 0;
       const bounds = rail.getBoundingClientRect();
       const center = bounds.left + bounds.width / 2;
       let nearest = -1;
@@ -63,17 +67,82 @@ function MobileGallery({ items, label = 'Services', onAction }) {
         }
       });
     };
-    const requestPaint = () => { if (!frame) frame = requestAnimationFrame(paint); };
-    const observer = new ResizeObserver(requestPaint);
+
+    const markInteraction = () => {
+      lastInteraction.current = performance.now();
+    };
+
+    const onTouchStart = () => {
+      isInteracting.current = true;
+      markInteraction();
+    };
+
+    const onTouchEnd = () => {
+      isInteracting.current = false;
+      markInteraction();
+    };
+
+    const onUserScroll = () => {
+      markInteraction();
+    };
+
+    rail.addEventListener('touchstart', onTouchStart, { passive: true });
+    rail.addEventListener('touchend', onTouchEnd, { passive: true });
+    rail.addEventListener('touchcancel', onTouchEnd, { passive: true });
+    rail.addEventListener('pointerdown', onTouchStart, { passive: true });
+    rail.addEventListener('pointerup', onTouchEnd, { passive: true });
+    rail.addEventListener('scroll', onUserScroll, { passive: true });
+
+    const observer = new ResizeObserver(() => paint());
     observer.observe(rail);
-    rail.addEventListener('scroll', requestPaint, { passive: true });
-    requestPaint();
-    return () => { observer.disconnect(); rail.removeEventListener('scroll', requestPaint); if (frame) cancelAnimationFrame(frame); };
+
+    const autoSpeed = 36; // pixels per second
+
+    const animate = (now) => {
+      if (!lastTime) lastTime = now;
+      const dt = Math.min(now - lastTime, 64);
+      lastTime = now;
+
+      const idleTime = now - lastInteraction.current;
+      const userActive = isInteracting.current || idleTime < 2200;
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (!userActive && !reducedMotion) {
+        rail.style.scrollSnapType = 'none';
+        const maxScroll = rail.scrollWidth - rail.clientWidth;
+        if (maxScroll > 0) {
+          let nextScroll = rail.scrollLeft + (autoSpeed * dt) / 1000;
+          if (nextScroll >= maxScroll - 0.5) {
+            nextScroll = 0;
+          }
+          rail.scrollLeft = nextScroll;
+        }
+      } else {
+        rail.style.scrollSnapType = '';
+      }
+
+      paint();
+      frame = requestAnimationFrame(animate);
+    };
+
+    frame = requestAnimationFrame(animate);
+
+    return () => {
+      observer.disconnect();
+      if (frame) cancelAnimationFrame(frame);
+      rail.removeEventListener('touchstart', onTouchStart);
+      rail.removeEventListener('touchend', onTouchEnd);
+      rail.removeEventListener('touchcancel', onTouchEnd);
+      rail.removeEventListener('pointerdown', onTouchStart);
+      rail.removeEventListener('pointerup', onTouchEnd);
+      rail.removeEventListener('scroll', onUserScroll);
+    };
   }, [items.length]);
 
   const move = (direction) => {
     const rail = railRef.current;
     if (!rail) return;
+    lastInteraction.current = performance.now();
     rail.scrollBy({ left: direction * rail.clientWidth * 0.82, behavior: 'smooth' });
   };
 
