@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, Phone, MapPin, User } from 'lucide-react';
 import styles from './Footer.module.css';
-import { getContactSettings } from '@/api';
+import { getContactSettings, createWhatsAppUrl, getCleanPhoneHref, formatPhoneDisplay } from '@/api';
 import { siteSettings } from '@/data/config';
 import { gsap, ScrollTrigger } from '@/lib/gsap';
 import SocialIcon, { SOCIAL_LABELS } from '@/components/ui/SocialIcons';
@@ -46,15 +46,21 @@ export default function Footer() {
     return () => { window.clearTimeout(id); ctx.revert(); };
   }, []);
 
-  const socials = [
-    ['instagram', settings.instagram_url],
-    ['linkedin', settings.linkedin_url],
-    ['x', settings.twitter_url],
-  ].filter(([, url]) => url);
-
-  // Admin panel values win; src/data/config.js is the fallback so the footer always shows a number and an email
-  const phone = settings.primary_whatsapp || siteSettings.primaryWhatsapp;
+  const rawPhone = settings.primary_whatsapp || siteSettings.primaryWhatsapp;
   const email = settings.primary_email || siteSettings.primaryEmail;
+  const linkedinUrl = settings.linkedin_url || siteSettings.linkedinUrl;
+  const instagramUrl = settings.instagram_url;
+  const twitterUrl = settings.twitter_url;
+  const whatsappUrl = rawPhone ? createWhatsAppUrl(rawPhone) : '';
+  const phoneDisplay = formatPhoneDisplay(rawPhone);
+  const phoneHref = getCleanPhoneHref(rawPhone);
+
+  const socials = [
+    ['instagram', instagramUrl],
+    ['linkedin', linkedinUrl],
+    ['x', twitterUrl],
+    ['whatsapp', whatsappUrl],
+  ].filter(([, url]) => url);
 
   return (
     <footer className={styles.footer} ref={footerRef}>
@@ -93,9 +99,14 @@ export default function Footer() {
           <span className={styles.contactItem}>
             <User size={14} aria-hidden="true" /> <span>{FOUNDER_NAME}</span>
           </span>
-          {phone && (
-            <a className={styles.contactItem} href={`tel:${phone.replace(/[^\d+]/g, '')}`}>
-              <Phone size={14} aria-hidden="true" /> <span>{phone}</span>
+          {phoneDisplay && (
+            <a
+              className={styles.contactItem}
+              href={phoneHref}
+              target={phoneHref.startsWith('http') ? '_blank' : undefined}
+              rel={phoneHref.startsWith('http') ? 'noopener noreferrer' : undefined}
+            >
+              <Phone size={14} aria-hidden="true" /> <span>{phoneDisplay}</span>
             </a>
           )}
           {email && (

@@ -121,7 +121,7 @@ function SiteEditor({ settings, onSave, onUpload, busy, message }) {
           </div>
           <label>Hero side heading <input value={hero.sideTitle || ''} onChange={(event) => updateHero('sideTitle', event.target.value)} /></label>
           <label>Hero side copy <textarea rows="3" value={hero.sideText || ''} onChange={(event) => updateHero('sideText', event.target.value)} /></label>
-          <label className={styles.uploadBox}><ImagePlus size={19} /><span><strong>Upload founder image</strong><small>Stored in website-images / site</small></span><input type="file" accept="image/*" onChange={uploadHero} disabled={busy} /></label>
+          <label className={styles.uploadBox}><ImagePlus size={19} /><span><strong>Upload founder image</strong><small>Stored in website-images / site · Recommended: 1080 x 1350 px (4:5 portrait ratio)</small></span><input type="file" accept="image/*" onChange={uploadHero} disabled={busy} /></label>
           {hero.portraitUrl && <img className={styles.preview} src={getImageUrl(hero.portraitUrl)} alt="Founder preview" />}
           <div className={styles.subheading}><Settings2 size={17} /><span>Homepage sections</span></div>
           <div className={styles.formRow}>
@@ -179,7 +179,7 @@ function SiteEditor({ settings, onSave, onUpload, busy, message }) {
               <label>Description <textarea rows="4" value={service.description || ''} onChange={(event) => updateService(index, 'description', limitWords(event.target.value))} /></label>
               <div className={styles.formRow}>
                 <label>Button label <input value={service.ctaLabel || ''} onChange={(event) => updateService(index, 'ctaLabel', event.target.value)} /></label>
-                <label className={styles.uploadBox}><ImagePlus size={19} /><span><strong>Upload card image</strong><small>Recommended: 1200 x 400 px (3:1)</small></span><input type="file" accept="image/*" onChange={(event) => uploadServiceImage(index, event)} disabled={busy} /></label>
+                <label className={styles.uploadBox}><ImagePlus size={19} /><span><strong>Upload card image</strong><small>Stored in website-images / site · Recommended: 1200 x 400 px (3:1 landscape ratio)</small></span><input type="file" accept="image/*" onChange={(event) => uploadServiceImage(index, event)} disabled={busy} /></label>
               </div>
               <label className={styles.switchLabel}>Visible on site <input className={styles.switch} type="checkbox" checked={service.is_active !== false} onChange={(event) => updateService(index, 'is_active', event.target.checked)} /></label>
             </article>
@@ -544,11 +544,14 @@ export default function AdminPanel() {
               <div className={styles.sectionHeading}>
                 <div><p className={styles.kicker}>PUBLIC FOOTER AND FORM RECIPIENT</p><h2>Contact details</h2></div>
               </div>
+              <p className={styles.accountMeta}>
+                Changes saved here immediately update all contact phone numbers, WhatsApp links, LinkedIn, and social media URLs across the entire website.
+              </p>
               {contactSettings && (
                 <form onSubmit={handleContactSubmit} className={styles.form}>
                   {[
                     ["primary_email", "Admin email", "hello@example.com", "email"],
-                    ["primary_whatsapp", "WhatsApp number", "+91 98765 43210", "tel"],
+                    ["primary_whatsapp", "WhatsApp number or link", "+91 98765 43210 or https://wa.me/...", "text"],
                     ["linkedin_url", "LinkedIn URL", "https://linkedin.com/in/...", "url"],
                     ["instagram_url", "Instagram URL", "https://instagram.com/...", "url"],
                     ["twitter_url", "Twitter / X URL", "https://twitter.com/...", "url"],
@@ -626,7 +629,7 @@ export default function AdminPanel() {
                 <ImagePlus size={21} />
                 <span>
                   <strong>Upload image</strong>
-                  <small>Stored in website-images / {type} · Recommended: {type === "services" ? "1200 x 400 px (3:1)" : "1600 x 1000 px (16:10)"}</small>
+                  <small>Stored in website-images / {type} · Recommended: {type === "services" ? "1200 x 400 px (3:1 landscape ratio)" : "1600 x 1000 px (16:10 landscape ratio)"}</small>
                 </span>
                 <input
                   type="file"

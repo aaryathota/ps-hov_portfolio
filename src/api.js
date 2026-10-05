@@ -68,11 +68,11 @@ export async function syncServiceCatalog(services) {
   })));
 }
 
-// No invented contact details: fill these from the admin panel (Contact details tab).
+// Default contact settings used as fallback
 const defaultContactSettings = {
-  primary_email: '',
-  primary_whatsapp: '',
-  linkedin_url: '',
+  primary_email: 'hello@psonkarventures.com',
+  primary_whatsapp: '+919876543210',
+  linkedin_url: 'https://linkedin.com/in/pratapsonkar',
   instagram_url: '',
   twitter_url: '',
   location: 'Bangalore, Karnataka, India',
@@ -109,8 +109,44 @@ export async function saveContactSettings(settings) {
   return data;
 }
 
-export function createWhatsAppUrl(phone, message) {
-  return `https://wa.me/${(phone || '').replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+export function createWhatsAppUrl(phone, message = '') {
+  if (!phone) return '#';
+  const trimmed = phone.trim();
+  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+    if (message) {
+      const hasQuery = trimmed.includes('?');
+      if (!trimmed.includes('text=')) {
+        return `${trimmed}${hasQuery ? '&' : '?'}text=${encodeURIComponent(message)}`;
+      }
+    }
+    return trimmed;
+  }
+  const cleanPhone = trimmed.replace(/\D/g, '');
+  const textParam = message ? `?text=${encodeURIComponent(message)}` : '';
+  return `https://wa.me/${cleanPhone}${textParam}`;
+}
+
+export function getCleanPhoneHref(phone) {
+  if (!phone) return '#';
+  const trimmed = phone.trim();
+  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+    return trimmed;
+  }
+  const cleanDigits = trimmed.replace(/[^\d+]/g, '');
+  return `tel:${cleanDigits}`;
+}
+
+export function formatPhoneDisplay(phone) {
+  if (!phone) return '';
+  const trimmed = phone.trim();
+  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+    const digits = trimmed.replace(/\D/g, '');
+    if (digits.length >= 10) {
+      return `+${digits}`;
+    }
+    return trimmed;
+  }
+  return trimmed;
 }
 
 export function getImageUrl(imagePath) {
