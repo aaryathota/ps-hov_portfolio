@@ -341,7 +341,6 @@
     overflow-x: auto;
     overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
     scroll-padding-inline: var(--section-padding-x);
     padding: 0 var(--section-padding-x) 1rem;
     -webkit-overflow-scrolling: touch;

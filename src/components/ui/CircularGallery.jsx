@@ -35,12 +35,22 @@ function MobileGallery({ items, label = 'Services', onAction }) {
   const isInteracting = useRef(false);
   const lastInteraction = useRef(0);
 
+  const displayItems = useMemo(() => {
+    if (!items || !items.length) return [];
+    return [...items, ...items, ...items];
+  }, [items]);
+
   useEffect(() => {
     const rail = railRef.current;
     if (!rail) return undefined;
 
     let frame = 0;
     let lastTime = 0;
+
+    const singleSetWidth = rail.scrollWidth / 3;
+    if (singleSetWidth > 0 && rail.scrollLeft < 10) {
+      rail.scrollLeft = singleSetWidth;
+    }
 
     const paint = () => {
       const bounds = rail.getBoundingClientRect();
@@ -56,7 +66,6 @@ function MobileGallery({ items, label = 'Services', onAction }) {
         card.style.opacity = String(1 - amount * 0.2);
         if (amount < best) { best = amount; nearest = index; }
       });
-      // The card in front gets the same data-front flag as on desktop, which plays its drawing, light sweep and text rise
       cardRefs.current.forEach((card, index) => {
         const face = card?.firstElementChild;
         if (!face) return;
@@ -96,7 +105,7 @@ function MobileGallery({ items, label = 'Services', onAction }) {
     const observer = new ResizeObserver(() => paint());
     observer.observe(rail);
 
-    const autoSpeed = 36; // pixels per second
+    const autoSpeed = 40;
 
     const animate = (now) => {
       if (!lastTime) lastTime = now;
@@ -104,18 +113,19 @@ function MobileGallery({ items, label = 'Services', onAction }) {
       lastTime = now;
 
       const idleTime = now - lastInteraction.current;
-      const userActive = isInteracting.current || idleTime < 2200;
+      const userActive = isInteracting.current || idleTime < 1500;
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       if (!userActive && !reducedMotion) {
         rail.style.scrollSnapType = 'none';
-        const maxScroll = rail.scrollWidth - rail.clientWidth;
-        if (maxScroll > 0) {
-          let nextScroll = rail.scrollLeft + (autoSpeed * dt) / 1000;
-          if (nextScroll >= maxScroll - 0.5) {
-            nextScroll = 0;
+        const singleSet = rail.scrollWidth / 3;
+        if (singleSet > 0) {
+          rail.scrollLeft += (autoSpeed * dt) / 1000;
+          if (rail.scrollLeft >= singleSet * 2) {
+            rail.scrollLeft -= singleSet;
+          } else if (rail.scrollLeft <= 5) {
+            rail.scrollLeft += singleSet;
           }
-          rail.scrollLeft = nextScroll;
         }
       } else {
         rail.style.scrollSnapType = '';
@@ -137,7 +147,7 @@ function MobileGallery({ items, label = 'Services', onAction }) {
       rail.removeEventListener('pointerup', onTouchEnd);
       rail.removeEventListener('scroll', onUserScroll);
     };
-  }, [items.length]);
+  }, [displayItems.length]);
 
   const move = (direction) => {
     const rail = railRef.current;
@@ -146,28 +156,33 @@ function MobileGallery({ items, label = 'Services', onAction }) {
     rail.scrollBy({ left: direction * rail.clientWidth * 0.82, behavior: 'smooth' });
   };
 
+  const originalCount = items.length || 1;
+
   return (
     <section className={styles.mobileSection} aria-roledescription="carousel" aria-label={label}>
       <div ref={railRef} className={styles.mobileRail}>
-        {items.map((item, index) => (
-          <article className={styles.mobileCard} ref={(node) => { cardRefs.current[index] = node; }} key={item.id || index}>
-            <div className={styles.mobileFace} data-tone={['navy', 'teal', 'gold'][index % 3]}>
-              <span className={styles.mobileSheen} aria-hidden="true" />
-              {item.image ? (
-                <img className={styles.mobileMedia} src={item.image} alt="" loading="lazy" decoding="async" draggable={false} />
-              ) : (
-                <div className={styles.mobilePanel} aria-hidden="true"><ServiceGraphic name={item.graphic} /></div>
-              )}
-              <span className={styles.mobileNumber}>{TWO_DIGITS(index + 1)}</span>
-              <h2 className={styles.mobileTitle}>{item.title || `Service ${index + 1}`}</h2>
-              {item.tagline && <p className={`${styles.mobileTagline} serif-accent`}>{item.tagline}</p>}
-              {item.description && <p className={styles.mobileText}>{item.description}</p>}
-              {item.action && (item.action.onClick ? (
-                <button type="button" className={styles.mobileAction} onClick={() => onAction?.(item)}><span>{item.action.label}</span><ArrowRight size={17} /></button>
-              ) : <Link className={styles.mobileAction} to={item.action.href}><span>{item.action.label}</span><ArrowRight size={17} /></Link>)}
-            </div>
-          </article>
-        ))}
+        {displayItems.map((item, index) => {
+          const itemIndex = index % originalCount;
+          return (
+            <article className={styles.mobileCard} ref={(node) => { cardRefs.current[index] = node; }} key={`${item.id || itemIndex}-${index}`}>
+              <div className={styles.mobileFace} data-tone={['navy', 'teal', 'gold'][itemIndex % 3]}>
+                <span className={styles.mobileSheen} aria-hidden="true" />
+                {item.image ? (
+                  <img className={styles.mobileMedia} src={item.image} alt="" loading="lazy" decoding="async" draggable={false} />
+                ) : (
+                  <div className={styles.mobilePanel} aria-hidden="true"><ServiceGraphic name={item.graphic} /></div>
+                )}
+                <span className={styles.mobileNumber}>{TWO_DIGITS(itemIndex + 1)}</span>
+                <h2 className={styles.mobileTitle}>{item.title || `Service ${itemIndex + 1}`}</h2>
+                {item.tagline && <p className={`${styles.mobileTagline} serif-accent`}>{item.tagline}</p>}
+                {item.description && <p className={styles.mobileText}>{item.description}</p>}
+                {item.action && (item.action.onClick ? (
+                  <button type="button" className={styles.mobileAction} onClick={() => onAction?.(item)}><span>{item.action.label}</span><ArrowRight size={17} /></button>
+                ) : <Link className={styles.mobileAction} to={item.action.href}><span>{item.action.label}</span><ArrowRight size={17} /></Link>)}
+              </div>
+            </article>
+          );
+        })}
       </div>
       <div className={styles.mobileControls}>
         <button type="button" className={styles.mobileControl} onClick={() => move(-1)} aria-label="Previous service"><ArrowLeft size={17} /></button>
