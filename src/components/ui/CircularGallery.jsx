@@ -48,6 +48,10 @@ function MobileGallery({ items, label = 'Services', onAction }) {
     let lastTime = 0;
     let cachedCardCenters = [];
     let railWidth = 0;
+    // Float position of the auto-drift. Phones round scrollLeft to whole pixels,
+    // so tiny per-frame steps would be lost if we only added to scrollLeft.
+    let pos = rail.scrollLeft;
+    let lastSet = pos;
 
     const measureLayout = () => {
       if (!rail) return;
@@ -59,6 +63,8 @@ function MobileGallery({ items, label = 'Services', onAction }) {
       const singleSetWidth = rail.scrollWidth / 3;
       if (singleSetWidth > 0 && rail.scrollLeft < 10) {
         rail.scrollLeft = singleSetWidth;
+        pos = rail.scrollLeft;
+        lastSet = pos;
       }
     };
 
@@ -114,6 +120,8 @@ function MobileGallery({ items, label = 'Services', onAction }) {
     };
 
     const onUserScroll = () => {
+      // Our own drift also fires scroll events; only real user scrolls count
+      if (Math.abs(rail.scrollLeft - lastSet) < 2) return;
       markInteraction();
     };
 
@@ -145,15 +153,20 @@ function MobileGallery({ items, label = 'Services', onAction }) {
         rail.style.scrollSnapType = 'none';
         const singleSet = rail.scrollWidth / 3;
         if (singleSet > 0) {
-          rail.scrollLeft += (autoSpeed * dt) / 1000;
-          if (rail.scrollLeft >= singleSet * 2) {
-            rail.scrollLeft -= singleSet;
-          } else if (rail.scrollLeft <= 5) {
-            rail.scrollLeft += singleSet;
+          pos += (autoSpeed * dt) / 1000;
+          if (pos >= singleSet * 2) {
+            pos -= singleSet;
+          } else if (pos <= 5) {
+            pos += singleSet;
           }
+          rail.scrollLeft = pos;
+          lastSet = rail.scrollLeft;
         }
       } else {
         rail.style.scrollSnapType = '';
+        // follow wherever the user (or the arrow buttons) took the rail
+        pos = rail.scrollLeft;
+        lastSet = pos;
       }
 
       paint();
