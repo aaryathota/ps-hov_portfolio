@@ -46,33 +46,55 @@ function MobileGallery({ items, label = 'Services', onAction }) {
 
     let frame = 0;
     let lastTime = 0;
+    let cachedCardCenters = [];
+    let railWidth = 0;
 
-    const singleSetWidth = rail.scrollWidth / 3;
-    if (singleSetWidth > 0 && rail.scrollLeft < 10) {
-      rail.scrollLeft = singleSetWidth;
-    }
+    const measureLayout = () => {
+      if (!rail) return;
+      railWidth = rail.clientWidth;
+      cachedCardCenters = cardRefs.current.map((card) => {
+        if (!card) return 0;
+        return card.offsetLeft + card.offsetWidth / 2;
+      });
+      const singleSetWidth = rail.scrollWidth / 3;
+      if (singleSetWidth > 0 && rail.scrollLeft < 10) {
+        rail.scrollLeft = singleSetWidth;
+      }
+    };
+
+    measureLayout();
 
     const paint = () => {
-      const bounds = rail.getBoundingClientRect();
-      const center = bounds.left + bounds.width / 2;
+      if (!railWidth) return;
+      const currentScroll = rail.scrollLeft;
+      const railCenter = railWidth / 2;
       let nearest = -1;
       let best = Infinity;
+
       cardRefs.current.forEach((card, index) => {
         if (!card) return;
-        const cardBounds = card.getBoundingClientRect();
-        const distance = Math.max(-1, Math.min(1, (cardBounds.left + cardBounds.width / 2 - center) / (bounds.width * 0.72)));
+        const centerPos = cachedCardCenters[index] || (card.offsetLeft + card.offsetWidth / 2);
+        const distFromCenter = centerPos - currentScroll - railCenter;
+        const distance = Math.max(-1, Math.min(1, distFromCenter / (railWidth * 0.72)));
         const amount = Math.abs(distance);
+
         card.style.transform = `rotateY(${(-distance * 18).toFixed(2)}deg) scale(${(1 - amount * 0.08).toFixed(3)}) translateZ(${((1 - amount) * 18).toFixed(1)}px)`;
         card.style.opacity = String(1 - amount * 0.2);
-        if (amount < best) { best = amount; nearest = index; }
+
+        if (amount < best) {
+          best = amount;
+          nearest = index;
+        }
       });
+
       cardRefs.current.forEach((card, index) => {
         const face = card?.firstElementChild;
         if (!face) return;
         const front = index === nearest;
         if (card._front !== front) {
           card._front = front;
-          if (front) face.setAttribute('data-front', ''); else face.removeAttribute('data-front');
+          if (front) face.setAttribute('data-front', '');
+          else face.removeAttribute('data-front');
         }
       });
     };
@@ -102,10 +124,13 @@ function MobileGallery({ items, label = 'Services', onAction }) {
     rail.addEventListener('pointerup', onTouchEnd, { passive: true });
     rail.addEventListener('scroll', onUserScroll, { passive: true });
 
-    const observer = new ResizeObserver(() => paint());
+    const observer = new ResizeObserver(() => {
+      measureLayout();
+      paint();
+    });
     observer.observe(rail);
 
-    const autoSpeed = 40;
+    const autoSpeed = 38; // px per sec
 
     const animate = (now) => {
       if (!lastTime) lastTime = now;
@@ -113,7 +138,7 @@ function MobileGallery({ items, label = 'Services', onAction }) {
       lastTime = now;
 
       const idleTime = now - lastInteraction.current;
-      const userActive = isInteracting.current || idleTime < 1500;
+      const userActive = isInteracting.current || idleTime < 1800;
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       if (!userActive && !reducedMotion) {
